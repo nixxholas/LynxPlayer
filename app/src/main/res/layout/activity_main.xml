@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.nixholas.materialtunes.MainActivity$PlaceholderFragment">
 
+    <!--http://stackoverflow.com/questions/33043536/menu-tabs-dont-respond-->
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:id="@+id/sliding_layout"
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
@@ -13,7 +14,7 @@
         android:gravity="bottom"
         sothree:umanoDragView="@+id/dragView"
         sothree:umanoPanelHeight="68dp"
-        sothree:umanoShadowHeight="4dp">
+        sothree:umanoShadowHeight="6dp">
 
         <!-- MAIN CONTENT -->
         <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -65,11 +66,13 @@
             android:background="#55eeeeee"
             android:clickable="true"
             android:focusable="false"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="68dp"
+                android:layout_height="48dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -81,14 +84,19 @@
                     android:paddingLeft="10dp"
                     android:textSize="14sp"/>
 
-                <Button
+               <!-- http://stackoverflow.com/questions/30959610/apply-material-design-touch-ripple-to-imagebutton-->
+                <ImageButton
                     android:id="@+id/follow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_play_arrow_black_24dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:layout_width="58dp"
+                    android:layout_height="58dp"
                     android:gravity="center_vertical|right"
+                    android:scaleType="fitXY"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textSize="14sp"/>
+                    android:paddingRight="10dp"/>
 
             </LinearLayout>
 

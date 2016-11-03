@@ -2,6 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nixholas.materialtunes">
 
+    <!-- To be able to hold the partial wake lock for playback when the screen is off -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Used to read the media library -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- Used for donations -->
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <!-- Used for restarting -->
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,6 +24,13 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.MUSIC_PLAYER" />
+
+                <category android:name="android.intent.category.APP_MUSIC" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="audio/*" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

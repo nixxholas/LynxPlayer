@@ -1,8 +1,13 @@
 package com.nixholas.materialtunes;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -19,8 +24,11 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.nixholas.materialtunes.Media.MediaManager;
 
+public class MainActivity extends AppCompatActivity {
+    MediaManager mediaManager = new MediaManager();
+    private static final int PERM_REQUEST_APP_CORE_PERMISSIONS = 133;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -40,6 +48,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        new Thread(new Runnable() {
+            public void run() {
+
+            }
+        }).start();
+
+        // Ensure we have READ_EXTERNAL_STORAGE for Music database in LocalProvider
+        // Ensure we have WRITE_EXTERNAL_STORAGE for Album arts storage
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    PERM_REQUEST_APP_CORE_PERMISSIONS);
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
