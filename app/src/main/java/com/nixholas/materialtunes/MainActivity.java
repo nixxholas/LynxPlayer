@@ -24,11 +24,11 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.nixholas.materialtunes.Fragments.SongsFragment;
 import com.nixholas.materialtunes.Media.MediaManager;
 
 public class MainActivity extends AppCompatActivity {
-    MediaManager mediaManager = new MediaManager();
-    private static final int PERM_REQUEST_APP_CORE_PERMISSIONS = 133;
+    public static MediaManager mediaManager = new MediaManager();
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -54,15 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }).start();
-
-        // Ensure we have READ_EXTERNAL_STORAGE for Music database in LocalProvider
-        // Ensure we have WRITE_EXTERNAL_STORAGE for Album arts storage
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    PERM_REQUEST_APP_CORE_PERMISSIONS);
-        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -130,8 +121,7 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
             return rootView;
         }
     }
@@ -150,7 +140,8 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+
+            return SongsFragment.newInstance(position);
         }
 
         @Override
@@ -163,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-
                     return "Songs";
                 case 1:
                     return "Albums";

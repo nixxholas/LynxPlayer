@@ -2,7 +2,11 @@ package com.nixholas.materialtunes.Media;
 
 import android.media.MediaPlayer;
 
+import com.nixholas.materialtunes.Media.Entities.Album;
+import com.nixholas.materialtunes.Media.Entities.Song;
+
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 
 /**
@@ -10,8 +14,8 @@ import java.util.ArrayList;
  */
 
 public class MediaManager extends Thread {
-    private static final String SD_PATH = new String("/sdcard/");
-    private volatile ArrayList<File> mediaFiles = new ArrayList<>();
+    public volatile ArrayList<Song> songFiles = new ArrayList<>();
+    public volatile ArrayList<Album> albumFiles = new ArrayList<>();
     private MediaPlayer mediaPlayer = new MediaPlayer();
 
     public MediaManager() {}
@@ -20,4 +24,5 @@ public class MediaManager extends Thread {
     public void run() {
 
     }
-}
+
+    }

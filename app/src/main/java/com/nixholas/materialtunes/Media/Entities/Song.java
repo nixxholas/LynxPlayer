@@ -14,7 +14,6 @@ public class Song {
     private final int duration;
     private final long id;
     private final String title;
-    private final int trackNumber;
 
     /**
      * Default Constructor
@@ -27,10 +26,37 @@ public class Song {
         this.artistName = "";
         this.albumName = "";
         this.duration = -1;
-        this.trackNumber = -1;
     }
 
-    public Song(long _id, long _albumId, long _artistId, String _title, String _artistName, String _albumName, int _duration, int _trackNumber) {
+    public String getTitle() {
+        return title;
+    }
+
+    public long getAlbumId() {
+        return albumId;
+    }
+
+    public String getArtistName() {
+        return artistName;
+    }
+
+    public long getArtistId() {
+        return artistId;
+    }
+
+    public String getAlbumName() {
+        return albumName;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public Song(long _id, long _albumId, long _artistId, String _title, String _artistName, String _albumName, int _duration) {
         this.id = _id;
         this.albumId = _albumId;
         this.artistId = _artistId;
@@ -38,6 +64,5 @@ public class Song {
         this.artistName = _artistName;
         this.albumName = _albumName;
         this.duration = _duration;
-        this.trackNumber = _trackNumber;
     }
 }
