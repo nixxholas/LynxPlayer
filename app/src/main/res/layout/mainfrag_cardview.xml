@@ -23,36 +23,43 @@
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground">
 
-        <LinearLayout
+        <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/card_image"
-                android:layout_gravity="start"
-                android:layout_width="100dp"
-                android:layout_height="100dp" />
-
-            <!-- http://stackoverflow.com/questions/35157145/aligning-text-view-below-text-view-in-card-view-->
             <LinearLayout
-                android:id="@+id/card_texts"
-                android:layout_marginTop="@dimen/fab_margin"
-                android:layout_marginLeft="@dimen/fab_margin"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/card_title"
-                    android:textStyle="bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:id="@+id/card_image"
+                    android:layout_gravity="start"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp" />
 
-                <TextView
-                    android:id="@+id/card_artist"
+                <!-- http://stackoverflow.com/questions/35157145/aligning-text-view-below-text-view-in-card-view-->
+                <LinearLayout
+                    android:id="@+id/card_texts"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:layout_marginLeft="@dimen/fab_margin"
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/card_title"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/card_artist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -63,10 +70,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|end"
-                android:layout_marginTop="@dimen/ic_album_overflow_margin_top"
-                android:src="@drawable/ic_more_vert_black_24dp" />
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/appbar_padding_top"
+                android:paddingRight="@dimen/appbar_padding_top"
+                android:src="@drawable/ic_more_vert_black_24dp"
+                tools:ignore="RtlHardcoded,RtlSymmetry" />
 
-        </LinearLayout>
+        </RelativeLayout >
 
     </android.support.v7.widget.CardView>
 

@@ -1,5 +1,6 @@
 package com.nixholas.materialtunes.Media.Adapter;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -111,6 +112,9 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
         context = parent.getContext();
 
+        // ButterKnife Properly
+        //http://stackoverflow.com/questions/37771222/android-butterknife-unable-to-bind-views-into-viewholder
+        ButterKnife.bind(this, (Activity) context);
 
         return vh;
     }

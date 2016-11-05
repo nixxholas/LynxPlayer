@@ -157,9 +157,10 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.slide_button)
     public void slideButtonOnClick(View v) {
-        //Log.e("Slide Button", "Clicked");
+        Log.e("Slide Button", "Clicked");
 
         if (mediaManager.mediaPlayer.isPlaying()) {
+
             //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
             slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
         } else {

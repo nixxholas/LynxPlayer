@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class MediaManager extends Thread {
     public MediaPlayer mediaPlayer = new MediaPlayer();
+    public boolean mediaPlayerIsPaused;
     public volatile ArrayList<Song> songFiles = new ArrayList<>();
     public volatile ArrayList<Album> albumFiles = new ArrayList<>();
 
