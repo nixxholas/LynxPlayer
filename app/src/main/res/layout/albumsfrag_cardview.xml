@@ -12,7 +12,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         card_view:cardUseCompatPadding="true"
-        android:id="@+id/card_view"
+        android:id="@+id/albumcard_view"
         android:stateListAnimator="@anim/lift_on_touch"
         android:layout_gravity="center"
         android:layout_width="match_parent"
@@ -29,14 +29,14 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/card_image"
+                android:id="@+id/albumcard_image"
                 android:layout_gravity="start"
                 android:layout_width="100dp"
                 android:layout_height="100dp" />
 
             <!-- http://stackoverflow.com/questions/35157145/aligning-text-view-below-text-view-in-card-view-->
             <LinearLayout
-                android:id="@+id/card_texts"
+                android:id="@+id/albumcard_texts"
                 android:layout_marginTop="@dimen/fab_margin"
                 android:layout_marginLeft="@dimen/fab_margin"
                 android:orientation="vertical"
@@ -44,20 +44,20 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/card_title"
+                    android:id="@+id/albumcard_title"
                     android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:id="@+id/card_artist"
+                    android:id="@+id/albumcard_artist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/card_options"
+                android:id="@+id/albumcard_options"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"

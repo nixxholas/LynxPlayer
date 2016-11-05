@@ -36,11 +36,11 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public View v;
-        protected TextView title, artistName;
-        protected ImageView songArt;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        /* each data item is just a string in this case */
+        protected View v;
+        TextView title, artistName;
+        ImageView songArt;
         private boolean isPopupVisible;
         CardView currentCard;
         private final int cardHeight, cardWidth;
@@ -130,13 +130,13 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         holder.currentCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Debugging Only
                 //Log.e("CardOnClick", "Clicked");
                 //Log.d("OnClick", "CardView");
 
                 // Animations
                 //view.animate().scaleX()
 
-                // Media Actions
                 // Since it's not enlarged yet
                 //view.getRootView().animate().scaleX(1.2f);
                 //view.getRootView().animate().scaleY(1.2f);
@@ -158,20 +158,12 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                     else
                     {
                         // http://stackoverflow.com/questions/9008770/media-player-called-in-state-0-error-38-0
+                        mediaManager.mediaPlayer.reset();
                         mediaManager.mediaPlayer.setDataSource(context, audioUri);
                         mediaManager.mediaPlayer.prepareAsync();
                     }
 
-                } catch (IllegalArgumentException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (SecurityException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IllegalStateException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
+                } catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }

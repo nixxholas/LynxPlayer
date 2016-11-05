@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.nixholas.materialtunes.Media.Adapter.SongsAdapter;
 import com.nixholas.materialtunes.Media.Entities.Song;
@@ -29,6 +28,9 @@ import com.nixholas.materialtunes.Utils.Preferences;
 import java.io.File;
 import java.io.FileFilter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 
 /**
@@ -36,8 +38,8 @@ import static com.nixholas.materialtunes.MainActivity.mediaManager;
  */
 
 public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedListener {
+    @BindView(R.id.main_RecyclerView) RecyclerView recyclerView;
     public File mainDirectory;
-    RecyclerView recyclerView;
     RecyclerView.Adapter rVAdapter;
     RecyclerView.LayoutManager rVLayoutManager;
     private Preferences mPreference;
@@ -67,6 +69,9 @@ public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.main_RecyclerView);
+        ButterKnife.bind(this, rootView);
 
         // Ensure we have READ_EXTERNAL_STORAGE for Music database in LocalProvider
         // Ensure we have WRITE_EXTERNAL_STORAGE for Album arts storage
@@ -134,9 +139,6 @@ public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedLis
         /**
          * User Interface Initialization
          */
-
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.main_RecyclerView);
         rVLayoutManager = new LinearLayoutManager(recyclerView.getContext());
 
         // use a linear layout manager

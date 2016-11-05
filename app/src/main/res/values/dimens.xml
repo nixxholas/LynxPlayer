@@ -7,4 +7,10 @@
     <dimen name="ic_album_overflow_width">20dp</dimen>
     <dimen name="ic_album_overflow_height">30dp</dimen>
     <dimen name="ic_album_overflow_margin_top">10dp</dimen>
+
+
+    <!-- Default Paddings for each fragment -->
+    <dimen name="fragment_padding_side">8dp</dimen>
+    <dimen name="fragment_padding_topbottom">10dp</dimen>
+
 </resources>
