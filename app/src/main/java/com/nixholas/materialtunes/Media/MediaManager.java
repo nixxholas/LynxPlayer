@@ -23,7 +23,6 @@ public class MediaManager extends Thread {
     public MediaManager() {
     }
 
-
     @Override
     public void run() {
 

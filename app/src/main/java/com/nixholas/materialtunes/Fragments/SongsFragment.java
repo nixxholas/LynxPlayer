@@ -82,6 +82,7 @@ public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedLis
 
         mediaManager.mediaPlayer.setOnPreparedListener(this);
 
+        mediaManager.songFiles.clear(); // Make sure we reset it first before we re-initialize to look for new audio files
         /**
          * Media Data Initialization Phase
          */
@@ -117,15 +118,16 @@ public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedLis
                     Log.e("Music Album Name", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
                     Log.e("Music Duration", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION)));*/
 
-                    mediaManager.songFiles.add(new Song(
-                            songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.DATA)),
-                            songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media._ID)),
-                            songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
-                            songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)),
-                            songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.TITLE)),
-                            songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
-                            songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
-                            songCur.getInt(songCur.getColumnIndex(MediaStore.Audio.Media.DURATION))));
+                        mediaManager.songFiles.add(new Song(
+                                songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.DATA)),
+                                songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media._ID)),
+                                songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
+                                songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)),
+                                songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.TITLE)),
+                                songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
+                                songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
+                                songCur.getInt(songCur.getColumnIndex(MediaStore.Audio.Media.DURATION))));
+
                 }
 
             }
