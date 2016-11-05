@@ -16,12 +16,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.nixholas.materialtunes.Fragments.AlbumsFragment;
@@ -31,8 +33,17 @@ import com.nixholas.materialtunes.Media.MediaManager;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MainActivity extends AppCompatActivity {
+    // Protected Entities
+    @BindView(R.id.slide_button) ImageButton slideButton;
+
+    // Publicly Accessible Entities
     public static MediaManager mediaManager = new MediaManager();
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -41,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -52,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         new Thread(new Runnable() {
             public void run() {
@@ -142,4 +154,18 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
+
+    @OnClick(R.id.slide_button)
+    public void slideButtonOnClick(View v) {
+        //Log.e("Slide Button", "Clicked");
+
+        if (mediaManager.mediaPlayer.isPlaying()) {
+            //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
+            slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
+        } else {
+            // Else, it is paused
+            slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+        }
+    }
+
 }

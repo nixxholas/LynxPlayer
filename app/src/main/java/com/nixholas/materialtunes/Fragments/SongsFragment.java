@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,6 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +24,6 @@ import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.Preferences;
 
 import java.io.File;
-import java.io.FileFilter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +36,6 @@ import static com.nixholas.materialtunes.MainActivity.mediaManager;
 
 public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedListener {
     @BindView(R.id.main_RecyclerView) RecyclerView recyclerView;
-    public File mainDirectory;
     RecyclerView.Adapter rVAdapter;
     RecyclerView.LayoutManager rVLayoutManager;
     private Preferences mPreference;
@@ -97,6 +93,7 @@ public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedLis
         String songsSortOrder = MediaStore.Audio.Media.TITLE + " ASC";
         Cursor songCur = cr.query(songsUri, null, songsSelection, null, songsSortOrder);
         int songCount = 0;
+
         if(songCur != null)
         {
             songCount = songCur.getCount();

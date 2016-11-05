@@ -11,18 +11,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 
@@ -30,6 +34,9 @@ import static com.nixholas.materialtunes.MainActivity.mediaManager;
  * Created by nixho on 03-Nov-16.
  */
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> {
+    // Protected Entities
+    @BindView(R.id.slide_button) ImageButton slideButton;
+
     private ArrayList<Song> mDataset;
     private Context context;
 
@@ -141,33 +148,46 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                 //view.getRootView().animate().scaleX(1.2f);
                 //view.getRootView().animate().scaleY(1.2f);
 
-
                 try {
                     //Log.e("LOG ", currentSong.getDataPath());
                     Uri audioUri = Uri.parse("file://" + currentSong.getDataPath());
 
                     if(mediaManager.mediaPlayer.isPlaying())
                     {
+                        /**
+                         * Under the hood changes
+                         */
                         //stop or pause your media player mediaPlayer.stop(); or mediaPlayer.pause();
                         // http://stackoverflow.com/questions/12266502/android-mediaplayer-stop-and-play
                         mediaManager.mediaPlayer.stop();
                         mediaManager.mediaPlayer.reset();
                         mediaManager.mediaPlayer.setDataSource(context, audioUri);
                         mediaManager.mediaPlayer.prepare();
-                    }
-                    else
+
+                        /**
+                         * User Interface Changes
+                         */
+                        slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
+                    } else
                     {
+                        /**
+                         * Under the hood changes
+                         */
                         // http://stackoverflow.com/questions/9008770/media-player-called-in-state-0-error-38-0
                         mediaManager.mediaPlayer.reset();
                         mediaManager.mediaPlayer.setDataSource(context, audioUri);
                         mediaManager.mediaPlayer.prepareAsync();
+
+                        /**
+                         * User Interface Changes
+                         */
+                        slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                     }
 
                 } catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                //mediaManager.mediaPlayer.start();
             }
         });
     }
