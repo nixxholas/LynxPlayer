@@ -31,6 +31,8 @@ import com.nixholas.materialtunes.Fragments.ListsFragment;
 import com.nixholas.materialtunes.Fragments.SongsFragment;
 import com.nixholas.materialtunes.Media.MediaManager;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -65,10 +67,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        new Thread(new Runnable() {
+        /*        new Thread(new Runnable() {
             public void run() {
             }
-        }).start();
+        }).start();*/
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,6 +84,15 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        // http://stackoverflow.com/questions/10529226/notify-once-the-audio-is-finished-playing
+        mediaManager.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+            public void onCompletion(MediaPlayer mp) {
+                slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+            }
+        });
+
     }
 
 
@@ -156,15 +167,21 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.slide_button)
     public void slideButtonOnClick(View v) {
-        Log.e("Slide Button", "Clicked");
+        //Log.e("Slide Button", "Clicked");
 
-        if (mediaManager.mediaPlayer.isPlaying()) {
+        if (mediaManager.mediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
+            // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
+            if (mediaManager.mediaPlayerIsPaused) { // If the current song is paused,
+                mediaManager.mediaPlayer.start();
+                mediaManager.mediaPlayerIsPaused = false;
+                //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
+                slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
 
-            //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
-            slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
-        } else {
-            // Else, it is paused
-            slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+            } else { // Else we pause it
+                mediaManager.mediaPlayer.pause();
+                mediaManager.mediaPlayerIsPaused = true;
+                slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+            }
         }
     }
 

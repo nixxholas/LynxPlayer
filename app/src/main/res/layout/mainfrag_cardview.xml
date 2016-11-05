@@ -23,12 +23,16 @@
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground">
 
+        <!--
+            Using Horizontal Layout to properly align the views
+        http://stackoverflow.com/questions/10829835/right-align-button-in-horizontal-linearlayout -->
         <RelativeLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/card_imgandtexts"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
@@ -41,7 +45,6 @@
 
                 <!-- http://stackoverflow.com/questions/35157145/aligning-text-view-below-text-view-in-card-view-->
                 <LinearLayout
-                    android:id="@+id/card_texts"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:layout_marginLeft="@dimen/fab_margin"
                     android:orientation="vertical"
@@ -51,6 +54,8 @@
                     <TextView
                         android:id="@+id/card_title"
                         android:textStyle="bold"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -72,9 +77,9 @@
                 android:gravity="center_vertical|end"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="@dimen/appbar_padding_top"
-                android:paddingRight="@dimen/appbar_padding_top"
+                android:layout_marginRight="@dimen/appbar_padding_top"
                 android:src="@drawable/ic_more_vert_black_24dp"
-                tools:ignore="RtlHardcoded,RtlSymmetry" />
+                tools:ignore="RtlHardcoded" />
 
         </RelativeLayout >
 

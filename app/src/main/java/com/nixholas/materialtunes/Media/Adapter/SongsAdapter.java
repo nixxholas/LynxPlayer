@@ -3,6 +3,7 @@ package com.nixholas.materialtunes.Media.Adapter;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -22,6 +23,8 @@ import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -37,6 +40,9 @@ import static com.nixholas.materialtunes.MainActivity.mediaManager;
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> {
     // Protected Entities
     @BindView(R.id.slide_button) ImageButton slideButton;
+    @BindView(R.id.slide_albumart) ImageView slideAlbumArt;
+    @BindView(R.id.slide_songtitle) TextView slideSongTitle;
+    @BindView(R.id.slide_songartist) TextView slideSongArtist;
 
     private ArrayList<Song> mDataset;
     private Context context;
@@ -156,7 +162,11 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                     //Log.e("LOG ", currentSong.getDataPath());
                     Uri audioUri = Uri.parse("file://" + currentSong.getDataPath());
 
-                    if(mediaManager.mediaPlayer.isPlaying())
+                    Uri sArtworkUri = Uri
+                            .parse("content://media/external/audio/albumart");
+                    Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
+
+                    if (mediaManager.mediaPlayer.isPlaying())
                     {
                         /**
                          * Under the hood changes
@@ -166,12 +176,16 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                         mediaManager.mediaPlayer.stop();
                         mediaManager.mediaPlayer.reset();
                         mediaManager.mediaPlayer.setDataSource(context, audioUri);
-                        mediaManager.mediaPlayer.prepare();
+                        mediaManager.mediaPlayer.prepareAsync();
+                        mediaManager.mediaPlayerIsPaused = false;
 
                         /**
                          * User Interface Changes
                          */
                         slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
+                        slideSongTitle.setText(currentSong.getTitle());
+                        slideSongArtist.setText(currentSong.getArtistName());
+                        Glide.with(context).load(albumArtUri).into(slideAlbumArt);
                     } else
                     {
                         /**
@@ -181,11 +195,15 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                         mediaManager.mediaPlayer.reset();
                         mediaManager.mediaPlayer.setDataSource(context, audioUri);
                         mediaManager.mediaPlayer.prepareAsync();
+                        mediaManager.mediaPlayerIsPaused = false;
 
                         /**
                          * User Interface Changes
                          */
                         slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
+                        slideSongTitle.setText(currentSong.getTitle());
+                        slideSongArtist.setText(currentSong.getArtistName());
+                        Glide.with(context).load(albumArtUri).into(slideAlbumArt);
                     }
 
                 } catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
