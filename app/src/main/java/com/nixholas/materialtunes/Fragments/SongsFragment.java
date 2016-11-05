@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -33,11 +35,11 @@ import static com.nixholas.materialtunes.MainActivity.mediaManager;
  * Created by nixho on 03-Nov-16.
  */
 
-public class SongsFragment extends Fragment {
+public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedListener {
     public File mainDirectory;
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter rVAdapter;
-    private RecyclerView.LayoutManager rVLayoutManager;
+    RecyclerView recyclerView;
+    RecyclerView.Adapter rVAdapter;
+    RecyclerView.LayoutManager rVLayoutManager;
     private Preferences mPreference;
 
     /**
@@ -75,11 +77,13 @@ public class SongsFragment extends Fragment {
                     PERM_REQUEST_APP_CORE_PERMISSIONS);
         }
 
+        mediaManager.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+        mediaManager.mediaPlayer.setOnPreparedListener(this);
 
         /**
          * Media Data Initialization Phase
          */
-
         // Get Content Dynamically
         ContentResolver cr = getActivity().getContentResolver();
 
@@ -96,10 +100,10 @@ public class SongsFragment extends Fragment {
             {
                 while(songCur.moveToNext())
                 {
-                    //String data = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA));
+                    //String data = songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.DATA));
 
                     // Debug
-                    //Log.e("Song Count", data);
+                    //Log.e("Song Path", data);
 
                     // (long _id, long _albumId, long _artistId, String _title,
                     // String _artistName, String _albumName, int _duration)
@@ -112,6 +116,7 @@ public class SongsFragment extends Fragment {
                     Log.e("Music Duration", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION)));*/
 
                     mediaManager.songFiles.add(new Song(
+                            songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.DATA)),
                             songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media._ID)),
                             songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
                             songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)),
@@ -132,9 +137,9 @@ public class SongsFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.main_RecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        // use a linear layout manager
         rVLayoutManager = new LinearLayoutManager(recyclerView.getContext());
+
+        // use a linear layout manager
         recyclerView.setLayoutManager(rVLayoutManager);
 
         rVAdapter = new SongsAdapter(mediaManager.songFiles);
@@ -143,4 +148,8 @@ public class SongsFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        mediaPlayer.start();
+    }
 }

@@ -24,8 +24,12 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.nixholas.materialtunes.Fragments.AlbumsFragment;
+import com.nixholas.materialtunes.Fragments.ListsFragment;
 import com.nixholas.materialtunes.Fragments.SongsFragment;
 import com.nixholas.materialtunes.Media.MediaManager;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public static MediaManager mediaManager = new MediaManager();
@@ -93,40 +97,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-            return rootView;
-        }
-    }
-
-    /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
@@ -141,7 +111,16 @@ public class MainActivity extends AppCompatActivity {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
 
-            return SongsFragment.newInstance(position);
+            switch (position) {
+                case 0:
+                    return SongsFragment.newInstance(position);
+                case 1:
+                    return AlbumsFragment.newInstance(position);
+                case 2:
+                    return ListsFragment.newInstance(position);
+                default:
+                    return ListsFragment.newInstance(position);
+            }
         }
 
         @Override

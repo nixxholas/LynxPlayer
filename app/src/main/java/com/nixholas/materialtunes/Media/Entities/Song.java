@@ -7,6 +7,7 @@ package com.nixholas.materialtunes.Media.Entities;
  */
 
 public class Song {
+    private final String dataPath;
     private final long albumId;
     private final String albumName;
     private final long artistId;
@@ -19,10 +20,12 @@ public class Song {
      * Default Constructor
      */
     public Song() {
+        this.dataPath = "";
         this.id = -1;
         this.albumId = -1;
         this.artistId = -1;
         this.title = "";
+
         this.artistName = "";
         this.albumName = "";
         this.duration = -1;
@@ -38,6 +41,10 @@ public class Song {
 
     public String getArtistName() {
         return artistName;
+    }
+
+    public String getDataPath() {
+        return dataPath;
     }
 
     public long getArtistId() {
@@ -56,7 +63,8 @@ public class Song {
         return id;
     }
 
-    public Song(long _id, long _albumId, long _artistId, String _title, String _artistName, String _albumName, int _duration) {
+    public Song(String _dataPath, long _id, long _albumId, long _artistId, String _title, String _artistName, String _albumName, int _duration) {
+        this.dataPath = _dataPath;
         this.id = _id;
         this.albumId = _albumId;
         this.artistId = _artistId;

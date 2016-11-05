@@ -1,5 +1,6 @@
 package com.nixholas.materialtunes.Media;
 
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 
 import com.nixholas.materialtunes.Media.Entities.Album;
@@ -14,11 +15,13 @@ import java.util.ArrayList;
  */
 
 public class MediaManager extends Thread {
+    public MediaPlayer mediaPlayer = new MediaPlayer();
     public volatile ArrayList<Song> songFiles = new ArrayList<>();
     public volatile ArrayList<Album> albumFiles = new ArrayList<>();
-    private MediaPlayer mediaPlayer = new MediaPlayer();
 
-    public MediaManager() {}
+    public MediaManager() {
+    }
+
 
     @Override
     public void run() {
