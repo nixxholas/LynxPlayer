@@ -179,7 +179,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                          */
                         //stop or pause your media player mediaPlayer.stop(); or mediaPlayer.pause();
                         // http://stackoverflow.com/questions/12266502/android-mediaplayer-stop-and-play
-                        mediaManager.mediaPlayer.stop();
+                        //mediaManager.mediaPlayer.stop();
                         mediaManager.mediaPlayer.reset();
                         mediaManager.mediaPlayer.setDataSource(context, audioUri);
                         mediaManager.mediaPlayer.prepareAsync();

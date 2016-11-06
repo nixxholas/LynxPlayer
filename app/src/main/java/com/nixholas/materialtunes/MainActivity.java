@@ -97,7 +97,24 @@ public class MainActivity extends AppCompatActivity {
         mediaManager.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
             public void onCompletion(MediaPlayer mp) {
-                slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                //Log.e("Completed", "Yep");
+
+                try {
+                    if (mediaManager.PlayState == MediaManager.MPPlayState.REPEATALL) {
+                        Song nextSong = mediaManager.getNext();
+
+                        mediaManager.mediaPlayer.reset();
+                        mediaManager.mediaPlayer.setDataSource("file://" + nextSong.getDataPath());
+                        mediaManager.mediaPlayer.prepareAsync();
+                    } else if (mediaManager.PlayState != MediaManager.MPPlayState.NOREPEAT) {
+                        // Update the UI
+                        slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                        mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+                    } // No need to perform an else for REPEATONE
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -133,16 +150,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-                Log.i("PanelSlideListener", "onPanelStateChanged " + newState);
+                //Log.i("PanelSlideListener", "onPanelStateChanged " + newState);
 
-                if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                /*if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     // Set the Unexpanded Views first
                     // http://stackoverflow.com/questions/13397709/android-hide-imageview
-                    /*slideButton.setVisibility(View.GONE);
+                    *//*slideButton.setVisibility(View.GONE);
                     slideAlbumArt.setVisibility(View.GONE);
                     slideSongTitle.setVisibility(View.GONE);
                     slideSongArtist.setVisibility(View.GONE);
-                    slideRelativeLayout.setVisibility(View.GONE);*/
+                    slideRelativeLayout.setVisibility(View.GONE);*//*
 
                     // Set the Expanded Layout
                     //slidedLinearLayout.setVisibility(View.VISIBLE);
@@ -150,18 +167,18 @@ public class MainActivity extends AppCompatActivity {
                     // Then the expanded views
                 } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
                     // Set the Unexpanded Views first
-                    /*slideButton.setVisibility(View.VISIBLE);
+                    *//*slideButton.setVisibility(View.VISIBLE);
                     slideAlbumArt.setVisibility(View.VISIBLE);
                     slideSongTitle.setVisibility(View.VISIBLE);
                     slideSongArtist.setVisibility(View.VISIBLE);
-                    slideRelativeLayout.setVisibility(View.VISIBLE);*/
+                    slideRelativeLayout.setVisibility(View.VISIBLE);*//*
 
                     // Then the expanded views
                     //slidedLinearLayout.setVisibility(View.GONE);
 
                 } else {
                     // Do Nothing
-                }
+                }*/
             }
         });
     }
@@ -359,8 +376,10 @@ public class MainActivity extends AppCompatActivity {
             // Next is repeat all..
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
             mediaManager.PlayState = MediaManager.MPPlayState.REPEATALL;
+            Log.e("PlayState", "Repeat All");
         } else if (mediaManager.PlayState == MediaManager.MPPlayState.REPEATALL) {
             // Next is repeat one only..
+            //http://stackoverflow.com/questions/9461270/media-player-looping-android
             mediaManager.mediaPlayer.setLooping(true);
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_24dp);
             mediaManager.PlayState = MediaManager.MPPlayState.REPEATONE;
