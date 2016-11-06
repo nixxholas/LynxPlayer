@@ -44,6 +44,9 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     @BindView(R.id.slide_songtitle) TextView slideSongTitle;
     @BindView(R.id.slide_songartist) TextView slideSongArtist;
 
+    // Expanded Sliding Up Bar Entities
+    @BindView(R.id.slided_image) ImageView slidedAlbumArt;
+
     private ArrayList<Song> mDataset;
     private Context context;
 
@@ -186,6 +189,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                         slideSongTitle.setText(currentSong.getTitle());
                         slideSongArtist.setText(currentSong.getArtistName());
                         Glide.with(context).load(albumArtUri).into(slideAlbumArt);
+                        Glide.with(context).load(albumArtUri).into(slidedAlbumArt);
                     } else
                     {
                         /**
@@ -204,6 +208,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                         slideSongTitle.setText(currentSong.getTitle());
                         slideSongArtist.setText(currentSong.getArtistName());
                         Glide.with(context).load(albumArtUri).into(slideAlbumArt);
+                        Glide.with(context).load(albumArtUri).into(slidedAlbumArt);
                     }
 
                 } catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {

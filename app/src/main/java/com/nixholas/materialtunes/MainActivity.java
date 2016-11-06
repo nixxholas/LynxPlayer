@@ -1,13 +1,7 @@
 package com.nixholas.materialtunes;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -17,23 +11,21 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nixholas.materialtunes.Fragments.AlbumsFragment;
 import com.nixholas.materialtunes.Fragments.ListsFragment;
 import com.nixholas.materialtunes.Fragments.SongsFragment;
 import com.nixholas.materialtunes.Media.MediaManager;
-
-import org.w3c.dom.Text;
-
-import java.util.List;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +33,14 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
     // Protected Entities
+    // Sliding Up Bar
+    @BindView(R.id.slide_albumart) ImageView slideAlbumArt;
+    @BindView(R.id.slide_songartist) TextView slideSongArtist;
+    @BindView(R.id.slide_songtitle) TextView slideSongTitle;
     @BindView(R.id.slide_button) ImageButton slideButton;
+    @BindView(R.id.slide_layout) RelativeLayout slideRelativeLayout;
+    @BindView(R.id.slided_layout) LinearLayout slidedLinearLayout;
+    @BindView(R.id.sliding_layout) SlidingUpPanelLayout slidingUpPanelLayout;
 
     // Publicly Accessible Entities
     public static MediaManager mediaManager = new MediaManager();
@@ -93,6 +92,69 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                Log.i("PanelSlideListener", "onPanelSlide, offset " + slideOffset);
+
+                /**
+                 * http://stackoverflow.com/questions/5078041/how-can-i-make-an-image-transparent-in-android
+                 *
+                 * since slideOffset will always be 0 to 1,
+                 *
+                 * 255 is the new limit for the alpha.
+                 *
+                 * So slideOffset * 255 will be the inverse of what we need.
+                 *
+                 * So we'll do 255 - (slideOffset * 255) for the Unexpanded Views and the previous for the expanded views
+                 */
+                int unexpandedOffset = (int) (255 - (slideOffset * 255)); // For the Un expanded views
+                int expandedOffset = (int) (slideOffset * 255); // For the expanded views
+
+                // Set the Unexpanded Views first
+                slideButton.setImageAlpha(unexpandedOffset);
+                slideAlbumArt.setImageAlpha(unexpandedOffset);
+                slideSongTitle.setAlpha(1 - slideOffset);
+                slideSongArtist.setAlpha(1 - slideOffset);
+                //slideRelativeLayout.setAlpha(1 - slideOffset);
+
+                // Then the expanded views
+                slidedLinearLayout.setAlpha(slideOffset);
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                Log.i("PanelSlideListener", "onPanelStateChanged " + newState);
+
+                if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    // Set the Unexpanded Views first
+                    // http://stackoverflow.com/questions/13397709/android-hide-imageview
+                    /*slideButton.setVisibility(View.GONE);
+                    slideAlbumArt.setVisibility(View.GONE);
+                    slideSongTitle.setVisibility(View.GONE);
+                    slideSongArtist.setVisibility(View.GONE);
+                    slideRelativeLayout.setVisibility(View.GONE);*/
+
+                    // Set the Expanded Layout
+                    //slidedLinearLayout.setVisibility(View.VISIBLE);
+
+                    // Then the expanded views
+                } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    // Set the Unexpanded Views first
+                    /*slideButton.setVisibility(View.VISIBLE);
+                    slideAlbumArt.setVisibility(View.VISIBLE);
+                    slideSongTitle.setVisibility(View.VISIBLE);
+                    slideSongArtist.setVisibility(View.VISIBLE);
+                    slideRelativeLayout.setVisibility(View.VISIBLE);*/
+
+                    // Then the expanded views
+                    //slidedLinearLayout.setVisibility(View.GONE);
+
+                } else {
+                    // Do Nothing
+                }
+            }
+        });
     }
 
 
