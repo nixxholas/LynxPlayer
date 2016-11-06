@@ -43,16 +43,18 @@
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <ImageButton
-                android:id="@+id/media_controls_rewind"
+                android:id="@+id/media_controls_previous"
+                android:onClick="mediaControlsOnClickPrevious"
                 android:layout_marginLeft="48dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_fast_rewind_white_36dp"
+                android:src="@drawable/ic_skip_previous_white_36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 />
 
             <ImageButton
                 android:id="@+id/media_controls_playpause"
+                android:onClick="mediaControlsOnClickPlayPause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
@@ -62,16 +64,18 @@
                 />
 
             <ImageButton
-                android:id="@+id/media_controls_forward"
+                android:id="@+id/media_controls_next"
+                android:onClick="mediaControlsOnClickNext"
                 android:layout_marginRight="48dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_fast_forward_white_36dp"
+                android:src="@drawable/ic_skip_next_white_36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 />
 
             <ImageButton
                 android:id="@+id/media_controls_repeat"
+                android:onClick="mediaControlsOnClickRepeat"
                 android:layout_marginTop="6dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

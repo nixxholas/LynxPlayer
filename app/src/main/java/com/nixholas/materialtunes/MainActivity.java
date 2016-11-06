@@ -1,6 +1,8 @@
 package com.nixholas.materialtunes;
 
+import android.content.ContentUris;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,9 +23,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.nixholas.materialtunes.Fragments.AlbumsFragment;
 import com.nixholas.materialtunes.Fragments.ListsFragment;
 import com.nixholas.materialtunes.Fragments.SongsFragment;
+import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.Media.MediaManager;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -42,7 +46,13 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.sliding_layout) SlidingUpPanelLayout slidingUpPanelLayout;
 
     // Expanded View of Sliding Up Bar
+    @BindView(R.id.slided_image) ImageView slidedAlbumArt;
     @BindView(R.id.slided_layout) LinearLayout slidedLinearLayout;
+    @BindView(R.id.media_controls_playpause) ImageButton mediaControls_PlayPause;
+    @BindView(R.id.media_controls_previous) ImageButton mediaControls_Previous;
+    @BindView(R.id.media_controls_next) ImageButton mediaControls_Next;
+    @BindView(R.id.media_controls_shuffle) ImageButton mediaControls_Shuffle;
+    @BindView(R.id.media_controls_repeat) ImageButton mediaControls_Repeat;
 
     // Publicly Accessible Entities
     public static MediaManager mediaManager = new MediaManager();
@@ -69,11 +79,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         slidedLinearLayout.setAlpha(0);
-
-        /*        new Thread(new Runnable() {
-            public void run() {
-            }
-        }).start();*/
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -161,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -231,6 +235,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * The two buttons below must have the same binded views at the same time.
+     * @param v
+     */
     @OnClick(R.id.slide_button)
     public void slideButtonOnClick(View v) {
         //Log.e("Slide Button", "Clicked");
@@ -242,13 +250,125 @@ public class MainActivity extends AppCompatActivity {
                 mediaManager.mediaPlayerIsPaused = false;
                 //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
                 slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
+                mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
 
             } else { // Else we pause it
                 mediaManager.mediaPlayer.pause();
                 mediaManager.mediaPlayerIsPaused = true;
                 slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
             }
         }
     }
 
+    @OnClick(R.id.media_controls_playpause)
+    public void mediaControlsOnClickPlayPause(View v) {
+        if (mediaManager.mediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
+            // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
+            if (mediaManager.mediaPlayerIsPaused) { // If the current song is paused,
+                mediaManager.mediaPlayer.start();
+                mediaManager.mediaPlayerIsPaused = false;
+                //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
+                slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
+                mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
+
+            } else { // Else we pause it
+                mediaManager.mediaPlayer.pause();
+                mediaManager.mediaPlayerIsPaused = true;
+                slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+            }
+        }
+    }
+
+    @OnClick(R.id.media_controls_previous)
+    public void mediaControlsOnClickPrevious(View v) {
+        try {
+            // This is a temporary fix, making it circular soon
+            final Song prevSong = mediaManager.songFiles.get(mediaManager.currentlyPlayingIndex - 1);
+            mediaManager.currentlyPlayingIndex -= 1;
+
+            Uri audioUri = Uri.parse("file://" + prevSong.getDataPath());
+
+            Uri sArtworkUri = Uri
+                    .parse("content://media/external/audio/albumart");
+            Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, prevSong.getAlbumId());
+
+            if (mediaManager.mediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
+                mediaManager.mediaPlayer.stop();
+                mediaManager.mediaPlayer.reset();
+                mediaManager.mediaPlayer.setDataSource(v.getContext(), audioUri);
+                mediaManager.mediaPlayer.prepareAsync();
+                mediaManager.mediaPlayerIsPaused = false;
+
+                /**
+                 * User Interface Changes
+                 */
+                slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
+                mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
+                slideSongTitle.setText(prevSong.getTitle());
+                slideSongArtist.setText(prevSong.getArtistName());
+                Glide.with(v.getContext()).load(albumArtUri).into(slideAlbumArt);
+                Glide.with(v.getContext()).load(albumArtUri).into(slidedAlbumArt);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @OnClick(R.id.media_controls_next)
+    public void mediaControlsOnClickNext(View v) {
+        try {
+            // This is a temporary fix, making it circular soon
+            final Song nextSong = mediaManager.songFiles.get(mediaManager.currentlyPlayingIndex + 1);
+            mediaManager.currentlyPlayingIndex += 1;
+
+            Uri audioUri = Uri.parse("file://" + nextSong.getDataPath());
+
+            Uri sArtworkUri = Uri
+                    .parse("content://media/external/audio/albumart");
+            Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, nextSong.getAlbumId());
+
+            if (mediaManager.mediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
+                mediaManager.mediaPlayer.stop();
+                mediaManager.mediaPlayer.reset();
+                mediaManager.mediaPlayer.setDataSource(v.getContext(), audioUri);
+                mediaManager.mediaPlayer.prepareAsync();
+                mediaManager.mediaPlayerIsPaused = false;
+
+                /**
+                 * User Interface Changes
+                 */
+                slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
+                mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
+                slideSongTitle.setText(nextSong.getTitle());
+                slideSongArtist.setText(nextSong.getArtistName());
+                Glide.with(v.getContext()).load(albumArtUri).into(slideAlbumArt);
+                Glide.with(v.getContext()).load(albumArtUri).into(slidedAlbumArt);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @OnClick(R.id.media_controls_repeat)
+    public void mediaControlsOnClickRepeat (View v) {
+        if (mediaManager.PlayState == MediaManager.MPPlayState.NOREPEAT) {
+            // Next is repeat all..
+            mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
+            mediaManager.PlayState = MediaManager.MPPlayState.REPEATALL;
+        } else if (mediaManager.PlayState == MediaManager.MPPlayState.REPEATALL) {
+            // Next is repeat one only..
+            mediaManager.mediaPlayer.setLooping(true);
+            mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_24dp);
+            mediaManager.PlayState = MediaManager.MPPlayState.REPEATONE;
+        } else {
+            // Next is repeat nothing..
+            mediaManager.mediaPlayer.setLooping(false);
+            mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
+            mediaManager.PlayState = MediaManager.MPPlayState.NOREPEAT;
+        }
+    }
 }

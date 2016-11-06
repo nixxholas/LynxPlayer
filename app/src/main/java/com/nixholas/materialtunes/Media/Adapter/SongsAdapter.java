@@ -47,6 +47,8 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     // Expanded Sliding Up Bar Entities
     @BindView(R.id.slided_image) ImageView slidedAlbumArt;
 
+    @BindView(R.id.media_controls_playpause) ImageButton mediaControls_PlayPause;
+
     private ArrayList<Song> mDataset;
     private Context context;
 
@@ -130,7 +132,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final Song currentSong = mDataset.get(position);
@@ -163,6 +165,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
                 try {
                     //Log.e("LOG ", currentSong.getDataPath());
+                    mediaManager.currentlyPlayingIndex = position;
                     Uri audioUri = Uri.parse("file://" + currentSong.getDataPath());
 
                     Uri sArtworkUri = Uri
@@ -186,6 +189,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                          * User Interface Changes
                          */
                         slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
+                        mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
                         slideSongTitle.setText(currentSong.getTitle());
                         slideSongArtist.setText(currentSong.getArtistName());
                         Glide.with(context).load(albumArtUri).into(slideAlbumArt);
@@ -205,6 +209,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                          * User Interface Changes
                          */
                         slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
+                        mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
                         slideSongTitle.setText(currentSong.getTitle());
                         slideSongArtist.setText(currentSong.getArtistName());
                         Glide.with(context).load(albumArtUri).into(slideAlbumArt);
