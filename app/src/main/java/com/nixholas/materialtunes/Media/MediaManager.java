@@ -56,4 +56,23 @@ public class MediaManager {
         return songFiles.get(currentlyPlayingIndex);
     }
 
+    public Song getPrevious() {
+        if(isMediaPlayerIsShuffling){
+            int newSong = currentlyPlayingIndex;
+            while(newSong == currentlyPlayingIndex){
+                newSong = shufflerRandomizer.nextInt(songFiles.size());
+            }
+            currentlyPlayingIndex = newSong;
+        }
+        else{
+            if (currentlyPlayingIndex == 0) {
+                currentlyPlayingIndex = songFiles.size();
+            } else {
+                currentlyPlayingIndex--;
+            }
+        }
+
+        return songFiles.get(currentlyPlayingIndex);
+    }
+
 }

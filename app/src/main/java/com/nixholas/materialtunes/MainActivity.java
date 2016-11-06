@@ -101,12 +101,34 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     if (mediaManager.PlayState == MediaManager.MPPlayState.REPEATALL) {
-                        Song nextSong = mediaManager.getNext();
+                        /**
+                         * Under the hood changes
+                         */
+                        Song nextSong = mediaManager.getNext(); // Call and get the next song with shuffling check
+                        Uri sArtworkUri = Uri
+                                .parse("content://media/external/audio/albumart");
+                        Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, nextSong.getAlbumId());
 
-                        mediaManager.mediaPlayer.reset();
-                        mediaManager.mediaPlayer.setDataSource("file://" + nextSong.getDataPath());
-                        mediaManager.mediaPlayer.prepareAsync();
+                        mediaManager.mediaPlayer.reset(); // Reset the mediaPlayer first
+                        mediaManager.mediaPlayer.setDataSource("file://" + nextSong.getDataPath()); // Set the path via the next song
+                        mediaManager.mediaPlayer.prepareAsync(); // prepare and play
+
+                        /**
+                         * User Interface Changes
+                         */
+                        slideSongTitle.setText(nextSong.getTitle());
+                        slideSongArtist.setText(nextSong.getArtistName());
+                        Glide.with(getApplicationContext()).load(albumArtUri).into(slideAlbumArt);
+                        Glide.with(getApplicationContext()).load(albumArtUri).into(slidedAlbumArt);
                     } else if (mediaManager.PlayState != MediaManager.MPPlayState.NOREPEAT) {
+                        /**
+                         * Under The Hood changes
+                         */
+                        Song currentSong = mediaManager.songFiles.get(mediaManager.currentlyPlayingIndex); // Get the current song that just ended
+                        mediaManager.mediaPlayer.reset(); // Reset the player first
+                        Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
+                        mediaManager.mediaPlayer.setDataSource(getApplicationContext(), audioUri); // Set it again
+
                         // Update the UI
                         slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                         mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
@@ -301,9 +323,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.media_controls_previous)
     public void mediaControlsOnClickPrevious(View v) {
         try {
-            // This is a temporary fix, making it circular soon
-            final Song prevSong = mediaManager.songFiles.get(mediaManager.currentlyPlayingIndex - 1);
-            mediaManager.currentlyPlayingIndex -= 1;
+            final Song prevSong = mediaManager.getPrevious();
 
             Uri audioUri = Uri.parse("file://" + prevSong.getDataPath());
 
@@ -337,9 +357,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.media_controls_next)
     public void mediaControlsOnClickNext(View v) {
         try {
-            // This is a temporary fix, making it circular soon
-            final Song nextSong = mediaManager.songFiles.get(mediaManager.currentlyPlayingIndex + 1);
-            mediaManager.currentlyPlayingIndex += 1;
+            final Song nextSong = mediaManager.getNext();
 
             Uri audioUri = Uri.parse("file://" + nextSong.getDataPath());
 
