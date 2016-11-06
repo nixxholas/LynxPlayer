@@ -39,8 +39,10 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.slide_songtitle) TextView slideSongTitle;
     @BindView(R.id.slide_button) ImageButton slideButton;
     @BindView(R.id.slide_layout) RelativeLayout slideRelativeLayout;
-    @BindView(R.id.slided_layout) LinearLayout slidedLinearLayout;
     @BindView(R.id.sliding_layout) SlidingUpPanelLayout slidingUpPanelLayout;
+
+    // Expanded View of Sliding Up Bar
+    @BindView(R.id.slided_layout) LinearLayout slidedLinearLayout;
 
     // Publicly Accessible Entities
     public static MediaManager mediaManager = new MediaManager();
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        slidedLinearLayout.setAlpha(0);
 
         /*        new Thread(new Runnable() {
             public void run() {
@@ -116,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 slideAlbumArt.setImageAlpha(unexpandedOffset);
                 slideSongTitle.setAlpha(1 - slideOffset);
                 slideSongArtist.setAlpha(1 - slideOffset);
-                //slideRelativeLayout.setAlpha(1 - slideOffset);
+                //slideRelativeLayout.setAlpha(1 - slideOffset); // This Results in synthetic disappearance.
 
                 // Then the expanded views
                 slidedLinearLayout.setAlpha(slideOffset);
