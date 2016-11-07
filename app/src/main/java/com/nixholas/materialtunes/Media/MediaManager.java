@@ -1,12 +1,16 @@
 package com.nixholas.materialtunes.Media;
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.session.MediaController;
 import android.net.Uri;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 
 import com.nixholas.materialtunes.Media.Entities.Album;
 import com.nixholas.materialtunes.Media.Entities.Song;
+import com.nixholas.materialtunes.R;
 
 import java.util.ArrayList;
 import java.util.Random;

@@ -118,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
                          */
                         slideSongTitle.setText(nextSong.getTitle());
                         slideSongArtist.setText(nextSong.getArtistName());
-                        Glide.with(getApplicationContext()).load(albumArtUri).into(slideAlbumArt);
-                        Glide.with(getApplicationContext()).load(albumArtUri).into(slidedAlbumArt);
+                        Glide.with(getApplicationContext()).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slideAlbumArt);
+                        Glide.with(getApplicationContext()).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slidedAlbumArt);
                     } else if (mediaManager.PlayState != MediaManager.MPPlayState.NOREPEAT) {
                         /**
                          * Under The Hood changes
@@ -345,8 +345,9 @@ public class MainActivity extends AppCompatActivity {
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
                 slideSongTitle.setText(prevSong.getTitle());
                 slideSongArtist.setText(prevSong.getArtistName());
-                Glide.with(v.getContext()).load(albumArtUri).into(slideAlbumArt);
-                Glide.with(v.getContext()).load(albumArtUri).into(slidedAlbumArt);
+                // http://stackoverflow.com/questions/40452192/performing-album-art-checks-on-an-audio-file
+                Glide.with(v.getContext()).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slideAlbumArt);
+                Glide.with(v.getContext()).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slidedAlbumArt);
             }
 
         } catch (Exception e) {
@@ -379,8 +380,8 @@ public class MainActivity extends AppCompatActivity {
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
                 slideSongTitle.setText(nextSong.getTitle());
                 slideSongArtist.setText(nextSong.getArtistName());
-                Glide.with(v.getContext()).load(albumArtUri).into(slideAlbumArt);
-                Glide.with(v.getContext()).load(albumArtUri).into(slidedAlbumArt);
+                Glide.with(v.getContext()).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slideAlbumArt);
+                Glide.with(v.getContext()).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slidedAlbumArt);
             }
 
         } catch (Exception e) {

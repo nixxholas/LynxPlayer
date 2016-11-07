@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -151,7 +152,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         //Log.e("Album Art URI", albumArtUri.toString());
 
         // http://stackoverflow.com/questions/32136973/how-to-get-a-context-in-a-recycler-view-adapter
-        Glide.with(context).load(albumArtUri).into(holder.songArt);
+        Glide.with(context).load(albumArtUri).placeholder(R.drawable.untitled_album).into(holder.songArt);
 
         holder.currentCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,8 +199,8 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                         mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
                         slideSongTitle.setText(currentSong.getTitle());
                         slideSongArtist.setText(currentSong.getArtistName());
-                        Glide.with(context).load(albumArtUri).into(slideAlbumArt);//.onLoadFailed(null, );
-                        Glide.with(context).load(albumArtUri).into(slidedAlbumArt);
+                        Glide.with(context).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slideAlbumArt);
+                        Glide.with(context).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slidedAlbumArt);
                     } else
                     {
                         /**
@@ -218,8 +219,8 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                         mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
                         slideSongTitle.setText(currentSong.getTitle());
                         slideSongArtist.setText(currentSong.getArtistName());
-                        Glide.with(context).load(albumArtUri).into(slideAlbumArt);
-                        Glide.with(context).load(albumArtUri).into(slidedAlbumArt);
+                        Glide.with(context).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slideAlbumArt);
+                        Glide.with(context).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slidedAlbumArt);
                     }
 
                 } catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
