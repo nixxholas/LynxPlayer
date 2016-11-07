@@ -3,9 +3,12 @@ package com.nixholas.materialtunes.Media.Adapter;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +28,7 @@ import com.nixholas.materialtunes.R;
 
 import org.w3c.dom.Text;
 
+import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -168,9 +172,11 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                     mediaManager.currentlyPlayingIndex = position;
                     Uri audioUri = Uri.parse("file://" + currentSong.getDataPath());
 
-                    Uri sArtworkUri = Uri
+                    /*Uri sArtworkUri = Uri
                             .parse("content://media/external/audio/albumart");
-                    Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
+                    Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());*/
+
+                    Uri albumArtUri = getAlbumArtUri(currentSong.getAlbumId());
 
                     if (mediaManager.mediaPlayer.isPlaying())
                     {
@@ -192,7 +198,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                         mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
                         slideSongTitle.setText(currentSong.getTitle());
                         slideSongArtist.setText(currentSong.getArtistName());
-                        Glide.with(context).load(albumArtUri).into(slideAlbumArt);
+                        Glide.with(context).load(albumArtUri).into(slideAlbumArt);//.onLoadFailed(null, );
                         Glide.with(context).load(albumArtUri).into(slidedAlbumArt);
                     } else
                     {
@@ -228,6 +234,33 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    public Uri getAlbumArtUri(long albumID) {
+        return ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), albumID);
+    }
+
+    public Bitmap getAlbumart(Long album_id)
+    {
+        Bitmap bm = null;
+        try
+        {
+            final Uri sArtworkUri = Uri
+                    .parse("content://media/external/audio/albumart");
+
+            Uri uri = ContentUris.withAppendedId(sArtworkUri, album_id);
+
+            ParcelFileDescriptor pfd = context.getContentResolver()
+                    .openFileDescriptor(uri, "r");
+
+            if (pfd != null)
+            {
+                FileDescriptor fd = pfd.getFileDescriptor();
+                bm = BitmapFactory.decodeFileDescriptor(fd);
+            }
+        } catch (Exception e) {
+        }
+        return bm;
     }
 
 }

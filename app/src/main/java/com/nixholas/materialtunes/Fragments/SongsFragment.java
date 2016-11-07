@@ -2,11 +2,15 @@ package com.nixholas.materialtunes.Fragments;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -14,6 +18,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +29,7 @@ import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.Preferences;
 
 import java.io.File;
+import java.io.FileDescriptor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -110,15 +116,15 @@ public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedLis
 
                     // (long _id, long _albumId, long _artistId, String _title,
                     // String _artistName, String _albumName, int _duration)
-                    /*Log.e("Music ID", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media._ID)));
-                    Log.e("Music Album ID", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
-                    Log.e("Music Artist ID", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)));
-                    Log.e("Music Title", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-                    Log.e("Music Artist Name", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
-                    Log.e("Music Album Name", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
-                    Log.e("Music Duration", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION)));*/
+                    //Log.e("Music ID", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media._ID)));
+                    //Log.e("Music Album ID", songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
+                    //Log.e("Music Artist ID", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)));
+                    //Log.e("Music Title", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                    //Log.e("Music Artist Name", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
+                    //Log.e("Music Album Name", songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
+                    //Log.e("Music Duration", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION)));
 
-                        mediaManager.songFiles.add(new Song(
+                    mediaManager.songFiles.add(new Song(
                                 songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.DATA)),
                                 songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media._ID)),
                                 songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
@@ -127,7 +133,6 @@ public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedLis
                                 songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
                                 songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
                                 songCur.getInt(songCur.getColumnIndex(MediaStore.Audio.Media.DURATION))));
-
                 }
 
             }
@@ -153,4 +158,5 @@ public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedLis
     public void onPrepared(MediaPlayer mediaPlayer) {
         mediaPlayer.start();
     }
+
 }
