@@ -2,6 +2,7 @@ package com.nixholas.materialtunes;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -86,9 +87,13 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        // Request for proper permissions first
         ActivityCompat.requestPermissions(MainActivity.this,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                1);
+                1); // Reading
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                2); // Writing
 
         mediaManager.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
@@ -463,6 +468,22 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 return;
             }
 
+            case 2: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(MainActivity.this, "Permission denied to write your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
             // other 'case' lines to check for other
             // permissions this app might request
         }
