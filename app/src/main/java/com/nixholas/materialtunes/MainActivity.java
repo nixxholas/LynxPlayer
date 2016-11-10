@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.nixholas.materialtunes.Fragments.AlbumsFragment;
@@ -85,18 +86,22 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                1);
+
         mediaManager.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         mediaManager.mediaPlayer.setOnPreparedListener(this);
 
         // Ensure we have READ_EXTERNAL_STORAGE for Music database in LocalProvider
         // Ensure we have WRITE_EXTERNAL_STORAGE for Album arts storage
-        if (ContextCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        /*if (ContextCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getParent(),
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     PERM_REQUEST_APP_CORE_PERMISSIONS);
-        }
+        }*/
 
         slidedLinearLayout.setAlpha(0);
 
@@ -434,6 +439,32 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             mediaManager.mediaPlayer.setLooping(false);
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
             mediaManager.PlayState = MediaManager.MPPlayState.NOREPEAT;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(MainActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
 }
