@@ -50,9 +50,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         public ViewHolder(View v) {
             super(v);
-            this.albumArt = (ImageView) v.findViewById(R.id.albumcard_image);
-            this.title = (TextView) v.findViewById(R.id.albumcard_title);
-            this.artistName = (TextView) v.findViewById(R.id.albumcard_artist);
+            this.albumArt = (ImageView) v.findViewById(R.id.album_thumbnail);
+            this.title = (TextView) v.findViewById(R.id.album_cardtitle);
+            this.artistName = (TextView) v.findViewById(R.id.album_cardartist);
         }
     }
 
@@ -65,7 +65,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     public AlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Create a new view
         final View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.albumsfrag_cardview, parent, false);
+                .inflate(R.layout.albumfrag_cardview, parent, false);
 
         // Set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
@@ -87,7 +87,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentAlbum.getId());
 
         // http://stackoverflow.com/questions/32136973/how-to-get-a-context-in-a-recycler-view-adapter
-        Glide.with(context).load(albumArtUri).placeholder(R.drawable.untitled_album).into(holder.albumArt);
+        // http://stackoverflow.com/questions/32038936/how-to-make-glide-display-like-picasso
+        Glide.with(context).load(albumArtUri).placeholder(R.drawable.untitled_album).centerCrop().into(holder.albumArt);
 
     }
 
