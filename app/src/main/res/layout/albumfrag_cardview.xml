@@ -17,6 +17,7 @@
         android:foreground="?android:attr/selectableItemBackground">
 
         <RelativeLayout
+            android:id="@+id/album_cardbackdrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

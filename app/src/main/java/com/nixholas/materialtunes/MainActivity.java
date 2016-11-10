@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -452,6 +453,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             mediaManager.mediaPlayer.setLooping(false);
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
             mediaManager.PlayState = MediaManager.MPPlayState.NOREPEAT;
+            mediaControls_Repeat.setBackgroundColor(Color.GRAY);
         }
     }
 
@@ -496,4 +498,5 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             // permissions this app might request
         }
     }
+
 }
