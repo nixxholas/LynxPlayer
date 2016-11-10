@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -92,17 +94,20 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Request for proper permissions first
+        // https://developer.android.com/training/permissions/requesting.html
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                1); // Reading
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                2); // Writing
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        // Request for proper permissions first
-        ActivityCompat.requestPermissions(MainActivity.this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                1); // Reading
-        ActivityCompat.requestPermissions(MainActivity.this,
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                2); // Writing
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
 
         mediaManager.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
@@ -309,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 case 2:
                     return ListsFragment.newInstance(position);
                 default:
-                    return ListsFragment.newInstance(position);
+                    return SongsFragment.newInstance(position);
             }
         }
 
