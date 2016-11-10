@@ -5,11 +5,11 @@ package com.nixholas.materialtunes.Media.Entities;
  */
 
 public class Album {
-    public final long artistId;
-    public final String artistName;
     public final long id;
-    public final int songCount;
     public final String title;
+    public final String artistName;
+    public final long artistId;
+    public final int songCount;
     public final int year;
 
     public Album() {
@@ -28,5 +28,29 @@ public class Album {
         this.artistId = _artistId;
         this.songCount = _songCount;
         this.year = _year;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getArtistName() {
+        return artistName;
+    }
+
+    public long getArtistId() {
+        return artistId;
+    }
+
+    public int getSongCount() {
+        return songCount;
+    }
+
+    public int getYear() {
+        return year;
     }
 }

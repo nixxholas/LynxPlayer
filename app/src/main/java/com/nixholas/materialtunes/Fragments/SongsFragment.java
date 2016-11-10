@@ -1,24 +1,13 @@
 package com.nixholas.materialtunes.Fragments;
 
-import android.Manifest;
 import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,20 +17,14 @@ import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.Preferences;
 
-import java.io.File;
-import java.io.FileDescriptor;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 
 /**
  * Created by nixho on 03-Nov-16.
  */
 
-public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedListener {
-    @BindView(R.id.main_RecyclerView) RecyclerView recyclerView;
+public class SongsFragment extends Fragment {
+    RecyclerView recyclerView;
     RecyclerView.Adapter rVAdapter;
     RecyclerView.LayoutManager rVLayoutManager;
     private Preferences mPreference;
@@ -51,7 +34,6 @@ public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedLis
      * fragment.
      */
     private static final String FRAGMENT_NAME = "Songs";
-    private static final int PERM_REQUEST_APP_CORE_PERMISSIONS = 133;
 
     public SongsFragment() {
     }
@@ -73,20 +55,6 @@ public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedLis
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.main_RecyclerView);
-        ButterKnife.bind(this, rootView);
-
-        // Ensure we have READ_EXTERNAL_STORAGE for Music database in LocalProvider
-        // Ensure we have WRITE_EXTERNAL_STORAGE for Album arts storage
-        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    PERM_REQUEST_APP_CORE_PERMISSIONS);
-        }
-
-        mediaManager.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-        mediaManager.mediaPlayer.setOnPreparedListener(this);
 
         mediaManager.songFiles.clear(); // Make sure we reset it first before we re-initialize to look for new audio files
         /**
@@ -143,7 +111,7 @@ public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedLis
         /**
          * User Interface Initialization
          */
-        rVLayoutManager = new LinearLayoutManager(recyclerView.getContext());
+        rVLayoutManager = new LinearLayoutManager(getActivity());
 
         // use a linear layout manager
         recyclerView.setLayoutManager(rVLayoutManager);
@@ -152,11 +120,6 @@ public class SongsFragment extends Fragment implements MediaPlayer.OnPreparedLis
         recyclerView.setAdapter(rVAdapter);
 
         return rootView;
-    }
-
-    @Override
-    public void onPrepared(MediaPlayer mediaPlayer) {
-        mediaPlayer.start();
     }
 
 }

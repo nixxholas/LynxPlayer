@@ -1,9 +1,15 @@
 package com.nixholas.materialtunes;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentUris;
+import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -35,7 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener{
     // Protected Entities
     // Sliding Up Bar
     @BindView(R.id.slide_albumart) ImageView slideAlbumArt;
@@ -67,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
 
+    private static final int PERM_REQUEST_APP_CORE_PERMISSIONS = 133;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -77,6 +84,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        mediaManager.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+        mediaManager.mediaPlayer.setOnPreparedListener(this);
+
+        // Ensure we have READ_EXTERNAL_STORAGE for Music database in LocalProvider
+        // Ensure we have WRITE_EXTERNAL_STORAGE for Album arts storage
+        if (ContextCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getParent(),
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    PERM_REQUEST_APP_CORE_PERMISSIONS);
+        }
 
         slidedLinearLayout.setAlpha(0);
 
@@ -203,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
                 }*/
             }
         });
+
     }
 
     @Override
@@ -227,6 +248,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+            mediaPlayer.start();
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -246,6 +272,7 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return SongsFragment.newInstance(position);
                 case 1:
+                    //Log.e("AlbumFragment", "SectionsPagerAdapter/getItem Call");
                     return AlbumsFragment.newInstance(position);
                 case 2:
                     return ListsFragment.newInstance(position);

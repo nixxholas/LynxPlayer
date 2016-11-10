@@ -13,4 +13,8 @@
     <dimen name="fragment_padding_side">8dp</dimen>
     <dimen name="fragment_padding_topbottom">10dp</dimen>
 
+    <!-- Default Paddings for AlbumsFragment -->
+    <dimen name="albumsfragment_padding_side">4dp</dimen>
+    <dimen name="albumsfragment_padding_topbottom">6dp</dimen>
+
 </resources>

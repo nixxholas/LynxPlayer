@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -20,14 +21,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
-
-import org.w3c.dom.Text;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -35,14 +33,13 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 
 /**
  * Created by nixho on 03-Nov-16.
  */
-public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> {
+public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
     // Protected Entities
     @BindView(R.id.slide_button) ImageButton slideButton;
     @BindView(R.id.slide_albumart) ImageView slideAlbumArt;
@@ -56,6 +53,19 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
     private ArrayList<Song> mDataset;
     private Context context;
+
+    @NonNull
+    @Override
+    public String getSectionName(int position) {
+        //this String will be shown in a bubble for specified position
+        return mDataset.get(position).getTitle().substring(0, 1);
+    }
+/*
+    @Override
+    public String getSectionTitle(int position) {
+        //this String will be shown in a bubble for specified position
+        return mDataset.get(position).getTitle().substring(0, 1);
+    }*/
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
