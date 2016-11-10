@@ -12,6 +12,7 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,11 +21,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
+import com.nixholas.materialtunes.Utils.Preferences;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.FileDescriptor;
@@ -35,6 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
+import static com.nixholas.materialtunes.MainActivity.slidedLinearLayout;
 
 /**
  * Created by nixho on 03-Nov-16.
@@ -45,6 +51,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     @BindView(R.id.slide_albumart) ImageView slideAlbumArt;
     @BindView(R.id.slide_songtitle) TextView slideSongTitle;
     @BindView(R.id.slide_songartist) TextView slideSongArtist;
+    @BindView(R.id.slided_layout) LinearLayout slidedLinearyLayout;
 
     // Expanded Sliding Up Bar Entities
     @BindView(R.id.slided_image) ImageView slidedAlbumArt;
@@ -75,6 +82,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         protected View v;
         TextView title, artistName;
         ImageView songArt;
+        Palette viewPalette;
         private boolean isPopupVisible;
         CardView currentCard;
         private final int cardHeight, cardWidth;
@@ -147,7 +155,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final Song currentSong = mDataset.get(position);
@@ -162,7 +170,11 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         //Log.e("Album Art URI", albumArtUri.toString());
 
         // http://stackoverflow.com/questions/32136973/how-to-get-a-context-in-a-recycler-view-adapter
-        Glide.with(context).load(albumArtUri).placeholder(R.drawable.untitled_album).into(holder.songArt);
+        Glide.with(context)
+                .load(albumArtUri)
+                .asBitmap()
+                .placeholder(R.drawable.untitled_album)
+                .into(holder.songArt);
 
         holder.currentCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,52 +201,123 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
                     Uri albumArtUri = getAlbumArtUri(currentSong.getAlbumId());
 
-                    if (mediaManager.mediaPlayer.isPlaying())
-                    {
-                        /**
-                         * Under the hood changes
-                         */
-                        //stop or pause your media player mediaPlayer.stop(); or mediaPlayer.pause();
-                        // http://stackoverflow.com/questions/12266502/android-mediaplayer-stop-and-play
-                        //mediaManager.mediaPlayer.stop();
-                        mediaManager.mediaPlayer.reset();
-                        mediaManager.mediaPlayer.setDataSource(context, audioUri);
-                        mediaManager.mediaPlayer.prepareAsync();
-                        mediaManager.mediaPlayerIsPaused = false;
+                        if (mediaManager.mediaPlayer.isPlaying()) {
+                            /**
+                             * Under the hood changes
+                             */
+                            //stop or pause your media player mediaPlayer.stop(); or mediaPlayer.pause();
+                            // http://stackoverflow.com/questions/12266502/android-mediaplayer-stop-and-play
+                            //mediaManager.mediaPlayer.stop();
+                            mediaManager.mediaPlayer.reset();
+                            mediaManager.mediaPlayer.setDataSource(context, audioUri);
+                            mediaManager.mediaPlayer.prepareAsync();
+                            mediaManager.mediaPlayerIsPaused = false;
 
-                        /**
-                         * User Interface Changes
-                         */
-                        slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
-                        mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
-                        slideSongTitle.setText(currentSong.getTitle());
-                        slideSongArtist.setText(currentSong.getArtistName());
-                        Glide.with(context).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slideAlbumArt);
-                        Glide.with(context).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slidedAlbumArt);
-                    } else
-                    {
-                        /**
-                         * Under the hood changes
-                         */
-                        // http://stackoverflow.com/questions/9008770/media-player-called-in-state-0-error-38-0
-                        mediaManager.mediaPlayer.reset();
-                        mediaManager.mediaPlayer.setDataSource(context, audioUri);
-                        mediaManager.mediaPlayer.prepareAsync();
-                        mediaManager.mediaPlayerIsPaused = false;
+                            /**
+                             * User Interface Changes
+                             */
+                            slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
+                            mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
+                            slideSongTitle.setText(currentSong.getTitle());
+                            slideSongArtist.setText(currentSong.getArtistName());
+                            Glide.with(context)
+                                    .load(albumArtUri)
+                                    .placeholder(R.drawable.untitled_album)
+                                    .into(slideAlbumArt);
 
-                        /**
-                         * User Interface Changes
-                         */
-                        slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
-                        mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
-                        slideSongTitle.setText(currentSong.getTitle());
-                        slideSongArtist.setText(currentSong.getArtistName());
-                        Glide.with(context).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slideAlbumArt);
-                        Glide.with(context).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slidedAlbumArt);
-                    }
+                            Glide.with(context)
+                                    .load(albumArtUri)
+                                    .asBitmap()
+                                    .placeholder(R.drawable.untitled_album)
+                                    .listener(new RequestListener<Uri, Bitmap>() {
+                                        @Override
+                                        public boolean onException(Exception e, Uri model, Target<Bitmap> target, boolean isFirstResource) {
+                                            return false;
+                                        }
 
-                } catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
-                    // TODO Auto-generated catch block
+                                        @Override
+                                        public boolean onResourceReady(Bitmap resource, Uri model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                            // Retrieve the palette of colors from the Bitmap first
+                                            Palette p = Palette.from(resource).generate();
+                                            Palette.Swatch swatch = p.getVibrantSwatch();
+                                            if (swatch != null) {
+                                                int color = swatch.getRgb();
+                                                slidedLinearLayout.setBackgroundColor(color);
+                                            } else {
+                                                Palette.Swatch mutedSwatch = p.getMutedSwatch();
+                                                if (mutedSwatch != null) {
+                                                    int color = mutedSwatch.getRgb();
+                                                    slidedLinearLayout.setBackgroundColor(color);
+                                                }
+                                            }
+
+                                            // Set the images
+                                            slideAlbumArt.setImageURI(model);
+                                            slidedAlbumArt.setImageURI(model);
+
+                                            return false;
+                                        }
+                                    })
+                                    .into(slidedAlbumArt);
+                        } else {
+                            /**
+                             * Under the hood changes
+                             */
+                            // http://stackoverflow.com/questions/9008770/media-player-called-in-state-0-error-38-0
+                            mediaManager.mediaPlayer.reset();
+                            mediaManager.mediaPlayer.setDataSource(context, audioUri);
+                            mediaManager.mediaPlayer.prepareAsync();
+                            mediaManager.mediaPlayerIsPaused = false;
+
+                            /**
+                             * User Interface Changes
+                             */
+                            slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
+                            mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
+                            slideSongTitle.setText(currentSong.getTitle());
+                            slideSongArtist.setText(currentSong.getArtistName());
+                            Glide.with(context)
+                                    .load(albumArtUri)
+                                    .placeholder(R.drawable.untitled_album)
+                                    .into(slideAlbumArt);
+
+                            Glide.with(context)
+                                    .load(albumArtUri)
+                                    .asBitmap()
+                                    .placeholder(R.drawable.untitled_album)
+                                    .listener(new RequestListener<Uri, Bitmap>() {
+                                        @Override
+                                        public boolean onException(Exception e, Uri model, Target<Bitmap> target, boolean isFirstResource) {
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public boolean onResourceReady(Bitmap resource, Uri model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                            // Retrieve the palette of colors from the Bitmap first
+                                            Palette p = Palette.from(resource).generate();
+                                            Palette.Swatch swatch = p.getVibrantSwatch();
+                                            if (swatch != null) {
+                                                int color = swatch.getRgb();
+                                                slidedLinearLayout.setBackgroundColor(color);
+                                            } else {
+                                                Palette.Swatch mutedSwatch = p.getMutedSwatch();
+                                                if (mutedSwatch != null) {
+                                                    int color = mutedSwatch.getRgb();
+                                                    slidedLinearLayout.setBackgroundColor(color);
+                                                }
+                                            }
+
+                                            // Set the images
+                                            slideAlbumArt.setImageURI(model);
+                                            slidedAlbumArt.setImageURI(model);
+
+                                            return true;
+                                        }
+                                    })
+                                    .into(slidedAlbumArt);
+                        }
+
+                    } catch (IOException e) {
                     e.printStackTrace();
                 }
             }

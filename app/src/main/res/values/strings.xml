@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">MaterialTunes</string>
 
+    <string name="app_intro">App Intro</string>
+
     <string name="action_settings">Settings</string>
 
     // Toolbar Strings
