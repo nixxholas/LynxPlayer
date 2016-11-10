@@ -243,6 +243,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             }
         });
 
+
+
     }
 
     @Override
@@ -250,6 +252,17 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    // http://programmerguru.com/android-tutorial/how-to-change-the-back-button-behaviour/
+    @Override
+    public void onBackPressed() {
+        //Include the code here
+        if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        } else {
+            finish();
+        }
     }
 
     @Override
