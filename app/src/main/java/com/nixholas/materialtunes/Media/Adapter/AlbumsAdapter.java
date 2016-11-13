@@ -128,6 +128,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         holder.artistName.setText(currentAlbum.getArtistName());
 
         if (currentAlbum.getAlbumArtPath() != null) {
+            // http://stackoverflow.com/questions/35997439/palette-using-with-glide-sometimes-fail-to-load-dark-vibrant-color
             Glide.with(context)
                     .fromUri()
                     .asBitmap()

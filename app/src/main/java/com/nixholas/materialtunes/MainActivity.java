@@ -3,8 +3,12 @@ package com.nixholas.materialtunes;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -14,11 +18,11 @@ import android.media.AudioManager;
 import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SlidingPaneLayout;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.graphics.Palette;
@@ -29,6 +33,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +43,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,15 +56,9 @@ import com.nixholas.materialtunes.Fragments.SongsFragment;
 import com.nixholas.materialtunes.Media.Adapter.DataAdapter;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.Media.MediaManager;
+import com.nixholas.materialtunes.Notification.PersistentNotif;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import org.w3c.dom.Text;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -137,7 +137,12 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         mediaControls_Repeat = (ImageButton) findViewById(R.id.media_controls_repeat);
 
         // Setup the notifications
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        /*NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        initializeNotification();*/
+
+        Handler mHandler = new Handler();
+        Context appContext = getBaseContext().getApplicationContext();
+        mHandler.post(new PersistentNotif(appContext));
 
         mDataAdapter.run();
 
@@ -687,5 +692,4 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             // permissions this app might request
         }
     }
-
 }

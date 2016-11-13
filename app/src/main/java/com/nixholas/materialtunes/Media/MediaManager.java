@@ -64,6 +64,10 @@ public class MediaManager {
         PlayState = MPPlayState.NOREPEAT;
     }
 
+    public Song getCurrent() {
+        return songFiles.get(currentlyPlayingIndex);
+    }
+
     public Song getNext() {
         if(isMediaPlayerIsShuffling){
             int newSong = currentlyPlayingIndex;
