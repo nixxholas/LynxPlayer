@@ -89,7 +89,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
         public ViewHolder(View v) {
             super(v);
-            ButterKnife.bind(this, v);
+            //ButterKnife.bind(this, v);
             this.title = (TextView) v.findViewById(R.id.card_title);
             this.artistName = (TextView) v.findViewById(R.id.card_artist);
             this.songArt = (ImageView) v.findViewById(R.id.card_image);

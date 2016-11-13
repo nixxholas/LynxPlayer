@@ -11,12 +11,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.AudioManager;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.graphics.Palette;
@@ -45,9 +47,12 @@ import com.bumptech.glide.request.target.Target;
 import com.nixholas.materialtunes.Fragments.AlbumsFragment;
 import com.nixholas.materialtunes.Fragments.ListsFragment;
 import com.nixholas.materialtunes.Fragments.SongsFragment;
+import com.nixholas.materialtunes.Media.Adapter.DataAdapter;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.Media.MediaManager;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import org.w3c.dom.Text;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -60,24 +65,26 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener{
     // Protected Entities
     // Sliding Up Bar
-    @BindView(R.id.slide_albumart) ImageView slideAlbumArt;
-    @BindView(R.id.slide_songartist) TextView slideSongArtist;
-    @BindView(R.id.slide_songtitle) TextView slideSongTitle;
-    @BindView(R.id.slide_button) ImageButton slideButton;
-    @BindView(R.id.slide_layout) RelativeLayout slideRelativeLayout;
-    @BindView(R.id.sliding_layout) SlidingUpPanelLayout slidingUpPanelLayout;
+    ImageView slideAlbumArt;
+    TextView slideSongArtist;
+    TextView slideSongTitle;
+    ImageButton slideButton;
+    RelativeLayout slideRelativeLayout;
+    SlidingUpPanelLayout slidingUpPanelLayout;
 
     // Expanded View of Sliding Up Bar
-    @BindView(R.id.slided_image) ImageView slidedAlbumArt;
+    ImageView slidedAlbumArt;
+    @SuppressLint("StaticFieldLeak")
     public static LinearLayout slidedLinearLayout;
-    @BindView(R.id.media_controls_playpause) ImageButton mediaControls_PlayPause;
-    @BindView(R.id.media_controls_previous) ImageButton mediaControls_Previous;
-    @BindView(R.id.media_controls_next) ImageButton mediaControls_Next;
-    @BindView(R.id.media_controls_shuffle) ImageButton mediaControls_Shuffle;
-    @BindView(R.id.media_controls_repeat) ImageButton mediaControls_Repeat;
+    ImageButton mediaControls_PlayPause;
+    ImageButton mediaControls_Previous;
+    ImageButton mediaControls_Next;
+    ImageButton mediaControls_Shuffle;
+    ImageButton mediaControls_Repeat;
 
     // Publicly Accessible Entities
     public static MediaManager mediaManager = new MediaManager();
+    DataAdapter mDataAdapter;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -93,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,8 +118,28 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         ButterKnife.bind(this);
 
         slidedLinearLayout = (LinearLayout) findViewById(R.id.slided_layout);
+        slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
 
+        // Sliding Up Bar
+        slideAlbumArt = (ImageView) findViewById(R.id.slide_albumart);
+        slideSongArtist = (TextView) findViewById(R.id.slide_songartist);
+        slideSongTitle = (TextView) findViewById(R.id.slide_songtitle);
+        slideButton = (ImageButton) findViewById(R.id.slide_button);
+        slideRelativeLayout = (RelativeLayout) findViewById(R.id.slide_layout);
+        mDataAdapter = new DataAdapter(getContentResolver());
+
+        // Expanded View of Sliding Up Bar
+        slidedAlbumArt = (ImageView) findViewById(R.id.slided_image);
+        mediaControls_PlayPause = (ImageButton) findViewById(R.id.media_controls_playpause);
+        mediaControls_Previous = (ImageButton) findViewById(R.id.media_controls_previous);
+        mediaControls_Next = (ImageButton) findViewById(R.id.media_controls_next);
+        mediaControls_Shuffle = (ImageButton) findViewById(R.id.media_controls_shuffle);
+        mediaControls_Repeat = (ImageButton) findViewById(R.id.media_controls_repeat);
+
+        // Setup the notifications
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+
+        mDataAdapter.run();
 
         mediaManager.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
@@ -128,6 +155,9 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         }*/
 
         slidedLinearLayout.setAlpha(0);
+
+        // Hide the panel first, since nothing is being played
+        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -292,7 +322,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-            mediaPlayer.start();
+        // Check to make sure it's not hidden
+        if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.HIDDEN) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        }
+        mediaPlayer.start();
     }
 
     /**
@@ -619,7 +653,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 1: {
-
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -636,7 +669,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             }
 
             case 2: {
-
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -647,7 +679,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(MainActivity.this, "Permission denied to write your External storage", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "Permission denied to write your External storage", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }

@@ -56,58 +56,6 @@ public class SongsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.main_RecyclerView);
 
-        mediaManager.songFiles.clear(); // Make sure we reset it first before we re-initialize to look for new audio files
-        /**
-         * Media Data Initialization Phase
-         */
-        // Get Content Dynamically
-        ContentResolver cr = getActivity().getContentResolver();
-
-        Uri songsUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String songsSelection = MediaStore.Audio.Media.IS_MUSIC + "!= 0";
-        String songsSortOrder = MediaStore.Audio.Media.TITLE + " ASC";
-        Cursor songCur = cr.query(songsUri, null, songsSelection, null, songsSortOrder);
-        int songCount = 0;
-
-        if(songCur != null)
-        {
-            songCount = songCur.getCount();
-
-            if(songCount > 0)
-            {
-                while(songCur.moveToNext())
-                {
-                    //String data = songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.DATA));
-
-                    // Debug
-                    //Log.e("Song Path", data);
-
-                    // (long _id, long _albumId, long _artistId, String _title,
-                    // String _artistName, String _albumName, int _duration)
-                    //Log.e("Music ID", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media._ID)));
-                    //Log.e("Music Album ID", songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
-                    //Log.e("Music Artist ID", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)));
-                    //Log.e("Music Title", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-                    //Log.e("Music Artist Name", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
-                    //Log.e("Music Album Name", songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
-                    //Log.e("Music Duration", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-
-                    mediaManager.songFiles.add(new Song(
-                                songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.DATA)),
-                                songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media._ID)),
-                                songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
-                                songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)),
-                                songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.TITLE)),
-                                songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
-                                songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
-                                songCur.getInt(songCur.getColumnIndex(MediaStore.Audio.Media.DURATION))));
-                }
-
-            }
-
-            songCur.close();
-        }
-
         /**
          * User Interface Initialization
          */

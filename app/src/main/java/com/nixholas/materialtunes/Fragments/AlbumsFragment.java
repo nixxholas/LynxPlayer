@@ -57,56 +57,6 @@ public class AlbumsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.main_RecyclerView);
 
-        mediaManager.albumFiles.clear(); // Make sure we reset it first before we re-initialize to look for new albums
-
-
-        /**
-         * Media Data Initialization Phase
-         */
-        // Get Content Dynamically
-        ContentResolver cr = getActivity().getContentResolver();
-
-        Uri albumsUri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
-        String albumsSortOrder = MediaStore.Audio.Albums.ALBUM + " ASC";
-        Cursor albumCur = cr.query(albumsUri,
-                new String[]{"_id", "album", "artist", "artist_id", "numsongs", "minyear"},
-                null,
-                null,
-                albumsSortOrder);
-
-        int albumCount = 0;
-
-        if (albumCur != null) {
-            albumCount = albumCur.getCount();
-
-            if (albumCount > 0) {
-                while (albumCur.moveToNext()) {
-                    // Debug
-                    //Log.e("Album ID", albumCur.getString(albumCur.getColumnIndex(MediaStore.Audio.Albums._ID)));
-                    //Log.e("Album Name", albumCur.getString(albumCur.getColumnIndex(MediaStore.Audio.Albums.ALBUM)));
-                    //Log.e("Album Artist", albumCur.getString(albumCur.getColumnIndex(MediaStore.Audio.Albums.ARTIST)));
-                    //Log.e("Album Artist ID", albumCur.getString(albumCur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)));
-                    //Log.e("Album Song Count", albumCur.getString(albumCur.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS)));
-                    //Log.e("Album Year", albumCur.getString(albumCur.getColumnIndex(MediaStore.Audio.Albums.FIRST_YEAR)));
-                    /*Log.e("Column 0", String.valueOf(albumCur.getLong(0)));
-                    Log.e("Column 1", String.valueOf(albumCur.getString(1)));
-                    Log.e("Column 2", String.valueOf(albumCur.getString(2)));
-                    Log.e("Column 3", String.valueOf(albumCur.getLong(3)));
-                    Log.e("Column 4", String.valueOf(albumCur.getInt(4)));
-                    Log.e("Column 5", String.valueOf(albumCur.getInt(5)));*/
-
-                    mediaManager.albumFiles.add(new Album(
-                            albumCur.getLong(0),
-                            albumCur.getString(1),
-                            albumCur.getString(2),
-                            albumCur.getLong(3),
-                            albumCur.getInt(4),
-                            albumCur.getInt(5)
-                    ));
-                }
-            }
-        }
-
         /**
          * User Interface Initialization
          */
