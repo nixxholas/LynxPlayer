@@ -2,29 +2,19 @@ package com.nixholas.materialtunes;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.AudioManager;
-import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 
@@ -33,7 +23,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,7 +32,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,9 +47,13 @@ import com.nixholas.materialtunes.Media.MediaManager;
 import com.nixholas.materialtunes.Notification.PersistentNotif;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
+/**
+ * Android Security TTN (To Take Note) Of
+ *
+ * https://securityintelligence.com/new-vulnerability-android-framework-fragment-injection/
+ *
+ *
+ */
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener{
     // Protected Entities
     // Sliding Up Bar
@@ -115,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
         slidedLinearLayout = (LinearLayout) findViewById(R.id.slided_layout);
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
@@ -241,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                  * So we'll do 255 - (slideOffset * 255) for the Unexpanded Views and the previous for the expanded views
                  */
                 int unexpandedOffset = (int) (255 - (slideOffset * 255)); // For the Un expanded views
-                int expandedOffset = (int) (slideOffset * 255); // For the expanded views
+                //int expandedOffset = (int) (slideOffset * 255); // For the expanded views
 
                 // Set the Unexpanded Views first
                 slideButton.setImageAlpha(unexpandedOffset);
@@ -319,6 +310,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -386,7 +379,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
      * The two buttons below must have the same binded views at the same time.
      * @param v
      */
-    @OnClick(R.id.slide_button)
     public void slideButtonOnClick(View v) {
         //Log.e("Slide Button", "Clicked");
 
@@ -408,7 +400,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         }
     }
 
-    @OnClick(R.id.media_controls_playpause)
     public void mediaControlsOnClickPlayPause(View v) {
         if (mediaManager.mediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
             // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
@@ -428,7 +419,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         }
     }
 
-    @OnClick(R.id.media_controls_previous)
     public void mediaControlsOnClickPrevious(View v) {
         try {
             final Song prevSong = mediaManager.getPrevious();
@@ -530,7 +520,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         }
     }
 
-    @OnClick(R.id.media_controls_next)
     public void mediaControlsOnClickNext(View v) {
         try {
             final Song nextSong = mediaManager.getNext();
@@ -631,7 +620,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         }
     }
 
-    @OnClick(R.id.media_controls_repeat)
     public void mediaControlsOnClickRepeat (View v) {
         if (mediaManager.PlayState == MediaManager.MPPlayState.NOREPEAT) {
             // Next is repeat all..

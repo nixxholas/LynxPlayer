@@ -12,6 +12,8 @@ import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.R;
 
 /**
+ * The Generic Notification Object for MaterialTunes.
+ *
  * Created by nixho on 14-Nov-16.
  *
  * http://www.laurivan.com/android-display-a-notification/
