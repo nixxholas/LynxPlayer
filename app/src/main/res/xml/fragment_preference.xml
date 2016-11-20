@@ -7,9 +7,14 @@
 
         <SwitchPreference
             android:defaultValue="false"
-            android:title="Dark Mode"
-            android:key="darkorlight_pref" />
+            android:title="AMOLED Mode"
+            android:key="amoled_pref" />
 
+        <ListPreference
+            android:title="@string/pref_theme_title">
+
+
+        </ListPreference>
 
     </PreferenceCategory>
 

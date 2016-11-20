@@ -5,6 +5,9 @@
 
     <string name="action_settings">Settings</string>
     <string name="pref_main_title">Preferences</string>
+    
+    // Preference Strings
+    <string name="pref_theme_title">Theme</string>
 
     // Toolbar Strings
     <string name="equalizer_title">Equalizer</string>

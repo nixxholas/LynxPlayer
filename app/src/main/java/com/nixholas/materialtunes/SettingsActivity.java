@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 
 import com.nixholas.materialtunes.R;
 
@@ -15,6 +16,13 @@ import com.nixholas.materialtunes.R;
  */
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+    // Object References
+    static SharedPreferences mPreference;
+
+    static SwitchPreference amoledPref;
+
+    // Option References
+    public static final String AMOLED_PREF = "amoled_pref";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +32,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+
     }
 
     public static class SettingsFragment extends PreferenceFragment
@@ -33,6 +42,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.fragment_preference);
+
+            //amoledPref = (SwitchPreference)
         }
     }
 }

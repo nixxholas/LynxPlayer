@@ -66,8 +66,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     // Expanded View of Sliding Up Bar
     ImageView slidedAlbumArt;
-    @SuppressLint("StaticFieldLeak")
-    public static LinearLayout slidedLinearLayout;
+    LinearLayout slidedLinearLayout;
     ImageButton mediaControls_PlayPause;
     ImageButton mediaControls_Previous;
     ImageButton mediaControls_Next;
