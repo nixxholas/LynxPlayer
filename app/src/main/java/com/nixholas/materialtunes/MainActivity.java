@@ -1,17 +1,23 @@
 package com.nixholas.materialtunes;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.AudioManager;
+import android.media.Image;
+import android.media.MediaMetadata;
 import android.media.MediaPlayer;
+import android.media.session.MediaController;
+import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +38,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,28 +61,34 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
  *
  *
  */
-public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener{
+public class MainActivity extends AppCompatActivity {
     // Protected Entities
     // Sliding Up Bar
-    ImageView slideAlbumArt;
-    TextView slideSongArtist;
-    TextView slideSongTitle;
-    ImageButton slideButton;
-    RelativeLayout slideRelativeLayout;
-    SlidingUpPanelLayout slidingUpPanelLayout;
+    public static ImageView slideAlbumArt;
+    public static TextView slideSongArtist;
+    public static TextView slideSongTitle;
+    public static ImageButton slideButton;
+    public static RelativeLayout slideRelativeLayout;
+    public static SlidingUpPanelLayout slidingUpPanelLayout;
 
     // Expanded View of Sliding Up Bar
-    ImageView slidedAlbumArt;
-    LinearLayout slidedLinearLayout;
-    ImageButton mediaControls_PlayPause;
-    ImageButton mediaControls_Previous;
-    ImageButton mediaControls_Next;
-    ImageButton mediaControls_Shuffle;
-    ImageButton mediaControls_Repeat;
+    public static ImageView slidedAlbumArt;
+    public static LinearLayout slidedLinearLayout;
+    public static ImageButton mediaControls_PlayPause;
+    public static ImageButton mediaControls_Previous;
+    public static ImageButton mediaControls_Next;
+    public static ImageButton mediaControls_Shuffle;
+    public static ImageButton mediaControls_Repeat;
 
     // Publicly Accessible Entities
-    public static MediaManager mediaManager = new MediaManager();
+    public static MediaManager mediaManager;
+
     DataAdapter mDataAdapter;
+
+    // Notification Entities
+    private static MainActivity finalMain;
+    public static RemoteViews notifyView;
+    public static PersistentNotif persistentNotif;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -106,6 +119,16 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mediaManager = new MediaManager(this);
+        finalMain = this;
+
+        // Notifications
+        // Setup the default data for the Notifcation controls
+        /*notifyView = new RemoteViews(getPackageName(), R.layout.notification_big);
+        notifyView.setImageViewResource(R.id.notification_albumart, R.drawable.untitled_album);
+        notifyView.setImageViewResource(R.id.notification_previous, R.drawable.ic_skip_previous_black_36dp);
+        notifyView.setImageViewResource(R.id.notification_playpause, R.drawable.ic_play_arrow_black_36dp);
+        notifyView.setImageViewResource(R.id.notification_next, R.drawable.ic_skip_next_black_36dp);*/
 
         slidedLinearLayout = (LinearLayout) findViewById(R.id.slided_layout);
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
@@ -127,18 +150,13 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         mediaControls_Repeat = (ImageButton) findViewById(R.id.media_controls_repeat);
 
         // Setup the notifications
-        /*NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-        initializeNotification();*/
-
         Handler mHandler = new Handler();
         Context appContext = getBaseContext().getApplicationContext();
-        mHandler.post(new PersistentNotif(appContext));
+        mHandler.post(persistentNotif = new PersistentNotif(appContext));
 
         mDataAdapter.run();
 
-        mediaManager.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-        mediaManager.mediaPlayer.setOnPreparedListener(this);
+        mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         // Ensure we have READ_EXTERNAL_STORAGE for Music database in LocalProvider
         // Ensure we have WRITE_EXTERNAL_STORAGE for Album arts storage
@@ -166,53 +184,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        // http://stackoverflow.com/questions/10529226/notify-once-the-audio-is-finished-playing
-        mediaManager.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            public void onCompletion(MediaPlayer mp) {
-                //Log.e("Completed", "Yep");
-
-                try {
-                    if (mediaManager.PlayState == MediaManager.MPPlayState.REPEATALL) {
-                        /**
-                         * Under the hood changes
-                         */
-                        Song nextSong = mediaManager.getNext(); // Call and get the next song with shuffling check
-                        Uri sArtworkUri = Uri
-                                .parse("content://media/external/audio/albumart");
-                        Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, nextSong.getAlbumId());
-
-                        mediaManager.mediaPlayer.reset(); // Reset the mediaPlayer first
-                        mediaManager.mediaPlayer.setDataSource("file://" + nextSong.getDataPath()); // Set the path via the next song
-                        mediaManager.mediaPlayer.prepareAsync(); // prepare and play
-
-                        /**
-                         * User Interface Changes
-                         */
-                        slideSongTitle.setText(nextSong.getTitle());
-                        slideSongArtist.setText(nextSong.getArtistName());
-                        Glide.with(getApplicationContext()).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slideAlbumArt);
-                        Glide.with(getApplicationContext()).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slidedAlbumArt);
-                    } else if (mediaManager.PlayState != MediaManager.MPPlayState.NOREPEAT) {
-                        /**
-                         * Under The Hood changes
-                         */
-                        Song currentSong = mediaManager.songFiles.get(mediaManager.currentlyPlayingIndex); // Get the current song that just ended
-                        mediaManager.mediaPlayer.reset(); // Reset the player first
-                        Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
-                        mediaManager.mediaPlayer.setDataSource(getApplicationContext(), audioUri); // Set it again
-
-                        // Update the UI
-                        slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
-                        mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
-                    } // No need to perform an else for REPEATONE
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
@@ -277,9 +248,14 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 }*/
             }
         });
+    }
 
-
-
+    /**
+     * http://stackoverflow.com/questions/22869928/android-broadcastreceiver-onreceive-update-textview-in-mainactivity
+     * @return
+     */
+    public static MainActivity getInstance(){
+        return finalMain;
     }
 
     @Override
@@ -316,16 +292,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onPrepared(MediaPlayer mediaPlayer) {
-        // Check to make sure it's not hidden
-        if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.HIDDEN) {
-            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        }
-        mediaPlayer.start();
-    }
-
+    
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -381,17 +348,17 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     public void slideButtonOnClick(View v) {
         //Log.e("Slide Button", "Clicked");
 
-        if (mediaManager.mediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
+        if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
             // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
             if (mediaManager.mediaPlayerIsPaused) { // If the current song is paused,
-                mediaManager.mediaPlayer.start();
+                mediaManager.mMediaPlayer.start();
                 mediaManager.mediaPlayerIsPaused = false;
                 //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
                 slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
 
             } else { // Else we pause it
-                mediaManager.mediaPlayer.pause();
+                mediaManager.mMediaPlayer.pause();
                 mediaManager.mediaPlayerIsPaused = true;
                 slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
@@ -399,18 +366,17 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         }
     }
 
-    public void mediaControlsOnClickPlayPause(View v) {
-        if (mediaManager.mediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
+    public static void mediaControlsOnClickPlayPause() {
+        if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
             // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
             if (mediaManager.mediaPlayerIsPaused) { // If the current song is paused,
-                mediaManager.mediaPlayer.start();
+                mediaManager.mMediaPlayer.start();
                 mediaManager.mediaPlayerIsPaused = false;
                 //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
                 slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
-
             } else { // Else we pause it
-                mediaManager.mediaPlayer.pause();
+                mediaManager.mMediaPlayer.pause();
                 mediaManager.mediaPlayerIsPaused = true;
                 slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
@@ -418,8 +384,10 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         }
     }
 
-    public void mediaControlsOnClickPrevious(View v) {
+    public static void mediaControlsOnClickPrevious() {
         try {
+            View v = getInstance().getCurrentFocus();
+
             final Song prevSong = mediaManager.getPrevious();
 
             Uri audioUri = Uri.parse("file://" + prevSong.getDataPath());
@@ -428,11 +396,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                     .parse("content://media/external/audio/albumart");
             Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, prevSong.getAlbumId());
 
-            if (mediaManager.mediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
-                mediaManager.mediaPlayer.stop();
-                mediaManager.mediaPlayer.reset();
-                mediaManager.mediaPlayer.setDataSource(v.getContext(), audioUri);
-                mediaManager.mediaPlayer.prepareAsync();
+            if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
+                mediaManager.mMediaPlayer.stop();
+                mediaManager.mMediaPlayer.reset();
+                mediaManager.mMediaPlayer.setDataSource(v.getContext(), audioUri);
+                mediaManager.mMediaPlayer.prepareAsync();
                 mediaManager.mediaPlayerIsPaused = false;
 
                 /**
@@ -519,8 +487,10 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         }
     }
 
-    public void mediaControlsOnClickNext(View v) {
+    public static void mediaControlsOnClickNext() {
         try {
+            View v = getInstance().getCurrentFocus();
+
             final Song nextSong = mediaManager.getNext();
 
             Uri audioUri = Uri.parse("file://" + nextSong.getDataPath());
@@ -529,11 +499,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                     .parse("content://media/external/audio/albumart");
             Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, nextSong.getAlbumId());
 
-            if (mediaManager.mediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
-                mediaManager.mediaPlayer.stop();
-                mediaManager.mediaPlayer.reset();
-                mediaManager.mediaPlayer.setDataSource(v.getContext(), audioUri);
-                mediaManager.mediaPlayer.prepareAsync();
+            if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
+                mediaManager.mMediaPlayer.stop();
+                mediaManager.mMediaPlayer.reset();
+                mediaManager.mMediaPlayer.setDataSource(v.getContext(), audioUri);
+                mediaManager.mMediaPlayer.prepareAsync();
                 mediaManager.mediaPlayerIsPaused = false;
 
                 /**
@@ -620,24 +590,24 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     public void mediaControlsOnClickRepeat (View v) {
-        if (mediaManager.PlayState == MediaManager.MPPlayState.NOREPEAT) {
-            // Next is repeat all..
+        /*if (mediaManager.getmPlaybackState() == MediaManager.MPgetmPlaybackState().NOREPEAT) {
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
-            mediaManager.PlayState = MediaManager.MPPlayState.REPEATALL;
-            Log.e("PlayState", "Repeat All");
-        } else if (mediaManager.PlayState == MediaManager.MPPlayState.REPEATALL) {
+            // Next is repeat all..
+            mediaManager.getmPlaybackState() = MediaManager.MPgetmPlaybackState().REPEATALL;
+            Log.e("getmPlaybackState()", "Repeat All");
+        } else if (mediaManager.getmPlaybackState() == MediaManager.MPgetmPlaybackState().REPEATALL) {
+            mediaManager.mediaPlayer.setLooping(true);
             // Next is repeat one only..
             //http://stackoverflow.com/questions/9461270/media-player-looping-android
-            mediaManager.mediaPlayer.setLooping(true);
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_24dp);
-            mediaManager.PlayState = MediaManager.MPPlayState.REPEATONE;
+            mediaManager.getmPlaybackState() = MediaManager.MPgetmPlaybackState().REPEATONE;
         } else {
-            // Next is repeat nothing..
             mediaManager.mediaPlayer.setLooping(false);
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
-            mediaManager.PlayState = MediaManager.MPPlayState.NOREPEAT;
+            // Next is repeat nothing..
+            mediaManager.getmPlaybackState() = MediaManager.MPgetmPlaybackState().NOREPEAT;
             mediaControls_Repeat.setBackgroundColor(Color.GRAY);
-        }
+        }*/
     }
 
     @Override

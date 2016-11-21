@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="128dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/notibig_albumart"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true" />
+
+    <LinearLayout
+        android:id="@+id/notibig_textlayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="6dp"
+        android:layout_toEndOf="@+id/notibig_albumart"
+        android:orientation="vertical">
+
+        <!--http://stackoverflow.com/questions/9527288/any-way-to-remove-the-grey-background-from-imagebuttons-->
+        <TextView
+            android:id="@+id/notibig_title"
+            android:textColor="#000000"
+            android:textSize="@dimen/album_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/notibig_artist"
+            android:textColor="#000000"
+            android:textSize="@dimen/songs_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/notibig_album"
+            android:textColor="#000000"
+            android:textSize="@dimen/songs_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:weightSum="3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <!--http://stackoverflow.com/questions/5406092/android-how-to-make-a-view-grow-to-fill-available-space-->
+            <ImageButton
+                android:id="@+id/notibig_previous"
+                android:background="?android:selectableItemBackground"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageButton
+                android:id="@+id/notibig_playpause"
+                android:layout_marginLeft="@dimen/notibig_button_margin"
+                android:layout_marginRight="@dimen/notibig_button_margin"
+                android:background="?android:selectableItemBackground"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageButton
+                android:id="@+id/notibig_next"
+                android:background="?android:selectableItemBackground"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/notibig_dismiss"
+        android:background="?android:selectableItemBackground"
+        android:src="@drawable/ic_close_black_36dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

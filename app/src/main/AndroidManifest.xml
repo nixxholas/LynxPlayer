@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.nixholas.materialtunes">
 
     <!-- To be able to hold the partial wake lock for playback when the screen is off -->
@@ -45,6 +46,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".SettingsActivity" />
+        <receiver android:name=".Notification.PersistentNotif"
+            tools:ignore="InnerclassSeparator">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

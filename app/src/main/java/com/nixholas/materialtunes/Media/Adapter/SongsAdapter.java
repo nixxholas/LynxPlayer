@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.media.MediaPlayer;
+import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
@@ -40,7 +41,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
-import static com.nixholas.materialtunes.MainActivity.slidedLinearLayout;
 
 /**
  * Created by nixho on 03-Nov-16.
@@ -51,7 +51,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     @BindView(R.id.slide_albumart) ImageView slideAlbumArt;
     @BindView(R.id.slide_songtitle) TextView slideSongTitle;
     @BindView(R.id.slide_songartist) TextView slideSongArtist;
-    @BindView(R.id.slided_layout) LinearLayout slidedLinearyLayout;
+    @BindView(R.id.slided_layout) LinearLayout slidedLinearLayout;
 
     // Expanded Sliding Up Bar Entities
     @BindView(R.id.slided_image) ImageView slidedAlbumArt;
@@ -83,7 +83,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         TextView title, artistName;
         ImageView songArt;
         Palette viewPalette;
-        private boolean isPopupVisible;
+        //private boolean isPopupVisible;
         CardView currentCard;
         private final int cardHeight, cardWidth;
 
@@ -155,10 +155,11 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final Song currentSong = mDataset.get(position);
+        final int currentPosition = position;
 
         holder.title.setText(currentSong.getTitle());
         holder.artistName.setText(currentSong.getArtistName());
@@ -192,7 +193,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
                 try {
                     //Log.e("LOG ", currentSong.getDataPath());
-                    mediaManager.currentlyPlayingIndex = position;
+                    mediaManager.currentlyPlayingIndex = currentPosition;
                     Uri audioUri = Uri.parse("file://" + currentSong.getDataPath());
 
                     /*Uri sArtworkUri = Uri
@@ -201,16 +202,16 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
                     Uri albumArtUri = getAlbumArtUri(currentSong.getAlbumId());
 
-                        if (mediaManager.mediaPlayer.isPlaying()) {
+                        if (mediaManager.getmPlaybackState().getState() == PlaybackState.STATE_PLAYING) {
                             /**
                              * Under the hood changes
                              */
                             //stop or pause your media player mediaPlayer.stop(); or mediaPlayer.pause();
                             // http://stackoverflow.com/questions/12266502/android-mediaplayer-stop-and-play
                             //mediaManager.mediaPlayer.stop();
-                            mediaManager.mediaPlayer.reset();
-                            mediaManager.mediaPlayer.setDataSource(context, audioUri);
-                            mediaManager.mediaPlayer.prepareAsync();
+                            mediaManager.mMediaPlayer.reset();
+                            mediaManager.mMediaPlayer.setDataSource(context, audioUri);
+                            mediaManager.mMediaPlayer.prepareAsync();
                             mediaManager.mediaPlayerIsPaused = false;
 
                             /**
@@ -222,6 +223,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                             slideSongArtist.setText(currentSong.getArtistName());
                             Glide.with(context)
                                     .load(albumArtUri)
+                                    .asBitmap()
                                     .placeholder(R.drawable.untitled_album)
                                     .into(slideAlbumArt);
 
@@ -263,10 +265,13 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                             /**
                              * Under the hood changes
                              */
+
+                            //Log.e("SongsAdapter", "Working");
+
                             // http://stackoverflow.com/questions/9008770/media-player-called-in-state-0-error-38-0
-                            mediaManager.mediaPlayer.reset();
-                            mediaManager.mediaPlayer.setDataSource(context, audioUri);
-                            mediaManager.mediaPlayer.prepareAsync();
+                            mediaManager.mMediaPlayer.reset();
+                            mediaManager.mMediaPlayer.setDataSource(context, audioUri);
+                            mediaManager.mMediaPlayer.prepareAsync();
                             mediaManager.mediaPlayerIsPaused = false;
 
                             /**
