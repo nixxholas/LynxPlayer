@@ -47,10 +47,9 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
     private static final String NOTIF_LAUNCH = "NOTI_LAUNCH";
 
     private static final int NOTIFICATION_ID = 255;
-    private Context mContext;
+    private final Context mContext = MainActivity.getInstance();
     private NotificationManager mNotificationManager;
-    private Notification notification;
-    public static RemoteViews normalView, bigView;
+    private Notification mNotification;
 
     // NormalView Widgets
 
@@ -58,14 +57,14 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
     }
 
     public PersistentNotif(Context mContext) {
-        this.mContext = mContext;
+        //this.mContext = mContext;
 
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         //mNotificationManager.notify(NOTIFICATION_ID, notification); // Just for Debugging
     }
 
     public PersistentNotif(Context mContext, View parentView) {
-        this.mContext = mContext;
+        //this.mContext = mContext;
         //this.parentView = parentView;
 
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -78,18 +77,20 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
     }
 
     private void makeNotification(Context context) {
-        notification = new Notification.Builder(context)
+        mNotification = new Notification.Builder(context)
                 .setSmallIcon(R.drawable.ic_app_icon) // It is a requirement to have a default small icon for notifications
                 .setContentTitle("MaterialTunes")
                 .build();
     }
 
-    public void updateNotification(Song currentSong) {
+    public void createNotification() {
         // Debugging Works
         //Log.e("FilePath", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
+        //Log.e("Current Context", MainActivity.getInstance().getPackageName());
+        Song currentSong = mediaManager.getCurrent();
 
-        normalView = new RemoteViews(mContext.getPackageName(), R.layout.notification_normal);
-        bigView = new RemoteViews(mContext.getPackageName(), R.layout.notification_big);
+        RemoteViews normalView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_normal);
+        RemoteViews bigView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_big);
 
         // Setup the normalView items
         normalView.setTextViewText(R.id.noti_title, currentSong.getTitle());
@@ -100,8 +101,13 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
         bigView.setTextViewText(R.id.notibig_artist, currentSong.getArtistName());
         bigView.setTextViewText(R.id.notibig_album, currentSong.getAlbumName());
         bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
-        bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
         bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
+
+        if (mediaManager.mMediaPlayer.isPlaying()) {
+            bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
+        } else {
+            bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_white_36dp);
+        }
 
         // http://stackoverflow.com/questions/13472990/implementing-onclick-listener-for-app-widget
         bigView.setOnClickPendingIntent(R.id.notibig_playpause,
@@ -134,7 +140,7 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
             bigView.setImageViewResource(R.id.notibig_albumart, R.drawable.untitled_album);
         }
 
-        notification = new NotificationCompat.Builder(mContext)
+        mNotification = new NotificationCompat.Builder(mContext)
                 .setSmallIcon(R.drawable.ic_app_icon)
                 .setCustomContentView(normalView)
                 .setCustomBigContentView(bigView)
@@ -146,9 +152,84 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
                 .setOngoing(true)
                 .build();
 
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
 
-        mNotificationManager.notify(NOTIFICATION_ID, notification); // Notify the app to notify the system
+        mNotificationManager.notify(NOTIFICATION_ID, mNotification); // Notify the app to notify the system
+    }
+
+    public void updateNotification() {
+        // Debugging Works
+        //Log.e("FilePath", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
+        //Log.e("Current Context", MainActivity.getInstance().getPackageName());
+        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        Song currentSong = mediaManager.getCurrent();
+
+        RemoteViews normalView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_normal);
+        RemoteViews bigView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_big);
+
+        // Setup the normalView items
+        normalView.setTextViewText(R.id.noti_title, currentSong.getTitle());
+        normalView.setTextViewText(R.id.noti_artist, currentSong.getArtistName());
+
+        // Setup the bigView items
+        bigView.setTextViewText(R.id.notibig_title, currentSong.getTitle());
+        bigView.setTextViewText(R.id.notibig_artist, currentSong.getArtistName());
+        bigView.setTextViewText(R.id.notibig_album, currentSong.getAlbumName());
+        bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
+        bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
+
+        if (mediaManager.mMediaPlayer.isPlaying()) {
+            bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
+        } else {
+            bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
+        }
+
+        // http://stackoverflow.com/questions/13472990/implementing-onclick-listener-for-app-widget
+        bigView.setOnClickPendingIntent(R.id.notibig_playpause,
+                getPendingSelfIntent(mContext, NOTIF_PLAYPAUSE));
+        bigView.setOnClickPendingIntent(R.id.notibig_previous,
+                getPendingSelfIntent(mContext, NOTIF_PREVIOUS));
+        bigView.setOnClickPendingIntent(R.id.notibig_next,
+                getPendingSelfIntent(mContext, NOTIF_NEXT));
+        bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
+                getPendingSelfIntent(mContext, NOTIF_DISMISS));
+        bigView.setOnClickPendingIntent(R.id.notibig_layout,
+                getPendingSelfIntent(mContext, NOTIF_LAUNCH));
+
+        // Debugging Album Art
+        // Somehow doesn't work yet
+        Log.e("FilePathIsValid", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
+
+        // Album Art
+        // http://stackoverflow.com/questions/7817551/how-to-check-file-exist-or-not-and-if-not-create-a-new-file-in-sdcard-in-async-t
+        if (filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId())) {
+            // Setup the albumArt first
+            Uri sArtworkUri = Uri
+                    .parse("content://media/external/audio/albumart");
+            Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
+
+            normalView.setImageViewUri(R.id.noti_albumart, albumArtUri);
+            bigView.setImageViewUri(R.id.notibig_albumart, albumArtUri);
+        } else {
+            normalView.setImageViewResource(R.id.noti_albumart, R.drawable.untitled_album);
+            bigView.setImageViewResource(R.id.notibig_albumart, R.drawable.untitled_album);
+        }
+
+        mNotification = new NotificationCompat.Builder(mContext)
+                .setSmallIcon(R.drawable.ic_app_icon)
+                .setCustomContentView(normalView)
+                .setCustomBigContentView(bigView)
+                //.setLargeIcon(uriToBmp(albumArtUri))
+                // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
+                .setShowWhen(false) // Removes the timestamp for the notification
+                // http://stackoverflow.com/questions/27343202/changing-notification-icon-background-on-lollipop
+                //.setColor(Color.parseColor("303F9F"))
+                .setOngoing(true)
+                .build();
+
+        mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        mNotificationManager.notify(NOTIFICATION_ID, mNotification); // Notify the app to notify the system
     }
 
     private boolean filePathIsValid(String path) {
@@ -207,27 +288,34 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_PLAYPAUSE + " Works");
                 mediaControlsOnClickPlayPause();
+                updateNotification();
                 break;
+
             case NOTIF_NEXT:
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_NEXT + " Works");
                 mediaControlsOnClickNext();
                 break;
+
             case NOTIF_PREVIOUS:
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_PREVIOUS + " Works");
                 mediaControlsOnClickPrevious();
                 break;
+
             case NOTIF_DISMISS:
                 // Clear all notification
                 // http://stackoverflow.com/questions/4141555/how-to-use-getsystemservice-in-a-non-activity-class
                 mNotificationManager = (NotificationManager) context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.cancel(255);
-                mediaManager.mMediaPlayer.release(); // http://stackoverflow.com/questions/3692562/how-does-one-remove-a-mediaplayer
+                mediaManager.mMediaPlayer.reset();
+
+                // mediaManager.mMediaPlayer.release(); // http://stackoverflow.com/questions/3692562/how-does-one-remove-a-mediaplayer
                 // https://developer.android.com/guide/topics/media/mediaplayer.html
-                mediaManager.mMediaPlayer = null; // Good Practice to nullify our player
+                //mediaManager.mMediaPlayer = null; // Good Practice to nullify our player
                 //getInstance().finish();
                 break;
+
             case NOTIF_LAUNCH:
                 Intent mainIntent = new Intent(context, MainActivity.getInstance().getClass());
                 // http://stackoverflow.com/questions/5029354/how-can-i-programmatically-open-close-notifications-in-android
@@ -237,6 +325,7 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
                 context.sendBroadcast(closeIntent);
                 context.startActivity(mainIntent);
                 break;
+
             default:
                 break;
         }

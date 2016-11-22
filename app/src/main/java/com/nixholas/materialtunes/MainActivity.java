@@ -54,9 +54,8 @@ import com.nixholas.materialtunes.Media.Adapter.DataAdapter;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.Media.MediaManager;
 import com.nixholas.materialtunes.Notification.PersistentNotif;
+import com.nixholas.materialtunes.UI.SlidingBarUpdater;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
-import static com.nixholas.materialtunes.Notification.PersistentNotif.bigView;
 
 /**
  * Android Security TTN (To Take Note) Of
@@ -199,12 +198,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup the notifications
         Handler mHandler = new Handler();
-        Context appContext = getBaseContext().getApplicationContext();
-        mHandler.post(persistentNotif = new PersistentNotif(appContext));
+        //Context appContext = getBaseContext().getApplicationContext();
+        mHandler.post(persistentNotif = new PersistentNotif(MainActivity.this));
 
         mDataAdapter.run();
 
-        mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         // Ensure we have READ_EXTERNAL_STORAGE for Music database in LocalProvider
         // Ensure we have WRITE_EXTERNAL_STORAGE for Album arts storage
@@ -218,7 +217,12 @@ public class MainActivity extends AppCompatActivity {
         slidedLinearLayout.setAlpha(0);
 
         // Hide the panel first, since nothing is being played
-        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+        if (mediaManager.mMediaPlayer == null) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+        } else {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            SlidingBarUpdater.updateSlideBar(MainActivity.this);
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -403,12 +407,13 @@ public class MainActivity extends AppCompatActivity {
                 //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
                 slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
-
+                persistentNotif.updateNotification();
             } else { // Else we pause it
                 mediaManager.mMediaPlayer.pause();
                 mediaManager.mediaPlayerIsPaused = true;
                 slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+                persistentNotif.updateNotification();
             }
         }
     }
@@ -422,14 +427,16 @@ public class MainActivity extends AppCompatActivity {
                 //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
                 slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
-                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
+                //bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
             } else { // Else we pause it
                 mediaManager.mMediaPlayer.pause();
                 mediaManager.mediaPlayerIsPaused = true;
                 slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
-                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
+                //bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
             }
+
+            persistentNotif.updateNotification();
         }
     }
 
@@ -529,6 +536,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         })
                         .into(slidedAlbumArt);
+
+                persistentNotif.updateNotification();
             }
 
         } catch (Exception e) {
@@ -631,8 +640,9 @@ public class MainActivity extends AppCompatActivity {
                             }
                         })
                         .into(slidedAlbumArt);
-            }
 
+                persistentNotif.updateNotification();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

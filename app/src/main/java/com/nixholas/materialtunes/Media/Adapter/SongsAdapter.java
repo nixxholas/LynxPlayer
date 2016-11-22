@@ -185,6 +185,8 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                         int mCurrentPosition = mediaManager.mMediaPlayer.getCurrentPosition() / 1000;
                         slidingProgressBar.setProgress(mCurrentPosition);
                         slidedProgressBar.setProgress(mCurrentPosition);
+                    } else {
+
                     }
                     mainHandler.postDelayed(this, 1000);
                 } catch (Exception e) {
