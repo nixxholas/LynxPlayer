@@ -75,6 +75,16 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
+                <ProgressBar
+                    android:id="@+id/slide_progress"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:maxHeight="8dp"
+                    android:tag="tint_accent_color"
+                    android:layout_above="@+id/slide_layout"/>
+
             <RelativeLayout
                 android:id="@+id/slide_layout"
                 android:clipChildren="false"

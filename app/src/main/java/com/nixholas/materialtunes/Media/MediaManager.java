@@ -68,10 +68,16 @@ public class MediaManager extends Service {
         return mMediaSession.getSessionToken();
     }
 
+    public enum RepeatState{
+        NOREPEAT,
+        REPEATONE,
+        REPEATALL
+    }
+
     private MediaSession mMediaSession;
     public MediaPlayer mMediaPlayer = new MediaPlayer();
     public boolean mediaPlayerIsPaused;
-    public int repeatState = 0; // 0 for none, 1 for repeat one, 2 for repeat all
+    public RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
     private Random shufflerRandomizer;
     public boolean isMediaPlayerIsShuffling;
     private PlaybackState mPlaybackState;
@@ -107,7 +113,7 @@ public class MediaManager extends Service {
                     slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 }
 
-                Log.e("OnPrepared", "Working");
+                //Log.e("OnPrepared", "Working");
 
                 mMediaPlayer.start();
                 mPlaybackState = new PlaybackState.Builder()
@@ -125,7 +131,7 @@ public class MediaManager extends Service {
                 //Log.e("Completed", "Yep");
 
                 try {
-                    if (repeatState == 2) {
+                    if (repeatState == RepeatState.REPEATALL) {
                         /**
                          * Under the hood changes
                          */
@@ -150,7 +156,7 @@ public class MediaManager extends Service {
                         slideSongArtist.setText(nextSong.getArtistName());
                         Glide.with(getApplicationContext()).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slideAlbumArt);
                         Glide.with(getApplicationContext()).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slidedAlbumArt);
-                    } else if (repeatState == 0) {
+                    } else if (repeatState == RepeatState.NOREPEAT) {
                         /**
                          * Under The Hood changes
                          */
@@ -313,6 +319,14 @@ public class MediaManager extends Service {
         }
 
         return songFiles.get(currentlyPlayingIndex);
+    }
+
+    public RepeatState getRepeatState() {
+        return repeatState;
+    }
+
+    public void setRepeatState(RepeatState repeatState) {
+        this.repeatState = repeatState;
     }
 
 }

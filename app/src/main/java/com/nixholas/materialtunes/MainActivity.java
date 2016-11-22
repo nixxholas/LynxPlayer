@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.Image;
 import android.media.MediaMetadata;
@@ -37,6 +38,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
@@ -54,6 +56,8 @@ import com.nixholas.materialtunes.Media.MediaManager;
 import com.nixholas.materialtunes.Notification.PersistentNotif;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import static com.nixholas.materialtunes.Notification.PersistentNotif.bigView;
+
 /**
  * Android Security TTN (To Take Note) Of
  *
@@ -70,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     public static ImageButton slideButton;
     public static RelativeLayout slideRelativeLayout;
     public static SlidingUpPanelLayout slidingUpPanelLayout;
+    public static ProgressBar slidingProgressBar;
 
     // Expanded View of Sliding Up Bar
     public static ImageView slidedAlbumArt;
@@ -79,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     public static ImageButton mediaControls_Next;
     public static ImageButton mediaControls_Shuffle;
     public static ImageButton mediaControls_Repeat;
+    public static ProgressBar slidedProgressBar;
 
     // Publicly Accessible Entities
     public static MediaManager mediaManager;
@@ -87,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Notification Entities
     private static MainActivity finalMain;
-    public static RemoteViews notifyView;
     public static PersistentNotif persistentNotif;
 
     /**
@@ -119,8 +124,11 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mediaManager = new MediaManager(this);
-        finalMain = this;
+
+        if (mediaManager == null) {
+            mediaManager = new MediaManager(this);
+            finalMain = this;
+        }
 
         // Notifications
         // Setup the default data for the Notifcation controls
@@ -140,14 +148,54 @@ public class MainActivity extends AppCompatActivity {
         slideButton = (ImageButton) findViewById(R.id.slide_button);
         slideRelativeLayout = (RelativeLayout) findViewById(R.id.slide_layout);
         mDataAdapter = new DataAdapter(getContentResolver());
+        slidingProgressBar = (ProgressBar) findViewById(R.id.slide_progress);
 
         // Expanded View of Sliding Up Bar
         slidedAlbumArt = (ImageView) findViewById(R.id.slided_image);
+        slidedProgressBar = (ProgressBar) findViewById(R.id.slided_progress);
+
+        slidingProgressBar.getIndeterminateDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+        slidedProgressBar.getIndeterminateDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+
         mediaControls_PlayPause = (ImageButton) findViewById(R.id.media_controls_playpause);
+        mediaControls_PlayPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mediaControlsOnClickPlayPause();
+            }
+        });
+
         mediaControls_Previous = (ImageButton) findViewById(R.id.media_controls_previous);
+        mediaControls_Previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mediaControlsOnClickPrevious();
+            }
+        });
+
         mediaControls_Next = (ImageButton) findViewById(R.id.media_controls_next);
+        mediaControls_Next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mediaControlsOnClickNext();
+            }
+        });
+
         mediaControls_Shuffle = (ImageButton) findViewById(R.id.media_controls_shuffle);
+        mediaControls_Shuffle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         mediaControls_Repeat = (ImageButton) findViewById(R.id.media_controls_repeat);
+        mediaControls_Repeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mediaControlsOnClickRepeat();
+            }
+        });
 
         // Setup the notifications
         Handler mHandler = new Handler();
@@ -347,7 +395,6 @@ public class MainActivity extends AppCompatActivity {
      */
     public void slideButtonOnClick(View v) {
         //Log.e("Slide Button", "Clicked");
-
         if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
             // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
             if (mediaManager.mediaPlayerIsPaused) { // If the current song is paused,
@@ -375,11 +422,13 @@ public class MainActivity extends AppCompatActivity {
                 //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
                 slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
+                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
             } else { // Else we pause it
                 mediaManager.mMediaPlayer.pause();
                 mediaManager.mediaPlayerIsPaused = true;
                 slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
             }
         }
     }
@@ -589,25 +638,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void mediaControlsOnClickRepeat (View v) {
-        /*if (mediaManager.getmPlaybackState() == MediaManager.MPgetmPlaybackState().NOREPEAT) {
+    public void mediaControlsOnClickRepeat () {
+        if (mediaManager.getRepeatState() == MediaManager.RepeatState.NOREPEAT) {
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
             // Next is repeat all..
-            mediaManager.getmPlaybackState() = MediaManager.MPgetmPlaybackState().REPEATALL;
+            mediaManager.setRepeatState(MediaManager.RepeatState.REPEATALL);
             Log.e("getmPlaybackState()", "Repeat All");
-        } else if (mediaManager.getmPlaybackState() == MediaManager.MPgetmPlaybackState().REPEATALL) {
-            mediaManager.mediaPlayer.setLooping(true);
+        } else if (mediaManager.getRepeatState() == MediaManager.RepeatState.REPEATALL) {
+            mediaManager.mMediaPlayer.setLooping(true);
             // Next is repeat one only..
             //http://stackoverflow.com/questions/9461270/media-player-looping-android
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_24dp);
-            mediaManager.getmPlaybackState() = MediaManager.MPgetmPlaybackState().REPEATONE;
+            mediaManager.setRepeatState(MediaManager.RepeatState.REPEATONE);
         } else {
-            mediaManager.mediaPlayer.setLooping(false);
+            mediaManager.mMediaPlayer.setLooping(false);
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
             // Next is repeat nothing..
-            mediaManager.getmPlaybackState() = MediaManager.MPgetmPlaybackState().NOREPEAT;
+            mediaManager.setRepeatState(MediaManager.RepeatState.NOREPEAT);
             mediaControls_Repeat.setBackgroundColor(Color.GRAY);
-        }*/
+        }
     }
 
     @Override

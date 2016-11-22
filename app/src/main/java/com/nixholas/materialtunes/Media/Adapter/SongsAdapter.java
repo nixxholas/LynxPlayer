@@ -9,6 +9,7 @@ import android.media.Image;
 import android.media.MediaPlayer;
 import android.media.session.PlaybackState;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.Preferences;
@@ -41,6 +43,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
+import static com.nixholas.materialtunes.MainActivity.slidedProgressBar;
+import static com.nixholas.materialtunes.MainActivity.slidingProgressBar;
 
 /**
  * Created by nixho on 03-Nov-16.
@@ -163,6 +167,32 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
         holder.title.setText(currentSong.getTitle());
         holder.artistName.setText(currentSong.getArtistName());
+
+        // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android
+        slidingProgressBar.setMax(currentSong.getDuration()); // Set the max duration
+        slidedProgressBar.setMax(currentSong.getDuration());
+
+        // Get a handler that can be used to post to the main thread
+        // http://stackoverflow.com/questions/11123621/running-code-in-main-thread-from-another-thread
+        final Handler mainHandler = new Handler(context.getMainLooper());
+
+        Runnable progressRunnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (mediaManager.mMediaPlayer != null) {
+                        //Log.d("ProgRunnable", "Running"); // Debugging Purposes only
+                        int mCurrentPosition = mediaManager.mMediaPlayer.getCurrentPosition() / 1000;
+                        slidingProgressBar.setProgress(mCurrentPosition);
+                        slidedProgressBar.setProgress(mCurrentPosition);
+                    }
+                    mainHandler.postDelayed(this, 1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        mainHandler.post(progressRunnable);
 
         Uri sArtworkUri = Uri
                 .parse("content://media/external/audio/albumart");

@@ -1,36 +1,22 @@
 package com.nixholas.materialtunes.Notification;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RemoteViews;
-import android.widget.RemoteViewsService;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.AppWidgetTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
-import com.nixholas.materialtunes.Media.MediaManager;
 import com.nixholas.materialtunes.R;
 
 import java.io.ByteArrayOutputStream;
@@ -38,9 +24,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.MainActivity.mediaControlsOnClickPlayPause;
 import static com.nixholas.materialtunes.MainActivity.mediaControlsOnClickPrevious;
+import static com.nixholas.materialtunes.MainActivity.mediaManager;
 
 /**
  * The Generic Notification Object for MaterialTunes.
@@ -55,13 +43,14 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
     private static final String NOTIF_PREVIOUS = "NOTI_PREVIOUS";
     private static final String NOTIF_PLAYPAUSE = "NOTI_PLAYPAUSE";
     private static final String NOTIF_NEXT = "NOTI_NEXT";
+    private static final String NOTIF_DISMISS = "NOTI_DISMISS";
+    private static final String NOTIF_LAUNCH = "NOTI_LAUNCH";
 
     private static final int NOTIFICATION_ID = 255;
     private Context mContext;
     private NotificationManager mNotificationManager;
     private Notification notification;
-    private View parentView;
-    //private static RemoteViews normalView, bigView;
+    public static RemoteViews normalView, bigView;
 
     // NormalView Widgets
 
@@ -77,7 +66,7 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
 
     public PersistentNotif(Context mContext, View parentView) {
         this.mContext = mContext;
-        this.parentView = parentView;
+        //this.parentView = parentView;
 
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         //mNotificationManager.notify(NOTIFICATION_ID, notification); // Just for Debugging
@@ -99,8 +88,8 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
         // Debugging Works
         //Log.e("FilePath", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
 
-        RemoteViews normalView = new RemoteViews(mContext.getPackageName(), R.layout.notification_normal);
-        RemoteViews bigView = new RemoteViews(mContext.getPackageName(), R.layout.notification_big);
+        normalView = new RemoteViews(mContext.getPackageName(), R.layout.notification_normal);
+        bigView = new RemoteViews(mContext.getPackageName(), R.layout.notification_big);
 
         // Setup the normalView items
         normalView.setTextViewText(R.id.noti_title, currentSong.getTitle());
@@ -116,11 +105,15 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
 
         // http://stackoverflow.com/questions/13472990/implementing-onclick-listener-for-app-widget
         bigView.setOnClickPendingIntent(R.id.notibig_playpause,
-                                        getPendingSelfIntent(mContext, NOTIF_PLAYPAUSE));
+                getPendingSelfIntent(mContext, NOTIF_PLAYPAUSE));
         bigView.setOnClickPendingIntent(R.id.notibig_previous,
                 getPendingSelfIntent(mContext, NOTIF_PREVIOUS));
         bigView.setOnClickPendingIntent(R.id.notibig_next,
                 getPendingSelfIntent(mContext, NOTIF_NEXT));
+        bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
+                getPendingSelfIntent(mContext, NOTIF_DISMISS));
+        bigView.setOnClickPendingIntent(R.id.notibig_layout,
+                getPendingSelfIntent(mContext, NOTIF_LAUNCH));
 
         // Debugging Album Art
         // Somehow doesn't work yet
@@ -152,6 +145,8 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
                 //.setColor(Color.parseColor("303F9F"))
                 .setOngoing(true)
                 .build();
+
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
         mNotificationManager.notify(NOTIFICATION_ID, notification); // Notify the app to notify the system
     }
@@ -210,18 +205,37 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
         switch(intent.getAction()) {
             case NOTIF_PLAYPAUSE:
                 // Debugging Purposes
-                Log.e("onReceive:", NOTIF_PLAYPAUSE + " Works");
+                //Log.e("onReceive:", NOTIF_PLAYPAUSE + " Works");
                 mediaControlsOnClickPlayPause();
                 break;
             case NOTIF_NEXT:
                 // Debugging Purposes
-                Log.e("onReceive:", NOTIF_NEXT + " Works");
+                //Log.e("onReceive:", NOTIF_NEXT + " Works");
                 mediaControlsOnClickNext();
                 break;
             case NOTIF_PREVIOUS:
                 // Debugging Purposes
-                Log.e("onReceive:", NOTIF_PREVIOUS + " Works");
+                //Log.e("onReceive:", NOTIF_PREVIOUS + " Works");
                 mediaControlsOnClickPrevious();
+                break;
+            case NOTIF_DISMISS:
+                // Clear all notification
+                // http://stackoverflow.com/questions/4141555/how-to-use-getsystemservice-in-a-non-activity-class
+                mNotificationManager = (NotificationManager) context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.cancel(255);
+                mediaManager.mMediaPlayer.release(); // http://stackoverflow.com/questions/3692562/how-does-one-remove-a-mediaplayer
+                // https://developer.android.com/guide/topics/media/mediaplayer.html
+                mediaManager.mMediaPlayer = null; // Good Practice to nullify our player
+                //getInstance().finish();
+                break;
+            case NOTIF_LAUNCH:
+                Intent mainIntent = new Intent(context, MainActivity.getInstance().getClass());
+                // http://stackoverflow.com/questions/5029354/how-can-i-programmatically-open-close-notifications-in-android
+                Intent closeIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // http://stackoverflow.com/questions/3689581/calling-startactivity-from-outside-of-an-activity
+                context.sendBroadcast(closeIntent);
+                context.startActivity(mainIntent);
                 break;
             default:
                 break;

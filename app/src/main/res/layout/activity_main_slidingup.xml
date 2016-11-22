@@ -13,7 +13,8 @@
     <ImageView
             android:id="@+id/slided_image"
             android:layout_width="fill_parent"
-            android:layout_height="400dp"/>
+            android:layout_height="400dp"
+            android:contentDescription="slided album art" />
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/fab_container"
@@ -24,6 +25,17 @@
         android:layout_height="wrap_content"
         android:clipChildren="true"
         android:elevation="10dp">
+
+        <ProgressBar
+            android:id="@+id/slided_progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:maxHeight="48dp"
+            android:minHeight="36dp"
+            android:tag="tint_accent_color"
+            android:layout_above="@+id/media_controls_container"/>
 
         <LinearLayout
             android:id="@+id/media_controls_container"
@@ -44,7 +56,6 @@
 
             <ImageButton
                 android:id="@+id/media_controls_previous"
-                android:onClick="mediaControlsOnClickPrevious"
                 android:layout_marginLeft="48dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +65,6 @@
 
             <ImageButton
                 android:id="@+id/media_controls_playpause"
-                android:onClick="mediaControlsOnClickPlayPause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
@@ -65,7 +75,6 @@
 
             <ImageButton
                 android:id="@+id/media_controls_next"
-                android:onClick="mediaControlsOnClickNext"
                 android:layout_marginRight="48dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -75,7 +84,6 @@
 
             <ImageButton
                 android:id="@+id/media_controls_repeat"
-                android:onClick="mediaControlsOnClickRepeat"
                 android:layout_marginTop="6dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -84,29 +92,30 @@
 
         </LinearLayout>
 
-        <!--<android.support.design.widget.FloatingActionButton
-            app:layout_anchor="@id/media_controls_container"
-            app:layout_anchorGravity="bottom|right|end"
-            android:id="@+id/fab"
-            android:clickable="true"
-            android:src="@drawable/ic_dashboard_white_48dp"
-            android:transitionName="button_fab"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:elevation="6dp"
-            android:background="?attr/selectableItemBackgroundBorderless" />
--->
-        <!--<ImageButton
-            android:id="@+id/fab"
-            android:transitionName="button_fab"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_gravity="top|end"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:elevation="5dp"
-            android:onClick="onFabPressed"
-            />-->
+        <LinearLayout
+            android:id="@+id/slided_details"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/slided_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/slided_album"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 
