@@ -85,7 +85,7 @@ public class SlidingBarUpdater {
 
         if (mediaManager.mMediaPlayer.isPlaying()) {
             slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
-            mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_black_36dp);
+            mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
         } else {
             slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
             mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);

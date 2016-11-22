@@ -1,24 +1,15 @@
 package com.nixholas.materialtunes;
 
 import android.Manifest;
-import android.content.ComponentName;
 import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.AudioManager;
-import android.media.Image;
-import android.media.MediaMetadata;
-import android.media.MediaPlayer;
-import android.media.session.MediaController;
-import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Handler;
-import android.os.IBinder;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -40,7 +31,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +46,8 @@ import com.nixholas.materialtunes.Media.MediaManager;
 import com.nixholas.materialtunes.Notification.PersistentNotif;
 import com.nixholas.materialtunes.UI.SlidingBarUpdater;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
 
 /**
  * Android Security TTN (To Take Note) Of
@@ -168,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
         mediaControls_Previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mediaControlsOnClickPrevious();
+                mediaControlsOnClickPrevious(view);
             }
         });
 
@@ -344,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -407,43 +399,31 @@ public class MainActivity extends AppCompatActivity {
                 //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
                 slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
-                persistentNotif.updateNotification();
             } else { // Else we pause it
                 mediaManager.mMediaPlayer.pause();
                 mediaManager.mediaPlayerIsPaused = true;
                 slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
-                persistentNotif.updateNotification();
-            }
-        }
-    }
-
-    public static void mediaControlsOnClickPlayPause() {
-        if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
-            // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
-            if (mediaManager.mediaPlayerIsPaused) { // If the current song is paused,
-                mediaManager.mMediaPlayer.start();
-                mediaManager.mediaPlayerIsPaused = false;
-                //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
-                slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
-                mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
-                //bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
-            } else { // Else we pause it
-                mediaManager.mMediaPlayer.pause();
-                mediaManager.mediaPlayerIsPaused = true;
-                slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
-                mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
-                //bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
             }
 
             persistentNotif.updateNotification();
         }
     }
 
-    public static void mediaControlsOnClickPrevious() {
-        try {
-            View v = getInstance().getCurrentFocus();
+    public void clickPrevious(View view) {
+        mediaControlsOnClickPlayPause();
+    }
 
+    public void clickPlayPause(View view) {
+        mediaControlsOnClickPlayPause();
+    }
+
+    public void clickNext(View view) {
+        mediaControlsOnClickNext();
+    }
+
+    public static void mediaControlsOnClickPrevious(View v) {
+        try {
             final Song prevSong = mediaManager.getPrevious();
 
             Uri audioUri = Uri.parse("file://" + prevSong.getDataPath());
@@ -547,6 +527,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static void mediaControlsOnClickNext() {
         try {
+            //Log.e("onClickNext", "Working");
+
             View v = getInstance().getCurrentFocus();
 
             final Song nextSong = mediaManager.getNext();

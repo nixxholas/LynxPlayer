@@ -24,11 +24,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaControlsOnClickNext;
-import static com.nixholas.materialtunes.MainActivity.mediaControlsOnClickPlayPause;
 import static com.nixholas.materialtunes.MainActivity.mediaControlsOnClickPrevious;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
+import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
 
 /**
  * The Generic Notification Object for MaterialTunes.
@@ -300,7 +299,7 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
             case NOTIF_PREVIOUS:
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_PREVIOUS + " Works");
-                mediaControlsOnClickPrevious();
+                mediaControlsOnClickPlayPause();
                 break;
 
             case NOTIF_DISMISS:
