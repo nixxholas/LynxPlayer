@@ -27,6 +27,8 @@ import java.io.InputStream;
 import static com.nixholas.materialtunes.MainActivity.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.MainActivity.mediaControlsOnClickPrevious;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
+import static com.nixholas.materialtunes.Media.MediaNotifUpdater.mediaNotifOnClickNext;
+import static com.nixholas.materialtunes.Media.MediaNotifUpdater.mediaNotifOnClickPrevious;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
 
 /**
@@ -293,13 +295,17 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
             case NOTIF_NEXT:
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_NEXT + " Works");
-                mediaControlsOnClickNext();
+                //mediaControlsOnClickNext();
+                mediaNotifOnClickNext();
+                updateNotification();
                 break;
 
             case NOTIF_PREVIOUS:
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_PREVIOUS + " Works");
-                mediaControlsOnClickPlayPause();
+                //mediaControlsOnClickPrevious();
+                mediaNotifOnClickPrevious();
+                updateNotification();
                 break;
 
             case NOTIF_DISMISS:

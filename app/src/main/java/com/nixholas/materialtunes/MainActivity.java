@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Notification Entities
     private static MainActivity finalMain;
+    private static View mainActivityView;
     public static PersistentNotif persistentNotif;
 
     /**
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         if (mediaManager == null) {
             mediaManager = new MediaManager(this);
             finalMain = this;
+            mainActivityView = getCurrentFocus();
         }
 
         // Notifications
@@ -168,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         mediaControls_Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mediaControlsOnClickNext();
+                mediaControlsOnClickNext(view);
             }
         });
 
@@ -195,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
         mDataAdapter.run();
 
-            mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         // Ensure we have READ_EXTERNAL_STORAGE for Music database in LocalProvider
         // Ensure we have WRITE_EXTERNAL_STORAGE for Album arts storage
@@ -419,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickNext(View view) {
-        mediaControlsOnClickNext();
+        mediaControlsOnClickNext(view);
     }
 
     public static void mediaControlsOnClickPrevious(View v) {
@@ -525,11 +527,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void mediaControlsOnClickNext() {
+    public static void mediaControlsOnClickNext(View v) {
         try {
             //Log.e("onClickNext", "Working");
-
-            View v = getInstance().getCurrentFocus();
+            //Log.e("mMediaPlayer.isPlaying", mediaManager.mMediaPlayer.isPlaying() + "");
+            /**
+             * If getInstance().getCurrentFocus() is used, there will be a high probability of
+             * com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView{18335a0 VFED..... .F.....D 0,0-1440,2070 #7f0c00a9 app:id/main_RecyclerView}
+             * which in other words mean that the UI might fail to load on the right view.
+             *
+             * Glide is still failing to load on the right context because of the wrong view...
+             */
+            //View v = getInstance().getCurrentFocus().getRootView();
 
             final Song nextSong = mediaManager.getNext();
 
@@ -539,7 +548,7 @@ public class MainActivity extends AppCompatActivity {
                     .parse("content://media/external/audio/albumart");
             Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, nextSong.getAlbumId());
 
-            if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
+            if (mediaManager.mMediaPlayer.isPlaying() || !mediaManager.mediaPlayerIsPaused) {
                 mediaManager.mMediaPlayer.stop();
                 mediaManager.mMediaPlayer.reset();
                 mediaManager.mMediaPlayer.setDataSource(v.getContext(), audioUri);
@@ -578,10 +587,6 @@ public class MainActivity extends AppCompatActivity {
                                         slidedLinearLayout.setBackgroundColor(color);
                                     }
                                 }
-
-                                // Set the images
-                                slideAlbumArt.setImageURI(model);
-                                slidedAlbumArt.setImageURI(model);
 
                                 return true;
                             }

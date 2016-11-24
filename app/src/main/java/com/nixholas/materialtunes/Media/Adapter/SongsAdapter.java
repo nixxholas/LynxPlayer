@@ -174,7 +174,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
         // Get a handler that can be used to post to the main thread
         // http://stackoverflow.com/questions/11123621/running-code-in-main-thread-from-another-thread
-        final Handler mainHandler = new Handler(context.getMainLooper());
+        /*final Handler mainHandler = new Handler(context.getMainLooper());
 
         Runnable progressRunnable = new Runnable() {
             @Override
@@ -194,7 +194,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                 }
             }
         };
-        mainHandler.post(progressRunnable);
+        mainHandler.post(progressRunnable);*/
 
         Uri sArtworkUri = Uri
                 .parse("content://media/external/audio/albumart");
