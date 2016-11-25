@@ -4,6 +4,7 @@ import android.content.ContentUris;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v7.graphics.Palette;
+import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +22,7 @@ import static com.nixholas.materialtunes.MainActivity.persistentNotif;
  */
 
 public class MediaNotifUpdater {
+    private static String LOGSTR = "MediaNU";
 
     public static void mediaNotifOnClickPrevious() {
         try {
@@ -39,7 +41,7 @@ public class MediaNotifUpdater {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(LOGSTR + "OnClickPrevious", e.toString());
         }
     }
 
@@ -70,7 +72,7 @@ public class MediaNotifUpdater {
                 persistentNotif.updateNotification();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(LOGSTR + "OnClickNext", e.toString());
         }
     }
 

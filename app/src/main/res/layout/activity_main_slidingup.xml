@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--http://stackoverflow.com/questions/29738510/toolbar-overlapping-below-status-bar-->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/slided_layout"
     android:layout_alignBaseline="@+id/slide_layout"
@@ -10,93 +10,64 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!--http://stackoverflow.com/questions/17499789/set-position-of-seekbar-below-an-image-view-->
     <ImageView
             android:id="@+id/slided_image"
-            android:layout_width="fill_parent"
-            android:layout_height="400dp"
-            android:contentDescription="slided album art" />
-
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/fab_container"
-        android:clickable="true"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipChildren="true"
-        android:elevation="10dp">
-
-        <ProgressBar
-            android:id="@+id/slided_progress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:maxHeight="48dp"
-            android:minHeight="36dp"
-            android:tag="tint_accent_color"
-            android:layout_above="@+id/media_controls_container"/>
-
-        <LinearLayout
-            android:id="@+id/media_controls_container"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:adjustViewBounds="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:scaleType="fitXY"
+            android:contentDescription="slided album art" />
 
-            <ImageButton
-                android:id="@+id/media_controls_shuffle"
-                android:layout_marginTop="6dp"
-                android:src="@drawable/ic_shuffle_white_24dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+    <SeekBar
+        android:id="@+id/slided_seekbar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_below="@id/slided_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:maxHeight="88dp"
+        android:minHeight="64dp"
+        android:tag="tint_accent_color" />
 
-            <ImageButton
-                android:id="@+id/media_controls_previous"
-                android:onClick="clickPrevious"
-                android:layout_marginLeft="48dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_skip_previous_white_36dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                />
+    <LinearLayout
+        android:id="@+id/slided_seekbartext"
+        android:layout_below="@id/slided_seekbar"
+        android:layout_marginTop="-24sp"
+        android:paddingLeft="@dimen/appbar_padding_top"
+        android:paddingRight="@dimen/appbar_padding_top"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-            <ImageButton
-                android:id="@+id/media_controls_playpause"
-                android:onClick="clickPlayPause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:src="@drawable/ic_play_arrow_white_36dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                />
+        <TextView
+            android:id="@+id/slided_seekTextCurrent"
+            android:textColor="#ffff"
+            android:layout_gravity="left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-            <ImageButton
-                android:id="@+id/media_controls_next"
-                android:onClick="clickNext"
-                android:layout_marginRight="48dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_skip_next_white_36dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                />
+        <!-- Separator Views allow proper dynamic flow for different device sizes. -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
-            <ImageButton
-                android:id="@+id/media_controls_repeat"
-                android:layout_marginTop="6dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_repeat_white_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+        <TextView
+            android:id="@+id/slided_seekTextMax"
+            android:textColor="#ffff"
+            android:layout_gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-        </LinearLayout>
+    </LinearLayout>
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:id="@+id/slided_details"
+            android:layout_below="@id/slided_seekbartext"
+            android:background="@color/cardview_dark_background"
+            android:layout_marginLeft="@dimen/appbar_padding_top"
+            android:layout_marginRight="@dimen/appbar_padding_top"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -118,8 +89,87 @@
 
             </LinearLayout>
 
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/media_controls_container"
+            android:layout_below="@id/slided_details"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/ic_album_overflow_height"
+            android:layout_marginRight="@dimen/ic_album_overflow_height"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+
+            <ImageButton
+                android:id="@+id/media_controls_shuffle"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/ic_shuffle_white_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <!-- Separator Views allow proper dynamic flow for different device sizes. -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
+            <ImageButton
+                android:id="@+id/media_controls_previous"
+                android:onClick="clickPrevious"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_skip_previous_white_36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                />
+
+            <!-- Separator Views allow proper dynamic flow for different device sizes. -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/media_controls_playpause"
+                android:onClick="clickPlayPause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_play_arrow_white_36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                />
+
+            <!-- Separator Views allow proper dynamic flow for different device sizes. -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/media_controls_next"
+                android:onClick="clickNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_skip_next_white_36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                />
+
+            <!-- Separator Views allow proper dynamic flow for different device sizes. -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
+            <ImageButton
+                android:id="@+id/media_controls_repeat"
+                android:layout_marginTop="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_repeat_white_24dp"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
         </LinearLayout>
 
-    </android.support.design.widget.CoordinatorLayout>
-
-</LinearLayout>
+</RelativeLayout>

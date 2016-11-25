@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,17 +66,19 @@ public class MainActivity extends AppCompatActivity {
     public static ImageButton slideButton;
     public static RelativeLayout slideRelativeLayout;
     public static SlidingUpPanelLayout slidingUpPanelLayout;
-    public static ProgressBar slidingProgressBar;
+    public static SeekBar slidingSeekBar;
 
     // Expanded View of Sliding Up Bar
     public static ImageView slidedAlbumArt;
-    public static LinearLayout slidedLinearLayout;
+    public static RelativeLayout slidedRelativeLayout;
     public static ImageButton mediaControls_PlayPause;
     public static ImageButton mediaControls_Previous;
     public static ImageButton mediaControls_Next;
     public static ImageButton mediaControls_Shuffle;
     public static ImageButton mediaControls_Repeat;
-    public static ProgressBar slidedProgressBar;
+    public static TextView mediaSeekText_Progress;
+    public static TextView mediaSeekText_Maximum;
+    public static SeekBar slidedSeekBar;
 
     // Publicly Accessible Entities
     public static MediaManager mediaManager;
@@ -131,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         notifyView.setImageViewResource(R.id.notification_playpause, R.drawable.ic_play_arrow_black_36dp);
         notifyView.setImageViewResource(R.id.notification_next, R.drawable.ic_skip_next_black_36dp);*/
 
-        slidedLinearLayout = (LinearLayout) findViewById(R.id.slided_layout);
+        slidedRelativeLayout = (RelativeLayout) findViewById(R.id.slided_layout);
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
 
         // Sliding Up Bar
@@ -141,14 +144,16 @@ public class MainActivity extends AppCompatActivity {
         slideButton = (ImageButton) findViewById(R.id.slide_button);
         slideRelativeLayout = (RelativeLayout) findViewById(R.id.slide_layout);
         mDataAdapter = new DataAdapter(getContentResolver());
-        slidingProgressBar = (ProgressBar) findViewById(R.id.slide_progress);
+        slidingSeekBar = (SeekBar) findViewById(R.id.slide_seekbar);
 
         // Expanded View of Sliding Up Bar
         slidedAlbumArt = (ImageView) findViewById(R.id.slided_image);
-        slidedProgressBar = (ProgressBar) findViewById(R.id.slided_progress);
+        slidedSeekBar = (SeekBar) findViewById(R.id.slided_seekbar);
+        mediaSeekText_Progress = (TextView) findViewById(R.id.slided_seekTextCurrent);
+        mediaSeekText_Maximum = (TextView) findViewById(R.id.slided_seekTextMax);
 
-        slidingProgressBar.getIndeterminateDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
-        slidedProgressBar.getIndeterminateDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+        //slidingSeekBar.getIndeterminateDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+        //slidedSeekBar.getIndeterminateDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
 
         mediaControls_PlayPause = (ImageButton) findViewById(R.id.media_controls_playpause);
         mediaControls_PlayPause.setOnClickListener(new View.OnClickListener() {
@@ -208,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
                     PERM_REQUEST_APP_CORE_PERMISSIONS);
         }*/
 
-        slidedLinearLayout.setAlpha(0);
+        slidedRelativeLayout.setAlpha(0);
 
         // Hide the panel first, since nothing is being played
         if (mediaManager.mMediaPlayer == null) {
@@ -258,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
                 //slideRelativeLayout.setAlpha(1 - slideOffset); // This Results in synthetic disappearance.
 
                 // Then the expanded views
-                slidedLinearLayout.setAlpha(slideOffset);
+                slidedRelativeLayout.setAlpha(slideOffset);
             }
 
             @Override
@@ -466,12 +471,12 @@ public class MainActivity extends AppCompatActivity {
                                 Palette.Swatch swatch = p.getVibrantSwatch();
                                 if (swatch != null) {
                                     int color = swatch.getRgb();
-                                    slidedLinearLayout.setBackgroundColor(color);
+                                    slidedRelativeLayout.setBackgroundColor(color);
                                 } else {
                                     Palette.Swatch mutedSwatch = p.getMutedSwatch();
                                     if (mutedSwatch != null) {
                                         int color = mutedSwatch.getRgb();
-                                        slidedLinearLayout.setBackgroundColor(color);
+                                        slidedRelativeLayout.setBackgroundColor(color);
                                     }
                                 }
 
@@ -501,12 +506,12 @@ public class MainActivity extends AppCompatActivity {
                                 Palette.Swatch swatch = p.getVibrantSwatch();
                                 if (swatch != null) {
                                     int color = swatch.getRgb();
-                                    slidedLinearLayout.setBackgroundColor(color);
+                                    slidedRelativeLayout.setBackgroundColor(color);
                                 } else {
                                     Palette.Swatch mutedSwatch = p.getMutedSwatch();
                                     if (mutedSwatch != null) {
                                         int color = mutedSwatch.getRgb();
-                                        slidedLinearLayout.setBackgroundColor(color);
+                                        slidedRelativeLayout.setBackgroundColor(color);
                                     }
                                 }
 
@@ -579,12 +584,12 @@ public class MainActivity extends AppCompatActivity {
                                 Palette.Swatch swatch = p.getVibrantSwatch();
                                 if (swatch != null) {
                                     int color = swatch.getRgb();
-                                    slidedLinearLayout.setBackgroundColor(color);
+                                    slidedRelativeLayout.setBackgroundColor(color);
                                 } else {
                                     Palette.Swatch mutedSwatch = p.getMutedSwatch();
                                     if (mutedSwatch != null) {
                                         int color = mutedSwatch.getRgb();
-                                        slidedLinearLayout.setBackgroundColor(color);
+                                        slidedRelativeLayout.setBackgroundColor(color);
                                     }
                                 }
 
@@ -610,12 +615,12 @@ public class MainActivity extends AppCompatActivity {
                                 Palette.Swatch swatch = p.getVibrantSwatch();
                                 if (swatch != null) {
                                     int color = swatch.getRgb();
-                                    slidedLinearLayout.setBackgroundColor(color);
+                                    slidedRelativeLayout.setBackgroundColor(color);
                                 } else {
                                     Palette.Swatch mutedSwatch = p.getMutedSwatch();
                                     if (mutedSwatch != null) {
                                         int color = mutedSwatch.getRgb();
-                                        slidedLinearLayout.setBackgroundColor(color);
+                                        slidedRelativeLayout.setBackgroundColor(color);
                                     }
                                 }
 

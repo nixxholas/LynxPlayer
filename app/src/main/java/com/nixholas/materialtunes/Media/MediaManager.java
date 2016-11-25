@@ -13,10 +13,12 @@ import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
 import com.nixholas.materialtunes.MainActivity;
@@ -28,14 +30,21 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
+import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
+import static com.nixholas.materialtunes.MainActivity.mediaManager;
+import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Maximum;
+import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Progress;
 import static com.nixholas.materialtunes.MainActivity.persistentNotif;
 import static com.nixholas.materialtunes.MainActivity.slideAlbumArt;
 import static com.nixholas.materialtunes.MainActivity.slideButton;
 import static com.nixholas.materialtunes.MainActivity.slideSongArtist;
 import static com.nixholas.materialtunes.MainActivity.slideSongTitle;
 import static com.nixholas.materialtunes.MainActivity.slidedAlbumArt;
+import static com.nixholas.materialtunes.MainActivity.slidedSeekBar;
+import static com.nixholas.materialtunes.MainActivity.slidingSeekBar;
 import static com.nixholas.materialtunes.MainActivity.slidingUpPanelLayout;
 
 /**
@@ -76,12 +85,15 @@ public class MediaManager extends Service {
 
     private MediaSession mMediaSession;
     public MediaPlayer mMediaPlayer = new MediaPlayer();
+
     public boolean mediaPlayerIsPaused;
     public RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
     private Random shufflerRandomizer;
     public boolean isMediaPlayerIsShuffling;
     private PlaybackState mPlaybackState;
+
     public int currentlyPlayingIndex;
+
     public volatile ArrayList<Song> songFiles = new ArrayList<>();
     public volatile ArrayList<Album> albumFiles = new ArrayList<>();
 
@@ -98,14 +110,16 @@ public class MediaManager extends Service {
 
             @Override
             public void onPlayFromSearch(String query, Bundle extras) {
+                Log.e("onPlayFromSearch", "Running");
                 //Uri uri = extras.getParcelable(PARAM_TRACK_URI);
                 //onPlayFromUri(uri, null);
             }
 
             @Override
             public void onPlayFromUri(Uri uri, Bundle extras) {
-
                 try {
+                    Log.e("onPlayFromUri", "Running");
+
                     switch (mPlaybackState.getState()) {
                         case PlaybackState.STATE_PLAYING:
                         case PlaybackState.STATE_PAUSED:
@@ -135,6 +149,7 @@ public class MediaManager extends Service {
 
             @Override
             public void onPlay() {
+                Log.e("onPlay", "Running");
                 switch (mPlaybackState.getState()) {
                     case PlaybackState.STATE_PAUSED:
                         mMediaPlayer.start();
@@ -150,6 +165,7 @@ public class MediaManager extends Service {
 
             @Override
             public void onPause() {
+                Log.e("onPause", "Running");
                 switch (mPlaybackState.getState()) {
                     case PlaybackState.STATE_PLAYING:
                         mMediaPlayer.pause();
@@ -165,6 +181,7 @@ public class MediaManager extends Service {
 
             @Override
             public void onRewind() {
+                Log.e("onRewind", "Running");
                 switch (mPlaybackState.getState()) {
                     case PlaybackState.STATE_PLAYING:
                         mMediaPlayer.seekTo(mMediaPlayer.getCurrentPosition() - 10000);
@@ -175,11 +192,11 @@ public class MediaManager extends Service {
 
             @Override
             public void onFastForward() {
+                Log.e("onFastForward", "Running");
                 switch (mPlaybackState.getState()) {
                     case PlaybackState.STATE_PLAYING:
                         mMediaPlayer.seekTo(mMediaPlayer.getCurrentPosition() + 10000);
                         break;
-
                 }
             }
         };
@@ -197,20 +214,83 @@ public class MediaManager extends Service {
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-                // Check to make sure it's not hidden
-                if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.HIDDEN) {
-                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                }
+                    // Check to make sure it's not hidden
+                    if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.HIDDEN) {
+                        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    }
 
-                //Log.e("OnPrepared", "Working");
+                    mediaPlayer.start();
+                    mPlaybackState = new PlaybackState.Builder()
+                            .setState(PlaybackState.STATE_PLAYING, 0, 1.0f)
+                            .build();
+                    mMediaSession.setPlaybackState(mPlaybackState);
+                    persistentNotif.updateNotification();
 
-                mMediaPlayer.start();
-                mPlaybackState = new PlaybackState.Builder()
-                        .setState(PlaybackState.STATE_PLAYING, 0, 1.0f)
-                        .build();
-                mMediaSession.setPlaybackState(mPlaybackState);
-                persistentNotif.updateNotification();
+                    // Get a handler that can be used to post to the main thread
+                    // http://stackoverflow.com/questions/11123621/running-code-in-main-thread-from-another-thread
+                    final Handler mainHandler = new Handler(getInstance().getMainLooper());
 
+                    //Log.e("OnPrepared", "Working");
+
+                    // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android
+                    //Log.e("MaxDuration", getCurrent().getDuration() + "");
+                    slidingSeekBar.setMax(getCurrent().getDuration()); // Set the max duration
+                    slidedSeekBar.setMax(getCurrent().getDuration());
+                    mediaSeekText_Maximum.setText(getCurrent().getDuration() + "");
+
+                    // What if the user wants to scrub the time
+                    // http://stackoverflow.com/questions/35407578/how-to-control-the-audio-using-android-media-player-seek-bar
+                    slidedSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                            if (fromUser)
+                                mMediaPlayer.seekTo(progress);
+                            //seekBar.setProgress(progress);
+                        }
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+
+                        }
+
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+
+                        }
+                    });
+
+                    Runnable progressRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                            /*if (mediaManager.mMediaPlayer != null) {
+                                //Log.d("ProgRunnable", "Running"); // Debugging Purposes only
+                                int mCurrentPosition = mediaManager.mMediaPlayer.getCurrentPosition() / 1000;
+                                slidingSeekBar.setProgress(mCurrentPosition);
+                                slidedSeekBar.setProgress(mCurrentPosition);
+                            }
+                            mainHandler.postDelayed(this, 1000);*/
+
+                                if (mediaManager.mMediaPlayer != null) {
+                                    // http://stackoverflow.com/questions/35027321/seek-bar-and-media-player-and-a-time-of-a-track
+                                    //set seekbar progress
+                                    slidingSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+                                    slidedSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+                                    // Set current time
+                                    mediaSeekText_Progress.setText(mMediaPlayer.getCurrentPosition() + "");
+
+                                    //mediaSeekText_Progress.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes((long) timeRemaining), TimeUnit.MILLISECONDS.toSeconds((long) timeRemaining) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) timeRemaining))));
+
+                                    //repeat yourself that again in 100 miliseconds
+                                    mainHandler.postDelayed(this, 100);
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+                    mainHandler.post(progressRunnable);
             }
         });
 

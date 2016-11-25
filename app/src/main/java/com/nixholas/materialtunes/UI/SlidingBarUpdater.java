@@ -20,7 +20,7 @@ import static com.nixholas.materialtunes.MainActivity.slideButton;
 import static com.nixholas.materialtunes.MainActivity.slideSongArtist;
 import static com.nixholas.materialtunes.MainActivity.slideSongTitle;
 import static com.nixholas.materialtunes.MainActivity.slidedAlbumArt;
-import static com.nixholas.materialtunes.MainActivity.slidedLinearLayout;
+import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
 
 /**
  * Created by nixho on 22-Nov-16.
@@ -62,12 +62,12 @@ public class SlidingBarUpdater {
                         Palette.Swatch swatch = p.getVibrantSwatch();
                         if (swatch != null) {
                             int color = swatch.getRgb();
-                            slidedLinearLayout.setBackgroundColor(color);
+                            slidedRelativeLayout.setBackgroundColor(color);
                         } else {
                             Palette.Swatch mutedSwatch = p.getMutedSwatch();
                             if (mutedSwatch != null) {
                                 int color = mutedSwatch.getRgb();
-                                slidedLinearLayout.setBackgroundColor(color);
+                                slidedRelativeLayout.setBackgroundColor(color);
                             }
                         }
 

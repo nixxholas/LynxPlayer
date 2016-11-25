@@ -43,8 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
-import static com.nixholas.materialtunes.MainActivity.slidedProgressBar;
-import static com.nixholas.materialtunes.MainActivity.slidingProgressBar;
+import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
 
 /**
  * Created by nixho on 03-Nov-16.
@@ -55,7 +54,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     @BindView(R.id.slide_albumart) ImageView slideAlbumArt;
     @BindView(R.id.slide_songtitle) TextView slideSongTitle;
     @BindView(R.id.slide_songartist) TextView slideSongArtist;
-    @BindView(R.id.slided_layout) LinearLayout slidedLinearLayout;
+    //@BindView(R.id.slided_layout) LinearLayout slidedLinearLayout;
 
     // Expanded Sliding Up Bar Entities
     @BindView(R.id.slided_image) ImageView slidedAlbumArt;
@@ -168,34 +167,6 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         holder.title.setText(currentSong.getTitle());
         holder.artistName.setText(currentSong.getArtistName());
 
-        // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android
-        slidingProgressBar.setMax(currentSong.getDuration()); // Set the max duration
-        slidedProgressBar.setMax(currentSong.getDuration());
-
-        // Get a handler that can be used to post to the main thread
-        // http://stackoverflow.com/questions/11123621/running-code-in-main-thread-from-another-thread
-        /*final Handler mainHandler = new Handler(context.getMainLooper());
-
-        Runnable progressRunnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (mediaManager.mMediaPlayer != null) {
-                        //Log.d("ProgRunnable", "Running"); // Debugging Purposes only
-                        int mCurrentPosition = mediaManager.mMediaPlayer.getCurrentPosition() / 1000;
-                        slidingProgressBar.setProgress(mCurrentPosition);
-                        slidedProgressBar.setProgress(mCurrentPosition);
-                    } else {
-
-                    }
-                    mainHandler.postDelayed(this, 1000);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        mainHandler.post(progressRunnable);*/
-
         Uri sArtworkUri = Uri
                 .parse("content://media/external/audio/albumart");
         Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
@@ -276,12 +247,12 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                                             Palette.Swatch swatch = p.getVibrantSwatch();
                                             if (swatch != null) {
                                                 int color = swatch.getRgb();
-                                                slidedLinearLayout.setBackgroundColor(color);
+                                                slidedRelativeLayout.setBackgroundColor(color);
                                             } else {
                                                 Palette.Swatch mutedSwatch = p.getMutedSwatch();
                                                 if (mutedSwatch != null) {
                                                     int color = mutedSwatch.getRgb();
-                                                    slidedLinearLayout.setBackgroundColor(color);
+                                                    slidedRelativeLayout.setBackgroundColor(color);
                                                 }
                                             }
 
@@ -335,12 +306,12 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                                             Palette.Swatch swatch = p.getVibrantSwatch();
                                             if (swatch != null) {
                                                 int color = swatch.getRgb();
-                                                slidedLinearLayout.setBackgroundColor(color);
+                                                slidedRelativeLayout.setBackgroundColor(color);
                                             } else {
                                                 Palette.Swatch mutedSwatch = p.getMutedSwatch();
                                                 if (mutedSwatch != null) {
                                                     int color = mutedSwatch.getRgb();
-                                                    slidedLinearLayout.setBackgroundColor(color);
+                                                    slidedRelativeLayout.setBackgroundColor(color);
                                                 }
                                             }
 
