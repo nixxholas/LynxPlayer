@@ -10,6 +10,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageButton
+        android:id="@+id/slided_close"
+        android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_keyboard_arrow_down_white_36dp"/>
+
     <!--http://stackoverflow.com/questions/17499789/set-position-of-seekbar-below-an-image-view-->
     <ImageView
             android:id="@+id/slided_image"
