@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
     public static ImageButton mediaControls_Repeat;
     public static TextView mediaSeekText_Progress;
     public static TextView mediaSeekText_Maximum;
+    public static TextView slided_SongTitle;
+    public static TextView slided_SongArtist;
     public static SeekBar slidedSeekBar;
 
     // Publicly Accessible Entities
@@ -151,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
         slidedSeekBar = (SeekBar) findViewById(R.id.slided_seekbar);
         mediaSeekText_Progress = (TextView) findViewById(R.id.slided_seekTextCurrent);
         mediaSeekText_Maximum = (TextView) findViewById(R.id.slided_seekTextMax);
+        slided_SongTitle = (TextView) findViewById(R.id.slided_title);
+        slided_SongArtist = (TextView) findViewById(R.id.slided_artist);
 
         //slidingSeekBar.getIndeterminateDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
         //slidedSeekBar.getIndeterminateDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);

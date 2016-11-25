@@ -44,6 +44,8 @@ import static com.nixholas.materialtunes.MainActivity.slideSongArtist;
 import static com.nixholas.materialtunes.MainActivity.slideSongTitle;
 import static com.nixholas.materialtunes.MainActivity.slidedAlbumArt;
 import static com.nixholas.materialtunes.MainActivity.slidedSeekBar;
+import static com.nixholas.materialtunes.MainActivity.slided_SongArtist;
+import static com.nixholas.materialtunes.MainActivity.slided_SongTitle;
 import static com.nixholas.materialtunes.MainActivity.slidingSeekBar;
 import static com.nixholas.materialtunes.MainActivity.slidingUpPanelLayout;
 
@@ -231,6 +233,9 @@ public class MediaManager extends Service {
                     final Handler mainHandler = new Handler(getInstance().getMainLooper());
 
                     //Log.e("OnPrepared", "Working");
+
+                    slided_SongTitle.setText(getCurrent().getTitle());
+                    slided_SongArtist.setText(getCurrent().getArtistName());
 
                     // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android
                     //Log.e("MaxDuration", getCurrent().getDuration() + "");
