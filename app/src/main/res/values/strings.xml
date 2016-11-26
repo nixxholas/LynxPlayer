@@ -13,4 +13,7 @@
     <string name="equalizer_title">Equalizer</string>
     <string name="playnow_title">Play Now</string>
 
+    // Songs Fragment Strings
+    <string name="songmenu_playlist">Add to playlist</string>
+    <string name="songmenu_delete">Delete</string>
 </resources>

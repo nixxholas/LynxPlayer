@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/song_playlist"
+        android:orderInCategory="100"
+        android:title="@string/songmenu_playlist"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/song_delete"
+        android:orderInCategory="200"
+        android:title="@string/songmenu_delete"
+        app:showAsAction="never" />
+
+</menu>

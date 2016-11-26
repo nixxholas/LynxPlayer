@@ -89,8 +89,9 @@ public class MainActivity extends AppCompatActivity {
 
     // Notification Entities
     private static MainActivity finalMain;
-    private static View mainActivityView;
     public static PersistentNotif persistentNotif;
+
+    // Permanent Entities
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -125,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
         if (mediaManager == null) {
             mediaManager = new MediaManager(this);
             finalMain = this;
-            mainActivityView = getCurrentFocus();
         }
 
         // Notifications

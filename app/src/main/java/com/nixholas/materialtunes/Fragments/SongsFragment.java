@@ -27,7 +27,6 @@ public class SongsFragment extends Fragment {
     RecyclerView recyclerView;
     RecyclerView.Adapter rVAdapter;
     RecyclerView.LayoutManager rVLayoutManager;
-    private Preferences mPreference;
 
     /**
      * The fragment argument representing the section number for this

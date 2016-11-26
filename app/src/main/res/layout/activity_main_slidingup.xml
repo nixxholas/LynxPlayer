@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--http://stackoverflow.com/questions/29738510/toolbar-overlapping-below-status-bar-->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/slided_layout"
     android:layout_alignBaseline="@+id/slide_layout"
@@ -8,14 +9,47 @@
     android:background="@color/colorAccent"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/slided_close"
-        android:layout_alignParentStart="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_keyboard_arrow_down_white_36dp"/>
+    <LinearLayout
+        android:id="@+id/slided_song_texts"
+        android:padding="@dimen/fragment_padding_topbottom"
+        android:background="@color/cardview_dark_background"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/slided_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/fragment_padding_topbottom"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_keyboard_arrow_down_white_36dp"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/slided_title"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/slided_artist"
+                android:textSize="13sp"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <!--http://stackoverflow.com/questions/17499789/set-position-of-seekbar-below-an-image-view-->
     <ImageView
@@ -24,89 +58,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="fitXY"
+            android:layout_below="@+id/slided_song_texts"
             android:contentDescription="slided album art" />
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/slided_details"
-            android:layout_below="@id/slided_image"
-            android:background="@color/cardview_dark_background"
-            android:layout_marginTop="@dimen/slideduplayout_cardpadding"
-            android:layout_marginLeft="@dimen/appbar_padding_top"
-            android:layout_marginRight="@dimen/appbar_padding_top"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <SeekBar
-                android:id="@+id/slided_seekbar"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxHeight="88dp"
-                android:minHeight="64dp"
-                android:tag="tint_accent_color" />
-
-            <LinearLayout
-                android:id="@+id/slided_seekbartext"
-                android:layout_below="@id/slided_seekbar"
-                android:layout_marginTop="-24sp"
-                android:paddingLeft="@dimen/appbar_padding_top"
-                android:paddingRight="@dimen/appbar_padding_top"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/slided_seekTextCurrent"
-                    android:textColor="#ffff"
-                    android:layout_gravity="left"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <!-- Separator Views allow proper dynamic flow for different device sizes. -->
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/slided_seekTextMax"
-                    android:textColor="#ffff"
-                    android:layout_gravity="right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/slided_currenttexts"
-                android:layout_below="@id/slided_seekbartext"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/slided_title"
-                    android:paddingTop="@dimen/album_title_padding"
-                    android:paddingLeft="@dimen/album_title_padding"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/slided_artist"
-                    android:paddingTop="@dimen/album_title_padding"
-                    android:paddingLeft="@dimen/album_title_padding"
-                    android:paddingBottom="@dimen/album_title_padding"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
 
         <LinearLayout
             android:id="@+id/media_controls_container"
-            android:layout_below="@id/slided_details"
+            android:layout_below="@id/slided_image"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/ic_album_overflow_height"
@@ -184,5 +141,65 @@
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
         </LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/slided_details"
+        android:layout_below="@id/media_controls_container"
+        android:background="@color/cardview_dark_background"
+        android:layout_marginTop="@dimen/slideduplayout_cardpadding"
+        android:layout_marginLeft="@dimen/appbar_padding_top"
+        android:layout_marginRight="@dimen/appbar_padding_top"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <SeekBar
+                android:id="@+id/slided_seekbar"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="88dp"
+                android:minHeight="64dp"
+                android:tag="tint_accent_color" />
+
+            <LinearLayout
+                android:id="@+id/slided_seekbartext"
+                android:layout_marginTop="-24sp"
+                android:paddingLeft="@dimen/appbar_padding_top"
+                android:paddingRight="@dimen/appbar_padding_top"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/slided_seekTextCurrent"
+                    android:textColor="#000000"
+                    android:layout_gravity="left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <!-- Separator Views allow proper dynamic flow for different device sizes. -->
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/slided_seekTextMax"
+                    android:textColor="#000000"
+                    android:layout_gravity="right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>

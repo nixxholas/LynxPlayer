@@ -18,6 +18,9 @@ import com.nixholas.materialtunes.Utils.Preferences;
  */
 
 public class IntroActivity extends AppIntro2 {
+    // Permanent Entities
+    SharedPreferences mPreferences;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -23,12 +23,15 @@ import android.widget.SeekBar;
 import com.bumptech.glide.Glide;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Album;
+import com.nixholas.materialtunes.Media.Entities.List;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -98,6 +101,7 @@ public class MediaManager extends Service {
 
     public volatile ArrayList<Song> songFiles = new ArrayList<>();
     public volatile ArrayList<Album> albumFiles = new ArrayList<>();
+    public volatile ArrayList<List> playLists = new ArrayList<>();
 
     public MediaManager(final MainActivity mainActivity) {
         //Log.e("onCreate: MediaManager", "Working");
@@ -233,15 +237,24 @@ public class MediaManager extends Service {
                     final Handler mainHandler = new Handler(getInstance().getMainLooper());
 
                     //Log.e("OnPrepared", "Working");
+                    long songDuration = getCurrent().getDuration();
 
                     slided_SongTitle.setText(getCurrent().getTitle());
                     slided_SongArtist.setText(getCurrent().getArtistName());
 
                     // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android
                     //Log.e("MaxDuration", getCurrent().getDuration() + "");
-                    slidingSeekBar.setMax(getCurrent().getDuration()); // Set the max duration
-                    slidedSeekBar.setMax(getCurrent().getDuration());
-                    mediaSeekText_Maximum.setText(getCurrent().getDuration() + "");
+                    slidingSeekBar.setMax((int) songDuration); // Set the max duration
+                    slidedSeekBar.setMax((int) songDuration);
+
+                    // Retrieve the length of the song and set it into the Maximum Text View
+                    //mediaSeekText_Maximum.setText(getCurrent().getDuration() + "");
+                    // http://stackoverflow.com/questions/625433/how-to-convert-milliseconds-to-x-mins-x-seconds-in-java
+                    mediaSeekText_Maximum.setText(String.format("%02d:%02d",
+                            TimeUnit.MILLISECONDS.toMinutes(songDuration),
+                            TimeUnit.MILLISECONDS.toSeconds(songDuration) -
+                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(songDuration))
+                    ));
 
                     // What if the user wants to scrub the time
                     // http://stackoverflow.com/questions/35407578/how-to-control-the-audio-using-android-media-player-seek-bar
@@ -281,10 +294,16 @@ public class MediaManager extends Service {
                                     //set seekbar progress
                                     slidingSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
                                     slidedSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
-                                    // Set current time
-                                    mediaSeekText_Progress.setText(mMediaPlayer.getCurrentPosition() + "");
 
-                                    //mediaSeekText_Progress.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes((long) timeRemaining), TimeUnit.MILLISECONDS.toSeconds((long) timeRemaining) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) timeRemaining))));
+                                    long currentPosition = mMediaPlayer.getCurrentPosition();
+                                    // Set current time
+                                    //mediaSeekText_Progress.setText(mMediaPlayer.getCurrentPosition() + "");
+                                    //mediaSeekText_Progress.setText(msecondsToString(mMediaPlayer.getCurrentPosition()));
+                                    mediaSeekText_Progress.setText(String.format("%02d:%02d",
+                                            TimeUnit.MILLISECONDS.toMinutes(currentPosition),
+                                            TimeUnit.MILLISECONDS.toSeconds(currentPosition) -
+                                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(currentPosition))
+                                    ));
 
                                     //repeat yourself that again in 100 miliseconds
                                     mainHandler.postDelayed(this, 100);
@@ -356,6 +375,23 @@ public class MediaManager extends Service {
         });
     }
 
+    /**
+     * http://codereview.stackexchange.com/questions/59784/integer-seconds-to-formated-string-mmss
+     * @param pTime
+     * @return
+     */
+    private String msecondsToString(long pTime) {
+        final long min = TimeUnit.MILLISECONDS.toMinutes(pTime);
+        final long sec = TimeUnit.MILLISECONDS.toSeconds(pTime - (min * 60));
+
+        final String strMin = placeZeroIfNeeded(min);
+        final String strSec = placeZeroIfNeeded(sec);
+        return String.format("%s:%s",strMin,strSec);
+    }
+
+    private String placeZeroIfNeeded(long number) {
+        return (number >=10)? Long.toString(number):String.format("0%s",Long.toString(number));
+    }
 
     @Override
     public IBinder onBind(Intent intent) {

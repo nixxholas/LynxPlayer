@@ -16,15 +16,19 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
@@ -85,10 +89,10 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         protected View v;
         TextView title, artistName;
         ImageView songArt;
+        ImageView overflowButton;
         Palette viewPalette;
         //private boolean isPopupVisible;
         CardView currentCard;
-        private final int cardHeight, cardWidth;
 
         public ViewHolder(View v) {
             super(v);
@@ -97,37 +101,38 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
             this.artistName = (TextView) v.findViewById(R.id.card_artist);
             this.songArt = (ImageView) v.findViewById(R.id.card_image);
             this.currentCard = (CardView) v.findViewById(R.id.card_view);
+            this.overflowButton = (ImageView) v.findViewById(R.id.card_options);
+            final Context mContext = v.getContext();
 
-            cardHeight = currentCard.getHeight();
-            cardWidth = currentCard.getWidth();
-
-            // http://stackoverflow.com/questions/36952436/expanding-cardview-with-a-textview-on-click
-            /*currentCard.setOnClickListener(new View.OnClickListener() {
+            // http://stackoverflow.com/questions/37851828/cardview-overflow-menu-in-fragment
+            this.overflowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Log.d("OnClick", "CardView");
-
-                    if (currentCard.getHeight() == cardHeight) {
-                        // We'll need to animate
-
-
-                        // Then play the music
-                        *//*try {
-                            mediaPlayer.setDataSource(this, myUri1);
-                        } catch (IllegalArgumentException e) {
-                            Toast.makeText(view.getContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                        } catch (SecurityException e) {
-                            Toast.makeText(view.getContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                        } catch (IllegalStateException e) {
-                            Toast.makeText(view.getContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }*//*
-                    } else {
-
-                    }
+                    PopupMenu popup = new PopupMenu(mContext, view);
+                    MenuInflater inflater = popup.getMenuInflater();
+                    inflater.inflate(R.menu.menu_song, popup.getMenu());
+                    popup.setOnMenuItemClickListener(new SongMenuClickListener());
+                    popup.show();
                 }
-            });*/
+            });
+        }
+
+        class SongMenuClickListener implements PopupMenu.OnMenuItemClickListener {
+
+            SongMenuClickListener() {
+            }
+
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.song_playlist:
+                        Log.e("OnMenuItemClick", "SongMenuClickListener is Working");
+                        //Toast.makeText(mContext, "Action 1", Toast.LENGTH_SHORT).show();
+                        return true;
+                    default:
+                }
+                return false;
+            }
         }
     }
 
