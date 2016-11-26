@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.nixholas.materialtunes.Fragments.IntroFragment;
+import com.nixholas.materialtunes.Utils.PreferenceHelper;
 
 /**
  * Created by nixho on 10-Nov-16.
@@ -16,11 +17,19 @@ import com.nixholas.materialtunes.Fragments.IntroFragment;
 
 public class IntroActivity extends AppIntro2 {
     // Permanent Entities
-    SharedPreferences mPreferences;
+    PreferenceHelper preferenceHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferenceHelper = new PreferenceHelper(getApplicationContext());
+
+        if (preferenceHelper.getIntroDone()) {
+            // Let's end this and go straight to the Main Activity
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            startActivity(mainIntent);
+            finish();
+        }
 
         // Add your slide fragments here.
         // AppIntro will automatically generate the dots indicator and buttons.
@@ -68,6 +77,13 @@ public class IntroActivity extends AppIntro2 {
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
+
+        /**
+         *  Make sure we set intro done to true so that the user doesn't have
+         *  to face this nonsense again
+         */
+        preferenceHelper.setIntroDone(true);
+
         // Do something when users tap on Done button.
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent);
