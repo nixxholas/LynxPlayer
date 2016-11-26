@@ -1,9 +1,5 @@
 package com.nixholas.materialtunes.Fragments;
 
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nixholas.materialtunes.Media.Adapter.SongsAdapter;
-import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
-import com.nixholas.materialtunes.Utils.Preferences;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 

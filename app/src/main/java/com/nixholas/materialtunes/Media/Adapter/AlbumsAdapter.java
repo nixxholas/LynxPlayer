@@ -1,20 +1,12 @@
 package com.nixholas.materialtunes.Media.Adapter;
 
-import android.annotation.TargetApi;
-import android.content.ContentUris;
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,24 +14,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.transcode.ResourceTranscoder;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.ImageViewTarget;
-import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.util.Util;
 import com.nixholas.materialtunes.Media.Entities.Album;
 import com.nixholas.materialtunes.R;
-import com.nixholas.materialtunes.Utils.Preferences;
+import com.nixholas.materialtunes.Utils.PreferencesExample;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -142,7 +128,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                             if (swatch != null) {
                                 int color = swatch.getRgb();
                                 holder.currentAlbumCard.setBackgroundColor(color);
-                                int textColor = Preferences.getBlackWhiteColor(swatch.getTitleTextColor());
+                                int textColor = PreferencesExample.getBlackWhiteColor(swatch.getTitleTextColor());
                                 holder.title.setTextColor(textColor);
                                 holder.artistName.setTextColor(textColor);
                             } else {
@@ -150,7 +136,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                                 if (mutedSwatch != null) {
                                     int color = mutedSwatch.getRgb();
                                     holder.currentAlbumCard.setBackgroundColor(color);
-                                    int textColor = Preferences.getBlackWhiteColor(mutedSwatch.getTitleTextColor());
+                                    int textColor = PreferencesExample.getBlackWhiteColor(mutedSwatch.getTitleTextColor());
                                     holder.title.setTextColor(textColor);
                                     holder.artistName.setTextColor(textColor);
                                 }
