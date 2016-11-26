@@ -222,7 +222,7 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
                 .setCustomBigContentView(bigView)
                 //.setLargeIcon(uriToBmp(albumArtUri))
                 // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
-                .setShowWhen(false) // Removes the timestamp for the notification
+                //.setShowWhen(false) // Removes the timestamp for the notification
                 // http://stackoverflow.com/questions/27343202/changing-notification-icon-background-on-lollipop
                 //.setColor(Color.parseColor("303F9F"))
                 .setOngoing(true)
