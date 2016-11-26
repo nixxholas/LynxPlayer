@@ -17,7 +17,7 @@ import com.nixholas.materialtunes.Utils.PreferenceHelper;
 
 public class IntroActivity extends AppIntro2 {
     // Permanent Entities
-    PreferenceHelper preferenceHelper;
+    public static PreferenceHelper preferenceHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -36,6 +36,8 @@ public class PreferenceHelper {
 
     public final boolean getIntroDone() {
         /**
+         * https://developer.android.com/reference/android/content/SharedPreferences.html#getBoolean(java.lang.String, boolean)
+         *
          * Parameters
          * key	String: The name of the preference to retrieve.
          * defValue	boolean: Value to return if this preference does not exist.
