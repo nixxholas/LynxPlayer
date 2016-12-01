@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_height="90dp"
+    android:layout_height="95dp"
     android:layout_width="match_parent"
     android:paddingBottom="2dp">
 
@@ -79,6 +79,25 @@
 
         </RelativeLayout >
 
-        </RelativeLayout>
+       <!-- <View
+            android:layout_alignParentEnd="true"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="105dp"
+            android:layout_marginRight="15dp"
+            android:paddingBottom="12sp"
+            android:layout_height="2dp"
+            android:background="#696969" />-->
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/mainfrag_songview_separator"
+        android:layout_marginLeft="105dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#696969"/>
 
     </LinearLayout>
