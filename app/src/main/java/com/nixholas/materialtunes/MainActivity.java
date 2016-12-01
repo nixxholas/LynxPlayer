@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
         slideRelativeLayout = (RelativeLayout) findViewById(R.id.slide_layout);
         mDataAdapter = new DataAdapter(getContentResolver());
         slidingSeekBar = (SeekBar) findViewById(R.id.slide_seekbar);
+        slidingSeekBar.getThumb().mutate().setAlpha(0);
 
         // Expanded View of Sliding Up Bar
         slidedAlbumArt = (ImageView) findViewById(R.id.slided_image);

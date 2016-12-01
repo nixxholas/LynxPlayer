@@ -73,30 +73,41 @@
                 android:clipChildren="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:padding="0dp"
                 android:orientation="horizontal">
-
-                <SeekBar
-                    android:id="@+id/slide_seekbar"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:maxHeight="8dp"
-                    android:tag="tint_accent_color"
-                    android:layout_above="@+id/slide_layout"/>
 
             <RelativeLayout
                 android:id="@+id/slide_layout"
                 android:clipChildren="false"
                 android:layout_width="match_parent"
+                android:padding="0dp"
                 android:layout_height="68dp"
                 android:orientation="horizontal">
 
+                <!--https://tushkhush.wordpress.com/2015/02/13/remove-thumb-of-seekbar-in-android/-->
+                <!--http://stackoverflow.com/questions/14171471/remove-vertical-padding-from-horizontal-progressbar-->
+                <!--http://stackoverflow.com/questions/33473849/android-seekbar-cant-be-full-width-even-set-padding-0-in-appcompat-23-1-0-->
+                <SeekBar
+                    android:id="@+id/slide_seekbar"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|start"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:layout_marginBottom="-4dp"
+                    android:layout_marginTop="-8dp"
+                    android:minHeight="8dp"
+                    android:maxHeight="8dp"
+                    android:splitTrack="false"
+                    android:tag="tint_accent_color"/>
+
                 <ImageView
                     android:id="@+id/slide_albumart"
+                    android:layout_below="@id/slide_seekbar"
                     android:layout_gravity="center_vertical|start"
-                    android:layout_width="68dp"
-                    android:layout_height="68dp" />
+                    android:layout_width="64dp"
+                    android:layout_height="64dp" />
 
                 <LinearLayout
                     android:id="@+id/slide_texts"
