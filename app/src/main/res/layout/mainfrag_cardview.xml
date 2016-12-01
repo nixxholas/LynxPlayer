@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_height="95dp"
+    android:layout_height="85dp"
     android:layout_width="match_parent"
     android:paddingBottom="2dp">
 
@@ -14,7 +14,7 @@
         android:stateListAnimator="@anim/lift_on_touch"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="80dp"
         android:focusable="true"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground">
@@ -36,8 +36,8 @@
                 <ImageView
                     android:id="@+id/card_image"
                     android:layout_gravity="start"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp" />
+                    android:layout_width="80dp"
+                    android:layout_height="80dp" />
 
                 <!-- http://stackoverflow.com/questions/35157145/aligning-text-view-below-text-view-in-card-view-->
                 <LinearLayout
@@ -97,7 +97,7 @@
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#696969"/>
+        android:layout_height="12dp"
+        android:background="#80696969"/>
 
     </LinearLayout>
