@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.transcode.ResourceTranscoder;
@@ -38,26 +39,6 @@ import java.util.concurrent.TimeUnit;
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
     private ArrayList<Album> mDataset;
     private Context context;
-    /*
-         * Gets the number of available cores
-         * (not always the same as the maximum number of cores)
-         */
-    private static int NUMBER_OF_CORES =
-            Runtime.getRuntime().availableProcessors();
-    // Sets the amount of time an idle thread waits before terminating
-    private static final int KEEP_ALIVE_TIME = 1;
-    // Sets the Time Unit to seconds
-    private static final TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
-    // A queue of Runnables
-    private final BlockingQueue<Runnable> mDecodeWorkQueue = new LinkedBlockingQueue<>();
-    // Creates a thread pool manager
-    ThreadPoolExecutor mDecodeThreadPool = new ThreadPoolExecutor(
-            NUMBER_OF_CORES,       // Initial pool size
-            NUMBER_OF_CORES,       // Max pool size
-            KEEP_ALIVE_TIME,
-            KEEP_ALIVE_TIME_UNIT,
-            mDecodeWorkQueue);
-
 
     @NonNull
     @Override
@@ -119,6 +100,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                     .fromUri()
                     .asBitmap()
                     .transcode(new PaletteBitmapTranscoder(context), PaletteBitmap.class)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .fitCenter().load(Uri.fromFile(new File(currentAlbum.getAlbumArtPath())))
                     .into(new ImageViewTarget<PaletteBitmap>(holder.albumArt) {
                         @Override
@@ -147,6 +129,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         } else { // Since it does not have an album art
             Glide.with(context)
                     .load(R.drawable.untitled_album)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(holder.albumArt);
         }
 

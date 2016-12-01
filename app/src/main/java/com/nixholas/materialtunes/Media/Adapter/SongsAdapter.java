@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -83,7 +84,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         ImageView overflowButton;
         Palette viewPalette;
         //private boolean isPopupVisible;
-        CardView currentCard;
+        RelativeLayout currentCard;
 
         public ViewHolder(View v) {
             super(v);
@@ -91,7 +92,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
             this.title = (TextView) v.findViewById(R.id.card_title);
             this.artistName = (TextView) v.findViewById(R.id.card_artist);
             this.songArt = (ImageView) v.findViewById(R.id.card_image);
-            this.currentCard = (CardView) v.findViewById(R.id.card_view);
+            this.currentCard = (RelativeLayout) v.findViewById(R.id.card_view);
             this.overflowButton = (ImageView) v.findViewById(R.id.card_options);
             final Context mContext = v.getContext();
 

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+import static android.os.Build.VERSION_CODES.M;
+import static android.os.Build.VERSION_CODES.N;
 import static com.nixholas.materialtunes.MainActivity.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.MainActivity.mediaControlsOnClickPrevious;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
@@ -216,17 +220,21 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
             bigView.setImageViewResource(R.id.notibig_albumart, R.drawable.untitled_album);
         }
 
-        mNotification = new NotificationCompat.Builder(mContext)
-                .setSmallIcon(R.drawable.ic_app_icon)
-                .setCustomContentView(normalView)
-                .setCustomBigContentView(bigView)
-                //.setLargeIcon(uriToBmp(albumArtUri))
-                // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
-                //.setShowWhen(false) // Removes the timestamp for the notification
-                // http://stackoverflow.com/questions/27343202/changing-notification-icon-background-on-lollipop
-                //.setColor(Color.parseColor("303F9F"))
-                .setOngoing(true)
-                .build();
+        if (Build.VERSION.SDK_INT != N) {
+            mNotification = new NotificationCompat.Builder(mContext)
+                    .setSmallIcon(R.drawable.ic_app_icon)
+                    .setCustomContentView(normalView)
+                    .setCustomBigContentView(bigView)
+                    //.setLargeIcon(uriToBmp(albumArtUri))
+                    // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
+                    //.setShowWhen(false) // Removes the timestamp for the notification
+                    // http://stackoverflow.com/questions/27343202/changing-notification-icon-background-on-lollipop
+                    //.setColor(Color.parseColor("303F9F"))
+                    .setOngoing(true)
+                    .build();
+        } else {
+
+        }
 
         mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
 
