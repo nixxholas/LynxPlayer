@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+// --> This was needed to fix the permission restrictions for Travis CI
+// http://stackoverflow.com/questions/33820638/travis-yml-gradlew-permission-denied
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
