@@ -1,7 +1,10 @@
 jdk: oraclejdk8
-language: android
-android: 
 
+language: android
+
+sudo: required
+
+android:
 components: 
   - tools # to get the new repo
   - platform-tools
@@ -11,13 +14,12 @@ components:
   - extra-android-m2repository
   - extra-android-support
   - extra-google-m2repository
-
 licenses:
     - 'android-sdk-preview-license-.+'
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
 
-before_install: 
+before_install:
   - "chmod +x gradlew"
 
 directories: 
