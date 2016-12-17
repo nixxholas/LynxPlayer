@@ -3,7 +3,8 @@ language: android
 android: 
 
 components: 
-  - tools
+  - tools # to get the new repo
+  - tools # to install Android SDK tools
   - platform-tools
   - build-tools-25.0.2
   - android-25
