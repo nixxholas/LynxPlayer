@@ -41,7 +41,7 @@ import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnC
  * Created by nixho on 14-Nov-16.
  *
  * http://www.laurivan.com/android-display-a-notification/
- */
+ */ 
 
 public class PersistentNotif extends BroadcastReceiver implements Runnable {
     // Notification Tags
