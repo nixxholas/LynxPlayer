@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
@@ -44,7 +43,7 @@ import com.nixholas.materialtunes.Fragments.SongsFragment;
 import com.nixholas.materialtunes.Media.Adapter.DataAdapter;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.Media.MediaManager;
-import com.nixholas.materialtunes.Notification.PersistentNotif;
+import com.nixholas.materialtunes.Notification.PersistentNotification;
 import com.nixholas.materialtunes.UI.SlidingBarUpdater;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Notification Entities
     private static MainActivity finalMain;
-    public static PersistentNotif persistentNotif;
+    public static PersistentNotification persistentNotif;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -201,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup the notifications
         Handler mHandler = new Handler();
         //Context appContext = getBaseContext().getApplicationContext();
-        mHandler.post(persistentNotif = new PersistentNotif(MainActivity.this));
+        mHandler.post(persistentNotif = new PersistentNotification(MainActivity.this));
 
         mDataAdapter.run();
 
