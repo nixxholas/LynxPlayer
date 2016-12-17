@@ -1,6 +1,3 @@
-# When faced with permission problems, solve it with this:
-# http://stackoverflow.com/questions/33820638/travis-yml-gradlew-permission-denied
-
 jdk: oraclejdk8
 
 language: android
@@ -31,15 +28,11 @@ directories:
   - $HOME/.gradle/wrapper/
 
 before_script:
-  # Before we attempt to utilize the cutting edge tools, we'll have to retrieve
-  # the actual license header so that we can allow Travis to properly accept it
-  # - android update sdk --no-ui --all --filter "build-tools-25.0.2"
-  - echo no | android create avd --force --name test --target android-23 --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-audio -no-window -gpu off &
+ # - android update sdk --no-ui --all --filter "build-tools-25.0.2"
+  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+  - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
-  - adb devices
   - adb shell input keyevent 82 &
 
 script: 
-  - android list target
-  - ./gradlew connectedAndroidTest
+  - "./gradlew build connectedCheck --stacktrace"
