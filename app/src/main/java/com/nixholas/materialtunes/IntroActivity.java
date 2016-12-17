@@ -26,8 +26,7 @@ public class IntroActivity extends AppIntro2 {
 
         if (preferenceHelper.getIntroDone()) {
             // Let's end this and go straight to the Main Activity
-            Intent mainIntent = new Intent(this, MainActivity.class);
-            startActivity(mainIntent);
+            startActivity(new Intent(this, MainActivity.class));
             finish();
         }
 
