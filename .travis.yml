@@ -7,10 +7,9 @@ branches:
 env:
   global:
     - ADB_INSTALL_TIMEOUT=20 # minutes (2 minutes by default)
-    - ANDROID_API_LEVEL=25
-    - EMULATOR_API_LEVEL=24
+    - ANDROID_TARGET=android-15
+    - ANDROID_ABI=armeabi-v7a
     - ANDROID_BUILD_TOOLS_VERSION=25.0.2
-    - ANDROID_ABI=google_apis/armeabi-v7a
 
 components:
       - platform-tools
@@ -18,13 +17,8 @@ components:
       - build-tools-25.0.2
       - android-25
       - extra-android-m2repository
-      # For Google APIs
-      - addon-google_apis-google-$ANDROID_API_LEVEL
-      - addon-google_apis-google-$EMULATOR_API_LEVEL
-      # Specify at least one system image
-      - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
-      - sys-img-armeabi-v7a-addon-google_apis-google-$EMULATOR_API_LEVEL
-      
+      - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
+
 jdk:
   - oraclejdk8
  
@@ -33,9 +27,11 @@ before_install:
 
 before_script:
 	# Create and start emulator
-	- echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI
-	- emulator -avd test -no-skin -no-audio -no-window &
-	- android-wait-for-emulator
- 
+    - ./gradlew build jacocoTestReport assembleAndroidTest
+    - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+    - emulator -avd test -no-skin -no-audio -no-window &
+    - android-wait-for-emulator
+
 script: 
+   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
    - ./gradlew build connectedCheck
