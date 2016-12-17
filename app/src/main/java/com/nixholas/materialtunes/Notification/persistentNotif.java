@@ -25,11 +25,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
-import static android.os.Build.VERSION_CODES.M;
 import static android.os.Build.VERSION_CODES.N;
-import static com.nixholas.materialtunes.MainActivity.mediaControlsOnClickNext;
-import static com.nixholas.materialtunes.MainActivity.mediaControlsOnClickPrevious;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.Media.MediaNotifUpdater.mediaNotifOnClickNext;
 import static com.nixholas.materialtunes.Media.MediaNotifUpdater.mediaNotifOnClickPrevious;
@@ -41,7 +37,7 @@ import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnC
  * Created by nixho on 14-Nov-16.
  *
  * http://www.laurivan.com/android-display-a-notification/
- */ 
+ */
 
 public class PersistentNotif extends BroadcastReceiver implements Runnable {
     // Notification Tags
