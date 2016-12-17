@@ -15,6 +15,12 @@ android:
       - build-tools-25.0.0
       - android-25
       - extra-android-m2repository
+      # For Google APIs
+      - addon-google_apis-google-$ANDROID_API_LEVEL
+      - addon-google_apis-google-$EMULATOR_API_LEVEL
+      # Specify at least one system image
+      - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
+      - sys-img-armeabi-v7a-addon-google_apis-google-$EMULATOR_API_LEVEL
       
 jdk:
   - oraclejdk8
