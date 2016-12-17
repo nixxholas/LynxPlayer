@@ -28,7 +28,7 @@ directories:
   - $HOME/.gradle/wrapper/
 
 before_script:
-  - android update sdk --no-ui --all --filter "build-tools-25.0.2"
+ # - android update sdk --no-ui --all --filter "build-tools-25.0.2"
 
 script: 
   - "./gradlew build connectedCheck --stacktrace"
