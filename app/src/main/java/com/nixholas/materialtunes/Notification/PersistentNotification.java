@@ -39,7 +39,7 @@ import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnC
  * http://www.laurivan.com/android-display-a-notification/
  */
 
-public class PersistentNotif extends BroadcastReceiver implements Runnable {
+public class PersistentNotification extends BroadcastReceiver implements Runnable {
     // Notification Tags
     private static final String NOTIF_PREVIOUS = "NOTI_PREVIOUS";
     private static final String NOTIF_PLAYPAUSE = "NOTI_PLAYPAUSE";
@@ -54,17 +54,17 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
 
     // NormalView Widgets
 
-    public PersistentNotif() {
+    public PersistentNotification() {
     }
 
-    public PersistentNotif(Context mContext) {
+    public PersistentNotification(Context mContext) {
         //this.mContext = mContext;
 
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         //mNotificationManager.notify(NOTIFICATION_ID, notification); // Just for Debugging
     }
 
-    public PersistentNotif(Context mContext, View parentView) {
+    public PersistentNotification(Context mContext, View parentView) {
         //this.mContext = mContext;
         //this.parentView = parentView;
 
@@ -274,7 +274,7 @@ public class PersistentNotif extends BroadcastReceiver implements Runnable {
     }
 
     protected PendingIntent getPendingSelfIntent(Context context, String action) {
-        Intent intent = new Intent(context, PersistentNotif.class);
+        Intent intent = new Intent(context, PersistentNotification.class);
         intent.setAction(action);
         return PendingIntent.getBroadcast(context, 0, intent, 0);
     }

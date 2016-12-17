@@ -46,7 +46,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SettingsActivity" />
-        <receiver android:name=".Notification.PersistentNotif"
+        <receiver android:name=".Notification.PersistentNotification"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
