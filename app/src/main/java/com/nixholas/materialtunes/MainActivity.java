@@ -45,6 +45,7 @@ import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.Media.MediaManager;
 import com.nixholas.materialtunes.Notification.PersistentNotification;
 import com.nixholas.materialtunes.UI.SlidingBarUpdater;
+import com.nixholas.materialtunes.Utils.UI.ButtonHelper;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
@@ -58,6 +59,8 @@ import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnC
  */
 public class MainActivity extends AppCompatActivity {
     // Protected Entities
+    ButtonHelper buttonHelper = new ButtonHelper();
+
     // Sliding Up Bar
     public static ImageView slideAlbumArt;
     public static TextView slideSongArtist;
@@ -125,14 +128,6 @@ public class MainActivity extends AppCompatActivity {
             finalMain = this;
         }
 
-        // Notifications
-        // Setup the default data for the Notifcation controls
-        /*notifyView = new RemoteViews(getPackageName(), R.layout.notification_big);
-        notifyView.setImageViewResource(R.id.notification_albumart, R.drawable.untitled_album);
-        notifyView.setImageViewResource(R.id.notification_previous, R.drawable.ic_skip_previous_black_36dp);
-        notifyView.setImageViewResource(R.id.notification_playpause, R.drawable.ic_play_arrow_black_36dp);
-        notifyView.setImageViewResource(R.id.notification_next, R.drawable.ic_skip_next_black_36dp);*/
-
         slidedRelativeLayout = (RelativeLayout) findViewById(R.id.slided_layout);
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
 
@@ -188,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        buttonHelper.setDisabled(mediaControls_Shuffle);
 
         mediaControls_Repeat = (ImageButton) findViewById(R.id.media_controls_repeat);
         mediaControls_Repeat.setOnClickListener(new View.OnClickListener() {
@@ -196,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 mediaControlsOnClickRepeat();
             }
         });
+        buttonHelper.setDisabled(mediaControls_Repeat);
 
         // Setup the notifications
         Handler mHandler = new Handler();
@@ -205,15 +202,6 @@ public class MainActivity extends AppCompatActivity {
         mDataAdapter.run();
 
         mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-        // Ensure we have READ_EXTERNAL_STORAGE for Music database in LocalProvider
-        // Ensure we have WRITE_EXTERNAL_STORAGE for Album arts storage
-        /*if (ContextCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getParent(),
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    PERM_REQUEST_APP_CORE_PERMISSIONS);
-        }*/
 
         slidedRelativeLayout.setAlpha(0);
 
@@ -255,14 +243,12 @@ public class MainActivity extends AppCompatActivity {
                  * So we'll do 255 - (slideOffset * 255) for the Unexpanded Views and the previous for the expanded views
                  */
                 int unexpandedOffset = (int) (255 - (slideOffset * 255)); // For the Un expanded views
-                //int expandedOffset = (int) (slideOffset * 255); // For the expanded views
 
                 // Set the Unexpanded Views first
                 slideButton.setImageAlpha(unexpandedOffset);
                 slideAlbumArt.setImageAlpha(unexpandedOffset);
                 slideSongTitle.setAlpha(1 - slideOffset);
                 slideSongArtist.setAlpha(1 - slideOffset);
-                //slideRelativeLayout.setAlpha(1 - slideOffset); // This Results in synthetic disappearance.
 
                 // Then the expanded views
                 slidedRelativeLayout.setAlpha(slideOffset);
@@ -271,34 +257,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
                 //Log.i("PanelSlideListener", "onPanelStateChanged " + newState);
-
-                /*if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    // Set the Unexpanded Views first
-                    // http://stackoverflow.com/questions/13397709/android-hide-imageview
-                    *//*slideButton.setVisibility(View.GONE);
-                    slideAlbumArt.setVisibility(View.GONE);
-                    slideSongTitle.setVisibility(View.GONE);
-                    slideSongArtist.setVisibility(View.GONE);
-                    slideRelativeLayout.setVisibility(View.GONE);*//*
-
-                    // Set the Expanded Layout
-                    //slidedLinearLayout.setVisibility(View.VISIBLE);
-
-                    // Then the expanded views
-                } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-                    // Set the Unexpanded Views first
-                    *//*slideButton.setVisibility(View.VISIBLE);
-                    slideAlbumArt.setVisibility(View.VISIBLE);
-                    slideSongTitle.setVisibility(View.VISIBLE);
-                    slideSongArtist.setVisibility(View.VISIBLE);
-                    slideRelativeLayout.setVisibility(View.VISIBLE);*//*
-
-                    // Then the expanded views
-                    //slidedLinearLayout.setVisibility(View.GONE);
-
-                } else {
-                    // Do Nothing
-                }*/
             }
         });
     }

@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 
 public class PreferenceHelper {
     public static final String INTRO_DONE = "intro_done";
+    public static final String DARK_MODE = "dark_mode";
     private static SharedPreferences mPreferences;
 
     public PreferenceHelper(Context mContext) {
@@ -43,5 +44,11 @@ public class PreferenceHelper {
          * defValue	boolean: Value to return if this preference does not exist.
          */
         return mPreferences.getBoolean(INTRO_DONE, false);
+    }
+
+    public void setDarkMode(boolean value) { writeBoolean(DARK_MODE, value); }
+
+    public final boolean getDarkMode() {
+        return mPreferences.getBoolean(DARK_MODE, false);
     }
 }

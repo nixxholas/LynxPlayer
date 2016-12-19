@@ -10,7 +10,7 @@
  * KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package com.nixholas.materialtunes.Utils;
+package com.nixholas.materialtunes.Utils.UI;
 
 /**
  * Created by nixho on 03-Nov-16.

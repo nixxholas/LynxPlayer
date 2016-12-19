@@ -198,8 +198,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 getPendingSelfIntent(mContext, NOTIF_LAUNCH));
 
         // Debugging Album Art
-        // Somehow doesn't work yet
-        Log.e("FilePathIsValid", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
+        //Log.e("FilePathIsValid", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
 
         // Album Art
         // http://stackoverflow.com/questions/7817551/how-to-check-file-exist-or-not-and-if-not-create-a-new-file-in-sdcard-in-async-t
@@ -216,6 +215,11 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
             bigView.setImageViewResource(R.id.notibig_albumart, R.drawable.untitled_album);
         }
 
+        /**
+         * Nougat handles notifications in a different as per compared to anything below and equal
+         * to Marshmallow. We'll have to diverge here so that Nougat's notification features can
+         * be utilized to the fullest potential.
+         */
         if (Build.VERSION.SDK_INT != N) {
             mNotification = new NotificationCompat.Builder(mContext)
                     .setSmallIcon(R.drawable.ic_app_icon)
@@ -229,7 +233,9 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                     .setOngoing(true)
                     .build();
         } else {
-
+            mNotification = new NotificationCompat.Builder(mContext)
+                    .setOngoing(true)
+                    .build();
         }
 
         mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
@@ -239,38 +245,6 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
     private boolean filePathIsValid(String path) {
         return new File(path).exists();
-    }
-
-    private Bitmap uriToBmp(Uri input) {
-        Bitmap bmp;
-        // http://stackoverflow.com/questions/13859769/how-to-compress-uri-image-to-bitmap
-        InputStream imageStream = null;
-        try {
-            imageStream = mContext.getContentResolver().openInputStream(
-                    input);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            // http://stackoverflow.com/questions/15255611/how-to-convert-a-drawable-image-from-resources-to-a-bitmap
-            bmp = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.untitled_album);
-            return bmp;
-        }
-
-        try {
-            bmp = BitmapFactory.decodeStream(imageStream);
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-
-            stream.close();
-            stream = null;
-            return bmp;
-        } catch (Exception e) {
-            e.printStackTrace();
-            // http://stackoverflow.com/questions/15255611/how-to-convert-a-drawable-image-from-resources-to-a-bitmap
-            bmp = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.untitled_album);
-            return bmp;
-        }
     }
 
     protected PendingIntent getPendingSelfIntent(Context context, String action) {
