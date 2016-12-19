@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     public static ImageButton mediaControls_Next;
     public static ImageButton mediaControls_Shuffle;
     public static ImageButton mediaControls_Repeat;
+    public static ImageButton slidedCloseButton;
     public static TextView mediaSeekText_Progress;
     public static TextView mediaSeekText_Maximum;
     public static TextView slided_SongTitle;
@@ -130,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
         slidedRelativeLayout = (RelativeLayout) findViewById(R.id.slided_layout);
         slidingUpPanelLayout = (CustomSlidingUpLayout) findViewById(R.id.sliding_layout);
 
+        slidingUpPanelLayout.setDragView(findViewById(R.id.dragView));
+
         // Sliding Up Bar
         slideAlbumArt = (ImageView) findViewById(R.id.slide_albumart);
         slideSongArtist = (TextView) findViewById(R.id.slide_songartist);
@@ -147,9 +150,17 @@ public class MainActivity extends AppCompatActivity {
         mediaSeekText_Maximum = (TextView) findViewById(R.id.slided_seekTextMax);
         slided_SongTitle = (TextView) findViewById(R.id.slided_title);
         slided_SongArtist = (TextView) findViewById(R.id.slided_artist);
+        slidedCloseButton = (ImageButton) findViewById(R.id.slided_close);
 
         //slidingSeekBar.getIndeterminateDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
         //slidedSeekBar.getIndeterminateDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+
+        slidedCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
+        });
 
         mediaControls_PlayPause = (ImageButton) findViewById(R.id.media_controls_playpause);
         mediaControls_PlayPause.setOnClickListener(new View.OnClickListener() {
@@ -228,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
         slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-                Log.i("PanelSlideListener", "onPanelSlide, offset " + slideOffset);
+                //Log.i("PanelSlideListener", "onPanelSlide, offset " + slideOffset);
 
                 /**
                  * http://stackoverflow.com/questions/5078041/how-can-i-make-an-image-transparent-in-android

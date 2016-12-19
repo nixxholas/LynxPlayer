@@ -24,5 +24,5 @@ public class CustomSlidingUpLayout extends SlidingUpPanelLayout {
         super(context, attrs);
     }
 
-    
+
 }

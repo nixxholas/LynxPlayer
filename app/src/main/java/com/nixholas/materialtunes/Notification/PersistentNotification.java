@@ -291,7 +291,11 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 // http://stackoverflow.com/questions/4141555/how-to-use-getsystemservice-in-a-non-activity-class
                 mNotificationManager = (NotificationManager) context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.cancel(255);
-                mediaManager.mMediaPlayer.reset();
+                mediaManager.mMediaPlayer.release();
+
+                // Kill the whole app to give the user all the processing space we took
+                // http://stackoverflow.com/questions/3105673/how-to-kill-an-application-with-all-its-activities
+                android.os.Process.killProcess(android.os.Process.myPid());
 
                 // mediaManager.mMediaPlayer.release(); // http://stackoverflow.com/questions/3692562/how-does-one-remove-a-mediaplayer
                 // https://developer.android.com/guide/topics/media/mediaplayer.html
