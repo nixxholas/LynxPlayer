@@ -5,7 +5,6 @@ import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
@@ -23,12 +22,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -44,8 +42,9 @@ import com.nixholas.materialtunes.Media.Adapter.DataAdapter;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.Media.MediaManager;
 import com.nixholas.materialtunes.Notification.PersistentNotification;
+import com.nixholas.materialtunes.UI.CustomSlidingUpLayout;
 import com.nixholas.materialtunes.UI.SlidingBarUpdater;
-import com.nixholas.materialtunes.Utils.UI.ButtonHelper;
+import com.nixholas.materialtunes.UI.ButtonHelper;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     public static TextView slideSongTitle;
     public static ImageButton slideButton;
     public static RelativeLayout slideRelativeLayout;
-    public static SlidingUpPanelLayout slidingUpPanelLayout;
+    public static CustomSlidingUpLayout slidingUpPanelLayout;
     public static SeekBar slidingSeekBar;
 
     // Expanded View of Sliding Up Bar
@@ -129,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         slidedRelativeLayout = (RelativeLayout) findViewById(R.id.slided_layout);
-        slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        slidingUpPanelLayout = (CustomSlidingUpLayout) findViewById(R.id.sliding_layout);
 
         // Sliding Up Bar
         slideAlbumArt = (ImageView) findViewById(R.id.slide_albumart);
@@ -180,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         mediaControls_Shuffle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                mediaControlsOnClickShuffle();
             }
         });
         buttonHelper.greyOut(mediaControls_Shuffle);
@@ -286,7 +285,6 @@ public class MainActivity extends AppCompatActivity {
     // http://programmerguru.com/android-tutorial/how-to-change-the-back-button-behaviour/
     @Override
     public void onBackPressed() {
-        //Include the code here
         if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         } else {
@@ -626,6 +624,16 @@ public class MainActivity extends AppCompatActivity {
             // Next is repeat nothing..
             mediaManager.setRepeatState(MediaManager.RepeatState.NOREPEAT);
             buttonHelper.greyOut(mediaControls_Repeat);
+        }
+    }
+
+    public void mediaControlsOnClickShuffle() {
+        if (mediaManager.shuffleState == MediaManager.ShuffleState.SHUFFLING) {
+            mediaManager.setShuffleState(MediaManager.ShuffleState.NOT_SHUFFLING);
+            buttonHelper.greyOut(mediaControls_Shuffle);
+        } else {
+            mediaManager.setShuffleState(MediaManager.ShuffleState.SHUFFLING);
+            buttonHelper.unGreyOut(mediaControls_Shuffle);
         }
     }
 

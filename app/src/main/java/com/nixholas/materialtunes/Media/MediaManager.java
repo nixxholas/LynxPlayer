@@ -61,6 +61,7 @@ import static com.nixholas.materialtunes.MainActivity.slidingUpPanelLayout;
  */
 
 public class MediaManager extends Service {
+    // Action Strings
     public static final String ACTION_PLAY = "action_play";
     public static final String ACTION_PAUSE = "action_pause";
     public static final String ACTION_REWIND = "action_rewind";
@@ -68,6 +69,23 @@ public class MediaManager extends Service {
     public static final String ACTION_NEXT = "action_next";
     public static final String ACTION_PREVIOUS = "action_previous";
     public static final String ACTION_STOP = "action_stop";
+
+    // Main Objects for MediaManager
+    private MediaSession mMediaSession;
+    public MediaPlayer mMediaPlayer = new MediaPlayer();
+
+    // MediaManager Sub Objects
+    public boolean mediaPlayerIsPaused;
+    public RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
+    public ShuffleState shuffleState = ShuffleState.NOT_SHUFFLING;
+    private Random shufflerRandomizer;
+    private PlaybackState mPlaybackState;
+    public int currentlyPlayingIndex;
+
+    // MediaManager Resources
+    public volatile ArrayList<Song> songFiles = new ArrayList<>();
+    public volatile ArrayList<Album> albumFiles = new ArrayList<>();
+    public volatile ArrayList<List> playLists = new ArrayList<>();
 
     public class ServiceBinder extends Binder {
 
@@ -82,31 +100,20 @@ public class MediaManager extends Service {
         return mMediaSession.getSessionToken();
     }
 
-    public enum RepeatState{
+    public enum RepeatState {
         NOREPEAT,
         REPEATONE,
         REPEATALL
     }
 
-    private MediaSession mMediaSession;
-    public MediaPlayer mMediaPlayer = new MediaPlayer();
-
-    public boolean mediaPlayerIsPaused;
-    public RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
-    private Random shufflerRandomizer;
-    public boolean isMediaPlayerIsShuffling;
-    private PlaybackState mPlaybackState;
-
-    public int currentlyPlayingIndex;
-
-    public volatile ArrayList<Song> songFiles = new ArrayList<>();
-    public volatile ArrayList<Album> albumFiles = new ArrayList<>();
-    public volatile ArrayList<List> playLists = new ArrayList<>();
+    public enum ShuffleState {
+        NOT_SHUFFLING,
+        SHUFFLING
+    }
 
     public MediaManager(final MainActivity mainActivity) {
         //Log.e("onCreate: MediaManager", "Working");
         mediaPlayerIsPaused = false;
-        isMediaPlayerIsShuffling = false;
         shufflerRandomizer = new Random();
         mPlaybackState = new PlaybackState.Builder()
                 .setState(PlaybackState.STATE_NONE, 0, 1.0f)
@@ -407,7 +414,7 @@ public class MediaManager extends Service {
     }
 
     public Song getNext() {
-        if (isMediaPlayerIsShuffling) {
+        if (shuffleState == ShuffleState.SHUFFLING) {
             int newSong = currentlyPlayingIndex;
             while (newSong == currentlyPlayingIndex) {
                 newSong = shufflerRandomizer.nextInt(songFiles.size());
@@ -424,7 +431,7 @@ public class MediaManager extends Service {
     }
 
     public Song getPrevious() {
-        if (isMediaPlayerIsShuffling) {
+        if (shuffleState == ShuffleState.SHUFFLING) {
             int newSong = currentlyPlayingIndex;
             while (newSong == currentlyPlayingIndex) {
                 newSong = shufflerRandomizer.nextInt(songFiles.size());
@@ -448,5 +455,9 @@ public class MediaManager extends Service {
     public void setRepeatState(RepeatState repeatState) {
         this.repeatState = repeatState;
     }
+
+    public ShuffleState getShuffleState() { return shuffleState; }
+
+    public void setShuffleState(ShuffleState shuffleState) { this.shuffleState = shuffleState; }
 
 }

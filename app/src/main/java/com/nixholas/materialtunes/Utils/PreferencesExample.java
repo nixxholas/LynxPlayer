@@ -6,8 +6,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
-import com.nixholas.materialtunes.Utils.UI.SortOrder;
-
 /**
  * Created by nixho on 03-Nov-16.
  */

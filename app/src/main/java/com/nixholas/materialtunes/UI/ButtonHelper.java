@@ -1,4 +1,4 @@
-package com.nixholas.materialtunes.Utils.UI;
+package com.nixholas.materialtunes.UI;
 
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
