@@ -13,14 +13,23 @@ import com.bumptech.glide.request.target.Target;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 
+import java.util.concurrent.TimeUnit;
+
+import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
+import static com.nixholas.materialtunes.MainActivity.mediaControls_Shuffle;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
+import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Maximum;
 import static com.nixholas.materialtunes.MainActivity.slideAlbumArt;
 import static com.nixholas.materialtunes.MainActivity.slideButton;
 import static com.nixholas.materialtunes.MainActivity.slideSongArtist;
 import static com.nixholas.materialtunes.MainActivity.slideSongTitle;
 import static com.nixholas.materialtunes.MainActivity.slidedAlbumArt;
 import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
+import static com.nixholas.materialtunes.MainActivity.slidedSeekBar;
+import static com.nixholas.materialtunes.MainActivity.slided_SongArtist;
+import static com.nixholas.materialtunes.MainActivity.slided_SongTitle;
+import static com.nixholas.materialtunes.MainActivity.slidingSeekBar;
 
 /**
  * Created by nixho on 22-Nov-16.
@@ -28,6 +37,7 @@ import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
 
 public class SlidingBarUpdater {
     public static void updateSlideBar(Context context) {
+        ButtonHelper buttonHelper = new ButtonHelper();
         Song currentSong = mediaManager.getCurrent();
 
         // Update the images first
@@ -81,7 +91,9 @@ public class SlidingBarUpdater {
                 .into(slidedAlbumArt);
 
         slideSongTitle.setText(currentSong.getTitle());
+        slided_SongTitle.setText(currentSong.getTitle());
         slideSongArtist.setText(currentSong.getArtistName());
+        slided_SongArtist.setText(currentSong.getArtistName());
 
         if (mediaManager.mMediaPlayer.isPlaying()) {
             slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
@@ -89,6 +101,26 @@ public class SlidingBarUpdater {
         } else {
             slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
             mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+        }
+
+        int songDuration = currentSong.getDuration();
+        slidingSeekBar.setMax(songDuration);
+        slidedSeekBar.setMax(songDuration);
+
+        // Retrieve the length of the song and set it into the Maximum Text View
+        //mediaSeekText_Maximum.setText(getCurrent().getDuration() + "");
+        // http://stackoverflow.com/questions/625433/how-to-convert-milliseconds-to-x-mins-x-seconds-in-java
+        mediaSeekText_Maximum.setText(String.format("%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(songDuration),
+                TimeUnit.MILLISECONDS.toSeconds(songDuration) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(songDuration))
+        ));
+
+        // Let's update the UI elements related to shuffling
+        if (preferenceHelper.getShuffle()) {
+            buttonHelper.greyOut(mediaControls_Shuffle);
+        } else {
+            buttonHelper.unGreyOut(mediaControls_Shuffle);
         }
     }
 }

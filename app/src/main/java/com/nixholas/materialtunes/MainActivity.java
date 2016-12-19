@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
+import android.preference.Preference;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -45,9 +46,13 @@ import com.nixholas.materialtunes.Notification.PersistentNotification;
 import com.nixholas.materialtunes.UI.CustomSlidingUpLayout;
 import com.nixholas.materialtunes.UI.SlidingBarUpdater;
 import com.nixholas.materialtunes.UI.ButtonHelper;
+import com.nixholas.materialtunes.Utils.PreferenceHelper;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
+import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
+import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPrevious;
 
 /**
  * Android Security TTN (To Take Note) Of
@@ -283,6 +288,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
+        SlidingBarUpdater.updateSlideBar(getApplicationContext());
     }
 
 
@@ -405,217 +411,6 @@ public class MainActivity extends AppCompatActivity {
         mediaControlsOnClickNext(view);
     }
 
-    public static void mediaControlsOnClickPrevious(View v) {
-        try {
-            final Song prevSong = mediaManager.getPrevious();
-
-            Uri audioUri = Uri.parse("file://" + prevSong.getDataPath());
-
-            Uri sArtworkUri = Uri
-                    .parse("content://media/external/audio/albumart");
-            Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, prevSong.getAlbumId());
-
-            if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
-                mediaManager.mMediaPlayer.stop();
-                mediaManager.mMediaPlayer.reset();
-                mediaManager.mMediaPlayer.setDataSource(v.getContext(), audioUri);
-                mediaManager.mMediaPlayer.prepareAsync();
-                mediaManager.mediaPlayerIsPaused = false;
-
-                /**
-                 * User Interface Changes
-                 */
-                slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
-                mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
-                slideSongTitle.setText(prevSong.getTitle());
-                slideSongArtist.setText(prevSong.getArtistName());
-                // http://stackoverflow.com/questions/40452192/performing-album-art-checks-on-an-audio-file
-                Glide.with(v.getContext())
-                        .load(albumArtUri)
-                        .asBitmap()
-                        .placeholder(R.drawable.untitled_album)
-                        .listener(new RequestListener<Uri, Bitmap>() {
-                            @Override
-                            public boolean onException(Exception e, Uri model, Target<Bitmap> target, boolean isFirstResource) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Uri model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                // Retrieve the palette of colors from the Bitmap first
-                                Palette p = Palette.from(resource).generate();
-                                Palette.Swatch swatch = p.getVibrantSwatch();
-                                if (swatch != null) {
-                                    int color = swatch.getRgb();
-                                    slidedRelativeLayout.setBackgroundColor(color);
-                                } else {
-                                    Palette.Swatch mutedSwatch = p.getMutedSwatch();
-                                    if (mutedSwatch != null) {
-                                        int color = mutedSwatch.getRgb();
-                                        slidedRelativeLayout.setBackgroundColor(color);
-                                    }
-                                }
-
-                                // Set the images
-                                slideAlbumArt.setImageURI(model);
-                                slidedAlbumArt.setImageURI(model);
-
-                                return true;
-                            }
-                        })
-                        .into(slideAlbumArt);
-
-                Glide.with(v.getContext())
-                        .load(albumArtUri)
-                        .asBitmap()
-                        .placeholder(R.drawable.untitled_album)
-                        .listener(new RequestListener<Uri, Bitmap>() {
-                            @Override
-                            public boolean onException(Exception e, Uri model, Target<Bitmap> target, boolean isFirstResource) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Uri model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                // Retrieve the palette of colors from the Bitmap first
-                                Palette p = Palette.from(resource).generate();
-                                Palette.Swatch swatch = p.getVibrantSwatch();
-                                if (swatch != null) {
-                                    int color = swatch.getRgb();
-                                    slidedRelativeLayout.setBackgroundColor(color);
-                                } else {
-                                    Palette.Swatch mutedSwatch = p.getMutedSwatch();
-                                    if (mutedSwatch != null) {
-                                        int color = mutedSwatch.getRgb();
-                                        slidedRelativeLayout.setBackgroundColor(color);
-                                    }
-                                }
-
-                                // Set the images
-                                slideAlbumArt.setImageURI(model);
-                                slidedAlbumArt.setImageURI(model);
-
-                                return true;
-                            }
-                        })
-                        .into(slidedAlbumArt);
-
-                persistentNotif.updateNotification();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void mediaControlsOnClickNext(View v) {
-        try {
-            //Log.e("onClickNext", "Working");
-            //Log.e("mMediaPlayer.isPlaying", mediaManager.mMediaPlayer.isPlaying() + "");
-            /**
-             * If getInstance().getCurrentFocus() is used, there will be a high probability of
-             * com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView{18335a0 VFED..... .F.....D 0,0-1440,2070 #7f0c00a9 app:id/main_RecyclerView}
-             * which in other words mean that the UI might fail to load on the right view.
-             *
-             * Glide is still failing to load on the right context because of the wrong view...
-             */
-            //View v = getInstance().getCurrentFocus().getRootView();
-
-            final Song nextSong = mediaManager.getNext();
-
-            Uri audioUri = Uri.parse("file://" + nextSong.getDataPath());
-
-            Uri sArtworkUri = Uri
-                    .parse("content://media/external/audio/albumart");
-            Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, nextSong.getAlbumId());
-
-            if (mediaManager.mMediaPlayer.isPlaying() || !mediaManager.mediaPlayerIsPaused) {
-                mediaManager.mMediaPlayer.stop();
-                mediaManager.mMediaPlayer.reset();
-                mediaManager.mMediaPlayer.setDataSource(v.getContext(), audioUri);
-                mediaManager.mMediaPlayer.prepareAsync();
-                mediaManager.mediaPlayerIsPaused = false;
-
-                /**
-                 * User Interface Changes
-                 */
-                slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
-                mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
-                slideSongTitle.setText(nextSong.getTitle());
-                slideSongArtist.setText(nextSong.getArtistName());
-                Glide.with(v.getContext())
-                        .load(albumArtUri)
-                        .asBitmap()
-                        .placeholder(R.drawable.untitled_album)
-                        .listener(new RequestListener<Uri, Bitmap>() {
-                            @Override
-                            public boolean onException(Exception e, Uri model, Target<Bitmap> target, boolean isFirstResource) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Uri model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                // Retrieve the palette of colors from the Bitmap first
-                                Palette p = Palette.from(resource).generate();
-                                Palette.Swatch swatch = p.getVibrantSwatch();
-                                if (swatch != null) {
-                                    int color = swatch.getRgb();
-                                    slidedRelativeLayout.setBackgroundColor(color);
-                                } else {
-                                    Palette.Swatch mutedSwatch = p.getMutedSwatch();
-                                    if (mutedSwatch != null) {
-                                        int color = mutedSwatch.getRgb();
-                                        slidedRelativeLayout.setBackgroundColor(color);
-                                    }
-                                }
-
-                                return true;
-                            }
-                        })
-                        .into(slideAlbumArt);
-
-                Glide.with(v.getContext())
-                        .load(albumArtUri)
-                        .asBitmap()
-                        .placeholder(R.drawable.untitled_album)
-                        .listener(new RequestListener<Uri, Bitmap>() {
-                            @Override
-                            public boolean onException(Exception e, Uri model, Target<Bitmap> target, boolean isFirstResource) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Uri model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                // Retrieve the palette of colors from the Bitmap first
-                                Palette p = Palette.from(resource).generate();
-                                Palette.Swatch swatch = p.getVibrantSwatch();
-                                if (swatch != null) {
-                                    int color = swatch.getRgb();
-                                    slidedRelativeLayout.setBackgroundColor(color);
-                                } else {
-                                    Palette.Swatch mutedSwatch = p.getMutedSwatch();
-                                    if (mutedSwatch != null) {
-                                        int color = mutedSwatch.getRgb();
-                                        slidedRelativeLayout.setBackgroundColor(color);
-                                    }
-                                }
-
-                                // Set the images
-                                slideAlbumArt.setImageURI(model);
-                                slidedAlbumArt.setImageURI(model);
-
-                                return true;
-                            }
-                        })
-                        .into(slidedAlbumArt);
-
-                persistentNotif.updateNotification();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void mediaControlsOnClickRepeat () {
         if (mediaManager.getRepeatState() == MediaManager.RepeatState.NOREPEAT) {
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
@@ -639,12 +434,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void mediaControlsOnClickShuffle() {
-        if (mediaManager.shuffleState == MediaManager.ShuffleState.SHUFFLING) {
-            mediaManager.setShuffleState(MediaManager.ShuffleState.NOT_SHUFFLING);
+        if (preferenceHelper.getShuffle()) {
+            preferenceHelper.setShuffle(false);
             buttonHelper.greyOut(mediaControls_Shuffle);
+            preferenceHelper.setShuffle(true);
         } else {
-            mediaManager.setShuffleState(MediaManager.ShuffleState.SHUFFLING);
+            preferenceHelper.setShuffle(true);
             buttonHelper.unGreyOut(mediaControls_Shuffle);
+            preferenceHelper.setShuffle(false);
         }
     }
 

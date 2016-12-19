@@ -121,6 +121,8 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 getPendingSelfIntent(mContext, NOTIF_DISMISS));
         bigView.setOnClickPendingIntent(R.id.notibig_layout,
                 getPendingSelfIntent(mContext, NOTIF_LAUNCH));
+        normalView.setOnClickPendingIntent(R.id.noti_image_end,
+                getPendingSelfIntent(mContext, NOTIF_DISMISS));
 
         // Debugging Album Art
         // Somehow doesn't work yet
@@ -235,6 +237,8 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
         } else {
             mNotification = new NotificationCompat.Builder(mContext)
                     .setOngoing(true)
+                    .setCustomContentView(normalView)
+                    .setCustomBigContentView(bigView)
                     .build();
         }
 

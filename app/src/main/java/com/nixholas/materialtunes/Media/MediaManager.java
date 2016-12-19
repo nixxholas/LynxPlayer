@@ -35,6 +35,7 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
@@ -77,7 +78,6 @@ public class MediaManager extends Service {
     // MediaManager Sub Objects
     public boolean mediaPlayerIsPaused;
     public RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
-    public ShuffleState shuffleState = ShuffleState.NOT_SHUFFLING;
     private Random shufflerRandomizer;
     private PlaybackState mPlaybackState;
     public int currentlyPlayingIndex;
@@ -104,11 +104,6 @@ public class MediaManager extends Service {
         NOREPEAT,
         REPEATONE,
         REPEATALL
-    }
-
-    public enum ShuffleState {
-        NOT_SHUFFLING,
-        SHUFFLING
     }
 
     public MediaManager(final MainActivity mainActivity) {
@@ -414,7 +409,7 @@ public class MediaManager extends Service {
     }
 
     public Song getNext() {
-        if (shuffleState == ShuffleState.SHUFFLING) {
+        if (preferenceHelper.getShuffle()) {
             int newSong = currentlyPlayingIndex;
             while (newSong == currentlyPlayingIndex) {
                 newSong = shufflerRandomizer.nextInt(songFiles.size());
@@ -431,7 +426,7 @@ public class MediaManager extends Service {
     }
 
     public Song getPrevious() {
-        if (shuffleState == ShuffleState.SHUFFLING) {
+        if (preferenceHelper.getShuffle()) {
             int newSong = currentlyPlayingIndex;
             while (newSong == currentlyPlayingIndex) {
                 newSong = shufflerRandomizer.nextInt(songFiles.size());
@@ -455,9 +450,5 @@ public class MediaManager extends Service {
     public void setRepeatState(RepeatState repeatState) {
         this.repeatState = repeatState;
     }
-
-    public ShuffleState getShuffleState() { return shuffleState; }
-
-    public void setShuffleState(ShuffleState shuffleState) { this.shuffleState = shuffleState; }
 
 }

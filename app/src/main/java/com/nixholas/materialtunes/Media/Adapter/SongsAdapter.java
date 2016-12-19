@@ -111,8 +111,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
         class SongMenuClickListener implements PopupMenu.OnMenuItemClickListener {
 
-            SongMenuClickListener() {
-            }
+            SongMenuClickListener() {}
 
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -120,6 +119,8 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                     case R.id.song_playlist:
                         Log.e("OnMenuItemClick", "SongMenuClickListener is Working");
                         //Toast.makeText(mContext, "Action 1", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.song_delete:
                         return true;
                     default:
                 }

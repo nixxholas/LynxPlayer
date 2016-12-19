@@ -31,5 +31,9 @@
     <dimen name="album_title">15dp</dimen>
     <dimen name="songs_count_padding_bottom">5dp</dimen>
     <dimen name="songs_count">12dp</dimen>
+
+    <!-- Notification Dimensions -->
     <dimen name="notibig_button_margin">36dp</dimen>
+    <dimen name="notification_info_container_padding_left">8dp</dimen>
+    <dimen name="notification_info_container_padding_bottom">4dp</dimen>
 </resources>

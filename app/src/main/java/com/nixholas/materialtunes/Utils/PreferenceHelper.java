@@ -12,6 +12,11 @@ import android.preference.PreferenceManager;
 public class PreferenceHelper {
     public static final String INTRO_DONE = "intro_done";
     public static final String DARK_MODE = "dark_mode";
+
+    // Playback Preferences
+    public static final String SHUFFLE = "shuffle";
+    public static final String REPEAT = "repeat";
+
     private static SharedPreferences mPreferences;
 
     public PreferenceHelper(Context mContext) {
@@ -51,4 +56,8 @@ public class PreferenceHelper {
     public final boolean getDarkMode() {
         return mPreferences.getBoolean(DARK_MODE, false);
     }
+
+    public void setShuffle(boolean value) { writeBoolean(SHUFFLE, value); }
+
+    public final boolean getShuffle() { return mPreferences.getBoolean(SHUFFLE, false); }
 }
