@@ -2,6 +2,7 @@ package com.nixholas.materialtunes.Utils.UI;
 
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.media.Image;
 import android.widget.ImageButton;
 
 /**
@@ -9,8 +10,15 @@ import android.widget.ImageButton;
  */
 
 public class ButtonHelper {
-    public void setDisabled(ImageButton imageButton) {
+
+    // We'll need to have a method to "grey" out a button
+    // http://stackoverflow.com/questions/8743120/how-to-grey-out-a-button
+    public void greyOut(ImageButton imageButton) {
         // This works so, let's use this instead
         imageButton.setAlpha(.5f);
+    }
+
+    public void unGreyOut(ImageButton imageButton) {
+        imageButton.setAlpha(1f);
     }
 }

@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        buttonHelper.setDisabled(mediaControls_Shuffle);
+        buttonHelper.greyOut(mediaControls_Shuffle);
 
         mediaControls_Repeat = (ImageButton) findViewById(R.id.media_controls_repeat);
         mediaControls_Repeat.setOnClickListener(new View.OnClickListener() {
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 mediaControlsOnClickRepeat();
             }
         });
-        buttonHelper.setDisabled(mediaControls_Repeat);
+        buttonHelper.greyOut(mediaControls_Repeat);
 
         // Setup the notifications
         Handler mHandler = new Handler();
@@ -612,7 +612,8 @@ public class MainActivity extends AppCompatActivity {
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
             // Next is repeat all..
             mediaManager.setRepeatState(MediaManager.RepeatState.REPEATALL);
-            Log.e("getmPlaybackState()", "Repeat All");
+            //Log.e("getmPlaybackState()", "Repeat All");
+            buttonHelper.unGreyOut(mediaControls_Repeat);
         } else if (mediaManager.getRepeatState() == MediaManager.RepeatState.REPEATALL) {
             mediaManager.mMediaPlayer.setLooping(true);
             // Next is repeat one only..
@@ -624,7 +625,7 @@ public class MainActivity extends AppCompatActivity {
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
             // Next is repeat nothing..
             mediaManager.setRepeatState(MediaManager.RepeatState.NOREPEAT);
-            mediaControls_Repeat.setBackgroundColor(Color.GRAY);
+            buttonHelper.greyOut(mediaControls_Repeat);
         }
     }
 
