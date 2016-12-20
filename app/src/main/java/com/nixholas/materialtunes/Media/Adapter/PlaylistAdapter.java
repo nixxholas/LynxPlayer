@@ -23,7 +23,9 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -149,8 +151,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         final Playlist currentList = mDataset.get(position);
         final int currentPosition = position;
 
+        long unixSeconds = Long.parseLong(currentList.getPlaylistDateAdded());
+        Date date = new Date(unixSeconds * 1000); // *1000 is to convert minutes to milliseconds
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy"); // the format of your date
+
         holder.title.setText(currentList.getPlaylistName());
-        holder.dateAdded.setText("Created on: " + currentList.getPlaylistDateAdded());
+        holder.dateAdded.setText("Created on: " + sdf.format(date));
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
