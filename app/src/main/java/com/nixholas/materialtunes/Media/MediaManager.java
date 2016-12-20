@@ -19,6 +19,8 @@ import android.os.IBinder;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.NotificationCompat;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.SeekBar;
@@ -29,6 +31,7 @@ import com.nixholas.materialtunes.Media.Entities.Album;
 import com.nixholas.materialtunes.Media.Entities.List;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
+import com.nixholas.materialtunes.Utils.RemoteControlReceiver;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
@@ -38,6 +41,8 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import static android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT;
+import static android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK;
 import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
@@ -76,9 +81,10 @@ public class MediaManager extends Service {
     public static final String ACTION_STOP = "action_stop";
 
     // Main Objects for MediaManager
-    private AudioManager mAudioManager;
+    public AudioManager audioManager;
     private MediaSessionCompat mMediaSession;
     public MediaPlayer mMediaPlayer = new MediaPlayer();
+    public RemoteControlReceiver remoteControlReceiver;
 
     // MediaManager Sub Objects
     public boolean mediaPlayerIsPaused;
@@ -112,6 +118,29 @@ public class MediaManager extends Service {
 
     public MediaManager(final MainActivity mainActivity) {
         //Log.e("onCreate: MediaManager", "Working");
+        audioManager = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
+
+        PhoneStateListener phoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                if (state == TelephonyManager.CALL_STATE_RINGING) {
+                    //Incoming call: Pause music
+                    mMediaPlayer.pause();
+                } else if(state == TelephonyManager.CALL_STATE_IDLE) {
+                    //Not in call: Play music
+                    mMediaPlayer.start();
+                } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    //A call is dialing, active or on hold
+                    mMediaPlayer.pause();
+                }
+                super.onCallStateChanged(state, incomingNumber);
+            }
+        };
+        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        if(mgr != null) {
+            mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
+
         mediaPlayerIsPaused = false;
         shufflerRandomizer = new Random();
         mPlaybackState = new PlaybackStateCompat.Builder()

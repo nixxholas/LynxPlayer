@@ -347,6 +347,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                     // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                                     //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
                                     .setLargeIcon(albumBitmap)
+                                    .setSmallIcon(R.drawable.ic_app_icon)
                                     // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
                                     .setShowWhen(false) // Removes the timestamp for the notification
                                     .setContentTitle(currentSong.getTitle())
@@ -376,6 +377,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                     // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                                     //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
                                     .setLargeIcon(albumBitmap)
+                                    .setSmallIcon(R.drawable.ic_app_icon)
                                     // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
                                     .setShowWhen(false) // Removes the timestamp for the notification
                                     .setContentTitle(currentSong.getTitle())

@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.KeyEvent;
 
+import java.io.IOException;
+
+import static com.nixholas.materialtunes.MainActivity.mediaManager;
+
 /**
  * Created by nixho on 20-Nov-16.
  *
@@ -19,9 +23,13 @@ public class RemoteControlReceiver extends BroadcastReceiver {
         if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
             KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
             if (KeyEvent.KEYCODE_MEDIA_PLAY == event.getKeyCode()) {
-                // Handle key press.
+                if (mediaManager.mMediaPlayer.isPlaying()) {
+                    mediaManager.mMediaPlayer.start();
+                }
             } else if (KeyEvent.KEYCODE_MEDIA_PAUSE == event.getKeyCode()) {
-
+                if (mediaManager.mMediaPlayer.isPlaying()) {
+                    mediaManager.mMediaPlayer.pause();
+                }
             }
         }
     }

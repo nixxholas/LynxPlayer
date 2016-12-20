@@ -214,10 +214,6 @@ public class MainActivity extends AppCompatActivity {
 
         mDataAdapter.run();
 
-        mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-        slidedRelativeLayout.setAlpha(0);
-
         // Hide the panel first, since nothing is being played
         if (mediaManager.mMediaPlayer == null) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
@@ -225,6 +221,10 @@ public class MainActivity extends AppCompatActivity {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             SlidingBarUpdater.updateSlideBar(MainActivity.this);
         }
+
+        mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+        slidedRelativeLayout.setAlpha(0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
