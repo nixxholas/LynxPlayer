@@ -1,15 +1,10 @@
 package com.nixholas.materialtunes.Media;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Binder;
@@ -18,31 +13,25 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v7.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.RemoteViews;
 import android.widget.SeekBar;
 
-import com.bumptech.glide.Glide;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Album;
 import com.nixholas.materialtunes.Media.Entities.Playlist;
 import com.nixholas.materialtunes.Media.Entities.Song;
+import com.nixholas.materialtunes.Media.Entities.Utils.PlaylistUtil;
 import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.RemoteControlReceiver;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import static android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT;
-import static android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK;
 import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
@@ -50,11 +39,7 @@ import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Maximum;
 import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Progress;
 import static com.nixholas.materialtunes.MainActivity.persistentNotif;
-import static com.nixholas.materialtunes.MainActivity.slideAlbumArt;
 import static com.nixholas.materialtunes.MainActivity.slideButton;
-import static com.nixholas.materialtunes.MainActivity.slideSongArtist;
-import static com.nixholas.materialtunes.MainActivity.slideSongTitle;
-import static com.nixholas.materialtunes.MainActivity.slidedAlbumArt;
 import static com.nixholas.materialtunes.MainActivity.slidedSeekBar;
 import static com.nixholas.materialtunes.MainActivity.slided_SongArtist;
 import static com.nixholas.materialtunes.MainActivity.slided_SongTitle;
@@ -466,4 +451,21 @@ public class MediaManager extends Service {
         this.repeatState = repeatState;
     }
 
+    public void purgeSong(long songId) {
+        for (int i = 0; i < songFiles.size(); i++) {
+            if (songFiles.get(i).getId() == songId) {
+                songFiles.remove(i);
+                break;
+            }
+        }
+    }
+
+    public void purgeList(long playlistId) {
+        for (int i = 0; i < playLists.size(); i++) {
+            if (playLists.get(i).getPlaylistId() == playlistId) {
+                playLists.remove(i);
+                break;
+            }
+        }
+    }
 }

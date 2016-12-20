@@ -3,6 +3,7 @@ package com.nixholas.materialtunes.Media.Adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
@@ -22,8 +23,6 @@ import com.nixholas.materialtunes.Media.Entities.Playlist;
 import com.nixholas.materialtunes.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,7 +30,8 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.nixholas.materialtunes.Media.PlaylistUtil.removePlaylist;
+import static com.nixholas.materialtunes.MainActivity.mediaManager;
+import static com.nixholas.materialtunes.Media.Entities.Utils.PlaylistUtil.removePlaylist;
 
 /**
  * Created by nixho on 26-Nov-16.
@@ -116,7 +116,15 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
                         return true;
                     case R.id.playlist_delete:
                         //Log.d("onMenuItemClick", title.getText().toString());
-                        removePlaylist(playlist.getPlaylistId());
+                        cardView.setVisibility(View.GONE);
+
+                        new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                removePlaylist(playlist.getPlaylistId());
+                                return null;
+                            }
+                        };
                         return true;
                     default:
                 }

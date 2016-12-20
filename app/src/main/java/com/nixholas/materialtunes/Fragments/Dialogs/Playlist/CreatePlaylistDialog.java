@@ -6,17 +6,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.InputType;
 import android.util.Log;
-import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.nixholas.materialtunes.Media.Entities.Playlist;
-import com.nixholas.materialtunes.Media.Entities.Song;
 
-import java.util.List;
-
-import static com.nixholas.materialtunes.MainActivity.mediaManager;
-import static com.nixholas.materialtunes.Media.PlaylistUtil.addNewPlaylist;
+import static com.nixholas.materialtunes.Media.Entities.Utils.PlaylistUtil.addNewPlaylist;
 
 /**
  * Created by nixholas on 20/12/16.

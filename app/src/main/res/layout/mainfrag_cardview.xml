@@ -1,23 +1,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainfrag_layout"
     android:orientation="vertical"
     android:layout_height="85dp"
     android:layout_width="match_parent"
-    android:paddingBottom="2dp">
+    android:paddingBottom="2dp"
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <!-- A CardView that contains a TextView -->
     <!--http://stackoverflow.com/questions/26997109/setting-elevation-in-xml-on-appcompat-cardview-on-android-5-0-->
     <!--http://stackoverflow.com/questions/26961147/touch-feedback-with-recyclerview-and-cardview-->
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/card_view"
         android:stateListAnimator="@anim/lift_on_touch"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:focusable="true"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground">
+        android:layout_height="80dp">
 
         <!--
             Using Horizontal Layout to properly align the views

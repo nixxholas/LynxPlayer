@@ -3,11 +3,10 @@ package com.nixholas.materialtunes.Media.Adapter;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
-import android.drm.DrmStore;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.session.PlaybackState;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -22,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -43,7 +43,7 @@ import butterknife.ButterKnife;
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
-import static com.nixholas.materialtunes.Media.PlaylistUtil.removePlaylist;
+import static com.nixholas.materialtunes.Media.Entities.Utils.SongUtil.removeSong;
 
 /**
  * Created by nixho on 03-Nov-16.
@@ -83,12 +83,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
     static class ViewHolder extends RecyclerView.ViewHolder {
         /* each data item is just a string in this case */
         protected View v;
+        Song song;
         TextView title, artistName;
         ImageView songArt;
         ImageView overflowButton;
         Palette viewPalette;
         //private boolean isPopupVisible;
-        RelativeLayout currentCard;
+        LinearLayout layout;
 
         public ViewHolder(View v) {
             super(v);
@@ -96,7 +97,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
             this.title = (TextView) v.findViewById(R.id.card_title);
             this.artistName = (TextView) v.findViewById(R.id.card_artist);
             this.songArt = (ImageView) v.findViewById(R.id.card_image);
-            this.currentCard = (RelativeLayout) v.findViewById(R.id.card_view);
+            this.layout = (LinearLayout) v.findViewById(R.id.mainfrag_layout);
             this.overflowButton = (ImageView) v.findViewById(R.id.card_options);
             final Context mContext = v.getContext();
 
@@ -126,6 +127,18 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
                         addToPlaylistDialog.show(getInstance().getFragmentManager(), "AddToPlaylistDialogFragment");
                         return true;
                     case R.id.song_delete:
+                        // We'll have a method that removes the song
+                        layout.setVisibility(View.GONE);
+
+                        new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                removeSong(song.getId());
+
+                                return null;
+                            }
+                        }.execute();
+
                         return true;
                     default:
                 }
@@ -165,6 +178,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final Song currentSong = mDataset.get(position);
+        holder.song = currentSong;
         final int currentPosition = position;
 
         holder.title.setText(currentSong.getTitle());
@@ -183,12 +197,12 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
                 .placeholder(R.drawable.untitled_album)
                 .into(holder.songArt);
 
-        holder.currentCard.setOnClickListener(new View.OnClickListener() {
+        holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Debugging Only
                 //Log.e("CardOnClick", "Clicked");
-                //Log.d("OnClick", "CardView");
+                Log.d("OnClick", "CardView");
 
                 // Animations
                 //view.animate().scaleX()

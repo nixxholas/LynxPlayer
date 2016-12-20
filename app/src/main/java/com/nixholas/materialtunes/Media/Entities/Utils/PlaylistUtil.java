@@ -1,4 +1,4 @@
-package com.nixholas.materialtunes.Media;
+package com.nixholas.materialtunes.Media.Entities.Utils;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;

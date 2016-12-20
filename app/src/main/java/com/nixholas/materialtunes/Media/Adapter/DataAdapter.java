@@ -203,6 +203,14 @@ public class DataAdapter implements Runnable {
 
     }
 
+    public void updateSongData() {
+        loadSongData(cr);
+    }
+
+    public void updateAlbumData() {
+        loadAlbumData(cr);
+    }
+
     public void updatePlaylistData() {
         //Log.d("updatePlaylistData", "Running");
         loadPlaylistData(cr);
