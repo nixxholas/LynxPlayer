@@ -9,7 +9,7 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/song_delete"
+        android:id="@+id/playlist_delete"
         android:orderInCategory="200"
         android:title="@string/playlistmenu_delete"
         app:showAsAction="never" />

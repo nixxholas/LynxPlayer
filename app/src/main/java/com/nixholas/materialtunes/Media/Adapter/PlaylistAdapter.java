@@ -92,7 +92,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
                 public void onClick(View view) {
                     PopupMenu popup = new PopupMenu(mContext, view);
                     MenuInflater inflater = popup.getMenuInflater();
-                    inflater.inflate(R.menu.menu_song, popup.getMenu());
+                    inflater.inflate(R.menu.menu_playlist, popup.getMenu());
                     popup.setOnMenuItemClickListener(new PlaylistAdapter.ViewHolder.ListMenuClickListener());
                     popup.show();
                 }
@@ -107,9 +107,10 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.song_playlist:
-                        Log.e("OnMenuItemClick", "SongMenuClickListener is Working");
+                    case R.id.playlist_play:
                         //Toast.makeText(mContext, "Action 1", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.playlist_delete:
                         return true;
                     default:
                 }
