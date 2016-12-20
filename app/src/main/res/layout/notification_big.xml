@@ -7,8 +7,9 @@
 
     <ImageView
         android:id="@+id/notibig_albumart"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
+        android:layout_margin="8dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true" />
 
@@ -58,7 +59,8 @@
                 android:background="?android:selectableItemBackground"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"/>
 
             <ImageButton
                 android:id="@+id/notibig_playpause"
@@ -74,18 +76,21 @@
                 android:background="?android:selectableItemBackground"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"/>
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <ImageView
+    <!--http://stackoverflow.com/questions/4931071/android-and-setting-alpha-for-image-view-alpha-->
+    <ImageButton
         android:id="@+id/notibig_dismiss"
         android:background="?android:selectableItemBackground"
-        android:src="@drawable/ic_close_black_36dp"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:src="@drawable/ic_close_black_24dp"
+        android:alpha="0.5"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

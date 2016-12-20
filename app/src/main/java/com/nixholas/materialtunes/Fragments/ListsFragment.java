@@ -47,8 +47,8 @@ public class ListsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.main_RecyclerView);
+        View rootView = inflater.inflate(R.layout.fragment_base, container, false);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.base_recyclerView);
 
         /**
          * User Interface Initialization
