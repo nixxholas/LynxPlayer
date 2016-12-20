@@ -55,6 +55,7 @@ import static com.nixholas.materialtunes.MainActivity.slided_SongArtist;
 import static com.nixholas.materialtunes.MainActivity.slided_SongTitle;
 import static com.nixholas.materialtunes.MainActivity.slidingSeekBar;
 import static com.nixholas.materialtunes.MainActivity.slidingUpPanelLayout;
+import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
 
 /**
  * Created by nixho on 02-Nov-16.
@@ -331,30 +332,8 @@ public class MediaManager extends Service {
 
                 try {
                     if (repeatState == RepeatState.REPEATALL) {
-                        /**
-                         * Under the hood changes
-                         */
-                        Song nextSong = getNext(); // Call and get the next song with shuffling check
-                        Uri sArtworkUri = Uri
-                                .parse("content://media/external/audio/albumart");
-                        Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, nextSong.getAlbumId());
-
-                        mMediaPlayer.reset(); // Reset the mediaPlayer first
-                        mMediaPlayer.setDataSource("file://" + nextSong.getDataPath()); // Set the path via the next song
-                        mMediaPlayer.prepareAsync(); // prepare and play
-
-                        mPlaybackState = new PlaybackStateCompat.Builder()
-                                .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1.0f)
-                                .build();
-                        mMediaSession.setPlaybackState(mPlaybackState);
-
-                        /**
-                         * User Interface Changes
-                         */
-                        slideSongTitle.setText(nextSong.getTitle());
-                        slideSongArtist.setText(nextSong.getArtistName());
-                        Glide.with(getApplicationContext()).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slideAlbumArt);
-                        Glide.with(getApplicationContext()).load(albumArtUri).placeholder(R.drawable.untitled_album).into(slidedAlbumArt);
+                        // Since it's repeat all, naturally it mimics an onClick Next..
+                        mediaControlsOnClickNext(MainActivity.getInstance().getCurrentFocus());
                     } else if (repeatState == RepeatState.NOREPEAT) {
                         /**
                          * Under The Hood changes
