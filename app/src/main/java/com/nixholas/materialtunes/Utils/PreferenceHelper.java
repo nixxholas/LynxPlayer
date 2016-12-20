@@ -60,4 +60,6 @@ public class PreferenceHelper {
     public void setShuffle(boolean value) { writeBoolean(SHUFFLE, value); }
 
     public final boolean getShuffle() { return mPreferences.getBoolean(SHUFFLE, false); }
+
+    public void setRepeat(int value) {  }
 }

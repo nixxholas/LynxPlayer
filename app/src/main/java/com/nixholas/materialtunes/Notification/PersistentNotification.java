@@ -1,5 +1,6 @@
 package com.nixholas.materialtunes.Notification;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,12 +11,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.bumptech.glide.Glide;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
@@ -23,13 +28,17 @@ import com.nixholas.materialtunes.R;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.ExecutionException;
 
 import static android.os.Build.VERSION_CODES.N;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.Media.MediaNotifUpdater.mediaNotifOnClickNext;
 import static com.nixholas.materialtunes.Media.MediaNotifUpdater.mediaNotifOnClickPrevious;
+import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
+import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPrevious;
 
 /**
  * The Generic Notification Object for MaterialTunes.
@@ -47,6 +56,26 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
     private static final String NOTIF_DISMISS = "NOTI_DISMISS";
     private static final String NOTIF_LAUNCH = "NOTI_LAUNCH";
 
+    // Action Integers
+    private static final int NOTI_PREV = 1;
+    private static final int NOTI_PLAYPAUSE = 2;
+    private static final int NOTI_NEXT = 3;
+    private static final int NOTI_DISMISS = 4;
+
+    // Action Intents
+    // Create all the Pending Intents
+    // http://www.journaldev.com/10463/android-pendingintent-and-notifications-example-tutorial
+    Intent prevIntent;
+    Intent pauseIntent;
+    Intent nextIntent;
+    Intent dismissIntent;
+
+    static PendingIntent prevPendingIntent;
+    static PendingIntent pausePendingIntent;
+    static PendingIntent nextPendingIntent;
+    static PendingIntent dismissPendingIntent;
+
+
     private static final int NOTIFICATION_ID = 255;
     private final Context mContext = MainActivity.getInstance();
     private NotificationManager mNotificationManager;
@@ -62,6 +91,26 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         //mNotificationManager.notify(NOTIFICATION_ID, notification); // Just for Debugging
+
+        prevIntent = new Intent(mContext, PersistentNotification.class);
+        pauseIntent = new Intent(mContext, PersistentNotification.class);
+        nextIntent = new Intent(mContext, PersistentNotification.class);
+        dismissIntent = new Intent(mContext, PersistentNotification.class);
+
+        prevIntent.setAction(NOTIF_PREVIOUS);
+        pauseIntent.setAction(NOTIF_PLAYPAUSE);
+        nextIntent.setAction(NOTIF_NEXT);
+        dismissIntent.setAction(NOTIF_DISMISS);
+
+        prevPendingIntent = PendingIntent.getBroadcast(mContext, NOTI_PREV
+                , prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        pausePendingIntent = PendingIntent.getBroadcast(mContext, NOTI_PLAYPAUSE
+                , pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        nextPendingIntent = PendingIntent.getBroadcast(mContext, NOTI_NEXT
+                , nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        dismissPendingIntent = PendingIntent.getBroadcast(mContext, NOTI_DISMISS
+                , dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
     }
 
     public PersistentNotification(Context mContext, View parentView) {
@@ -70,6 +119,25 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         //mNotificationManager.notify(NOTIFICATION_ID, notification); // Just for Debugging
+
+        prevIntent = new Intent(mContext, PersistentNotification.class);
+        pauseIntent = new Intent(mContext, PersistentNotification.class);
+        nextIntent = new Intent(mContext, PersistentNotification.class);
+        dismissIntent = new Intent(mContext, PersistentNotification.class);
+
+        prevIntent.setAction(NOTIF_PREVIOUS);
+        pauseIntent.setAction(NOTIF_PLAYPAUSE);
+        nextIntent.setAction(NOTIF_NEXT);
+        dismissIntent.setAction(NOTIF_DISMISS);
+
+        prevPendingIntent = PendingIntent.getBroadcast(mContext, NOTI_PREV
+                , prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        pausePendingIntent = PendingIntent.getBroadcast(mContext, NOTI_PLAYPAUSE
+                , pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        nextPendingIntent = PendingIntent.getBroadcast(mContext, NOTI_NEXT
+                , nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        dismissPendingIntent = PendingIntent.getBroadcast(mContext, NOTI_DISMISS
+                , dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     @Override
@@ -82,6 +150,8 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 .setSmallIcon(R.drawable.ic_app_icon) // It is a requirement to have a default small icon for notifications
                 .setContentTitle("MaterialTunes")
                 .build();
+
+
     }
 
     public void createNotification() {
@@ -143,10 +213,8 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
             bigView.setImageViewResource(R.id.notibig_albumart, R.drawable.untitled_album);
         }
 
-        mNotification = new NotificationCompat.Builder(mContext)
+        mNotification = new Notification.Builder(mContext)
                 .setSmallIcon(R.drawable.ic_app_icon)
-                .setCustomContentView(normalView)
-                .setCustomBigContentView(bigView)
                 //.setLargeIcon(uriToBmp(albumArtUri))
                 // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
                 .setShowWhen(false) // Removes the timestamp for the notification
@@ -161,11 +229,149 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
     }
 
     public void updateNotification() {
-        // Debugging Works
-        //Log.e("FilePath", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
-        //Log.e("Current Context", MainActivity.getInstance().getPackageName());
-        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        Song currentSong = mediaManager.getCurrent();
+        try {
+            // Debugging Works
+            //Log.e("FilePath", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
+            //Log.e("Current Context", MainActivity.getInstance().getPackageName());
+            mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            final Song currentSong = mediaManager.getCurrent();
+
+            // Debugging Album Art
+            //Log.e("FilePathIsValid", filePathIsValid("content://media/e0ternal/audio/albumart/" + currentSong.getAlbumId()) + "");
+
+            // Album Art
+            // http://stackoverflow.com/questions/7817551/how-to-check-file-exist-or-not-and-if-not-create-a-new-file-in-sdcard-in-async-t
+            //if (filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId())) {
+                // Setup the albumArt first
+                Uri sArtworkUri = Uri
+                        .parse("content://media/external/audio/albumart");
+                Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
+
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    Uri sArtworkUri = Uri
+                            .parse("content://media/external/audio/albumart");
+                    Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
+
+                    try {
+                        // http://stackoverflow.com/questions/27394016/how-does-one-use-glide-to-download-an-image-into-a-bitmap
+                        Bitmap albumBitmap = Glide.with(mContext)
+                                .load(albumArtUri)
+                                .asBitmap()
+                                .placeholder(R.drawable.untitled_album)
+                                .fitCenter()
+                                .into(400, 400)
+                                .get();
+
+                        if (mediaManager.mMediaPlayer.isPlaying()) {
+                            // Creating a Notifcation
+                            // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
+                            mNotification = new NotificationCompat.Builder(mContext)
+                                    // Show controls on lock screen even when user hides sensitive content.
+                                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                                    .setSmallIcon(R.drawable.untitled_album)
+                                    .setOngoing(true)
+                                    // Add media control buttons that invoke intents in your media service
+                                    .addAction(R.drawable.ic_skip_previous_black_36dp, "Previous", prevPendingIntent) // #0
+                                    .addAction(R.drawable.ic_pause_black_36dp, "Pause", pausePendingIntent)  // #1
+                                    .addAction(R.drawable.ic_skip_next_black_36dp, "Next", nextPendingIntent)     // #2
+                                    .addAction(R.drawable.ic_close_black_36dp, "Close", dismissPendingIntent) // #3
+                                    // Apply the media style template
+                                    .setStyle(new NotificationCompat.MediaStyle()
+                                            .setShowCancelButton(true)
+                                            .setCancelButtonIntent(dismissPendingIntent)
+                                            .setShowActionsInCompactView(1 /* #1: pause button */, 2, 3)
+                                            .setMediaSession(mediaManager.getMediaSessionToken()))
+                                    // Converting albumArtUri to a Bitmap directly
+                                    // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+                                    //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
+                                    .setLargeIcon(albumBitmap)
+                                    // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
+                                    .setShowWhen(false) // Removes the timestamp for the notification
+                                    .setContentTitle(currentSong.getTitle())
+                                    .setContentText(currentSong.getArtistName())
+                                    .build();
+                        } else {
+                            // Creating a Notifcation
+                            // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
+                            mNotification = new NotificationCompat.Builder(mContext)
+                                    // Show controls on lock screen even when user hides sensitive content.
+                                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                                    .setSmallIcon(R.drawable.untitled_album)
+                                    .setOngoing(true)
+                                    // Add media control buttons that invoke intents in your media service
+                                    .addAction(R.drawable.ic_skip_previous_black_36dp, "Previous", prevPendingIntent) // #0
+                                    .addAction(R.drawable.ic_play_arrow_black_36dp, "Play", pausePendingIntent)  // #1
+                                    .addAction(R.drawable.ic_skip_next_black_36dp, "Next", nextPendingIntent)     // #2
+                                    .addAction(R.drawable.ic_close_black_36dp, "Close", dismissPendingIntent) // #3
+                                    // Apply the media style template
+                                    .setStyle(new NotificationCompat.MediaStyle()
+                                            .setShowCancelButton(true)
+                                            .setCancelButtonIntent(dismissPendingIntent)
+                                            .setShowActionsInCompactView(1 /* #1: pause button */, 2, 3)
+                                            .setMediaSession(mediaManager.getMediaSessionToken()))
+                                    // Converting albumArtUri to a Bitmap directly
+                                    // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+                                    //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
+                                    .setLargeIcon(albumBitmap)
+                                    // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
+                                    .setShowWhen(false) // Removes the timestamp for the notification
+                                    .setContentTitle(currentSong.getTitle())
+                                    .setContentText(currentSong.getArtistName())
+                                    .build();
+                        }
+
+                        mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+                        mNotificationManager.notify(NOTIFICATION_ID, mNotification); // Notify the app to notify the system
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+
+                    return null;
+                }
+            }.execute();
+
+            //} else {
+                // Else, there isn't an album art for this song
+                // http://stackoverflow.com/questions/8717333/converting-drawable-resource-image-into-bitmap
+                //Bitmap largeIcon = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.untitled_album);
+
+                // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
+                /*mNotification = new NotificationCompat.Builder(mContext)
+                        // Show controls on lock screen even when user hides sensitive content.
+                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                        .setSmallIcon(R.drawable.ic_app_icon)
+                        .setOngoing(true)
+                        // Add media control buttons that invoke intents in your media service
+                        .addAction(R.drawable.ic_skip_previous_black_36dp, "Previous", prevPendingIntent) // #0
+                        .addAction(R.drawable.ic_pause_black_36dp, "Pause", pausePendingIntent)  // #1
+                        .addAction(R.drawable.ic_skip_next_black_36dp, "Next", nextPendingIntent)     // #2
+                        // Apply the media style template
+                        .setStyle(new NotificationCompat.MediaStyle()
+                                .setShowCancelButton(true)
+                                .setCancelButtonIntent(dismissPendingIntent)
+                                .setShowActionsInCompactView(0, 1 *//* #1: pause button *//*, 2)
+                                .setMediaSession(mediaManager.getMediaSessionToken()))
+                        .setLargeIcon(largeIcon)
+                        // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
+                        .setShowWhen(false) // Removes the timestamp for the notification
+                        .setContentTitle(currentSong.getTitle())
+                        .setContentText(currentSong.getArtistName())
+                        .build();*/
+            //}
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @RequiresApi(24)
+    public void updateNotificationNew() {
+        final Song currentSong = mediaManager.getCurrent();
 
         RemoteViews normalView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_normal);
         RemoteViews bigView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_big);
@@ -199,52 +405,10 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
         bigView.setOnClickPendingIntent(R.id.notibig_layout,
                 getPendingSelfIntent(mContext, NOTIF_LAUNCH));
 
-        // Debugging Album Art
-        //Log.e("FilePathIsValid", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
 
-        // Album Art
-        // http://stackoverflow.com/questions/7817551/how-to-check-file-exist-or-not-and-if-not-create-a-new-file-in-sdcard-in-async-t
-        if (filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId())) {
-            // Setup the albumArt first
-            Uri sArtworkUri = Uri
-                    .parse("content://media/external/audio/albumart");
-            Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
+        mNotification = new Notification.Builder(mContext)
+                .build();
 
-            normalView.setImageViewUri(R.id.noti_albumart, albumArtUri);
-            bigView.setImageViewUri(R.id.notibig_albumart, albumArtUri);
-        } else {
-            normalView.setImageViewResource(R.id.noti_albumart, R.drawable.untitled_album);
-            bigView.setImageViewResource(R.id.notibig_albumart, R.drawable.untitled_album);
-        }
-
-        /**
-         * Nougat handles notifications in a different as per compared to anything below and equal
-         * to Marshmallow. We'll have to diverge here so that Nougat's notification features can
-         * be utilized to the fullest potential.
-         */
-        if (Build.VERSION.SDK_INT != N) {
-            mNotification = new NotificationCompat.Builder(mContext)
-                    .setSmallIcon(R.drawable.ic_app_icon)
-                    .setCustomContentView(normalView)
-                    .setCustomBigContentView(bigView)
-                    //.setLargeIcon(uriToBmp(albumArtUri))
-                    // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
-                    //.setShowWhen(false) // Removes the timestamp for the notification
-                    // http://stackoverflow.com/questions/27343202/changing-notification-icon-background-on-lollipop
-                    //.setColor(Color.parseColor("303F9F"))
-                    .setOngoing(true)
-                    .build();
-        } else {
-            mNotification = new NotificationCompat.Builder(mContext)
-                    .setOngoing(true)
-                    .setCustomContentView(normalView)
-                    .setCustomBigContentView(bigView)
-                    .build();
-        }
-
-        mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-        mNotificationManager.notify(NOTIFICATION_ID, mNotification); // Notify the app to notify the system
     }
 
     private boolean filePathIsValid(String path) {
@@ -264,30 +428,28 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
      * @param intent
      */
     public void onReceive(Context context, Intent intent) {
-        //Log.e("onReceive:", "Works");
+        //Log.e("onReceive:", "Works" + intent.getAction());
 
         switch(intent.getAction()) {
             case NOTIF_PLAYPAUSE:
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_PLAYPAUSE + " Works");
+                //mediaControlsOnClickPlayPause();
                 mediaControlsOnClickPlayPause();
-                updateNotification();
                 break;
 
             case NOTIF_NEXT:
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_NEXT + " Works");
                 //mediaControlsOnClickNext();
-                mediaNotifOnClickNext();
-                updateNotification();
+                mediaControlsOnClickNext(MainActivity.getInstance().getCurrentFocus());
                 break;
 
             case NOTIF_PREVIOUS:
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_PREVIOUS + " Works");
                 //mediaControlsOnClickPrevious();
-                mediaNotifOnClickPrevious();
-                updateNotification();
+                mediaControlsOnClickPrevious(MainActivity.getInstance().getCurrentFocus());
                 break;
 
             case NOTIF_DISMISS:

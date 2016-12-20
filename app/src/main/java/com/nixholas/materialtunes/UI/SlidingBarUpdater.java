@@ -122,5 +122,7 @@ public class SlidingBarUpdater {
         } else {
             buttonHelper.unGreyOut(mediaControls_Shuffle);
         }
+
+
     }
 }

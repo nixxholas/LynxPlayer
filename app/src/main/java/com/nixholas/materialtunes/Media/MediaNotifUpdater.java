@@ -36,8 +36,6 @@ public class MediaNotifUpdater {
                 mediaManager.mMediaPlayer.setDataSource(getInstance(), audioUri);
                 mediaManager.mMediaPlayer.prepareAsync();
                 mediaManager.mediaPlayerIsPaused = false;
-
-                persistentNotif.updateNotification();
             }
 
         } catch (Exception e) {
@@ -68,8 +66,6 @@ public class MediaNotifUpdater {
                 mediaManager.mMediaPlayer.setDataSource(getInstance(), audioUri);
                 mediaManager.mMediaPlayer.prepareAsync();
                 mediaManager.mediaPlayerIsPaused = false;
-
-                persistentNotif.updateNotification();
             }
         } catch (Exception e) {
             Log.e(LOGSTR + "OnClickNext", e.toString());

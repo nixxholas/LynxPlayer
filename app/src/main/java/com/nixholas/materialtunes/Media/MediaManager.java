@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
@@ -15,6 +16,8 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -72,14 +75,15 @@ public class MediaManager extends Service {
     public static final String ACTION_STOP = "action_stop";
 
     // Main Objects for MediaManager
-    private MediaSession mMediaSession;
+    private AudioManager mAudioManager;
+    private MediaSessionCompat mMediaSession;
     public MediaPlayer mMediaPlayer = new MediaPlayer();
 
     // MediaManager Sub Objects
     public boolean mediaPlayerIsPaused;
     public RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
     private Random shufflerRandomizer;
-    private PlaybackState mPlaybackState;
+    private PlaybackStateCompat mPlaybackState;
     public int currentlyPlayingIndex;
 
     // MediaManager Resources
@@ -88,7 +92,6 @@ public class MediaManager extends Service {
     public volatile ArrayList<List> playLists = new ArrayList<>();
 
     public class ServiceBinder extends Binder {
-
         public MediaManager getService() {
             return MediaManager.this;
         }
@@ -96,7 +99,7 @@ public class MediaManager extends Service {
 
     private Binder mBinder = new MediaManager.ServiceBinder();
 
-    public MediaSession.Token getMediaSessionToken() {
+    public MediaSessionCompat.Token getMediaSessionToken() {
         return mMediaSession.getSessionToken();
     }
 
@@ -110,11 +113,11 @@ public class MediaManager extends Service {
         //Log.e("onCreate: MediaManager", "Working");
         mediaPlayerIsPaused = false;
         shufflerRandomizer = new Random();
-        mPlaybackState = new PlaybackState.Builder()
-                .setState(PlaybackState.STATE_NONE, 0, 1.0f)
+        mPlaybackState = new PlaybackStateCompat.Builder()
+                .setState(PlaybackStateCompat.STATE_NONE, 0, 1.0f)
                 .build();
-        mMediaSession = new MediaSession(mainActivity, "mSession");
-        MediaSession.Callback mMediaSessionCallback = new MediaSession.Callback() {
+        mMediaSession = new MediaSessionCompat(mainActivity, "mSession");
+        MediaSessionCompat.Callback mMediaSessionCallback = new MediaSessionCompat.Callback() {
 
             @Override
             public void onPlayFromSearch(String query, Bundle extras) {
@@ -134,16 +137,16 @@ public class MediaManager extends Service {
                             mMediaPlayer.reset();
                             mMediaPlayer.setDataSource(MediaManager.this, uri);
                             mMediaPlayer.prepare();
-                            mPlaybackState = new PlaybackState.Builder()
-                                    .setState(PlaybackState.STATE_CONNECTING, 0, 1.0f)
+                            mPlaybackState = new PlaybackStateCompat.Builder()
+                                    .setState(PlaybackStateCompat.STATE_CONNECTING, 0, 1.0f)
                                     .build();
                             mMediaSession.setPlaybackState(mPlaybackState);
                             break;
                         case PlaybackState.STATE_NONE:
                             mMediaPlayer.setDataSource(MediaManager.this, uri);
                             mMediaPlayer.prepare();
-                            mPlaybackState = new PlaybackState.Builder()
-                                    .setState(PlaybackState.STATE_CONNECTING, 0, 1.0f)
+                            mPlaybackState = new PlaybackStateCompat.Builder()
+                                    .setState(PlaybackStateCompat.STATE_CONNECTING, 0, 1.0f)
                                     .build();
                             mMediaSession.setPlaybackState(mPlaybackState);
                             break;
@@ -161,8 +164,8 @@ public class MediaManager extends Service {
                 switch (mPlaybackState.getState()) {
                     case PlaybackState.STATE_PAUSED:
                         mMediaPlayer.start();
-                        mPlaybackState = new PlaybackState.Builder()
-                                .setState(PlaybackState.STATE_PLAYING, 0, 1.0f)
+                        mPlaybackState = new PlaybackStateCompat.Builder()
+                                .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1.0f)
                                 .build();
                         mMediaSession.setPlaybackState(mPlaybackState);
                         persistentNotif.updateNotification();
@@ -177,8 +180,8 @@ public class MediaManager extends Service {
                 switch (mPlaybackState.getState()) {
                     case PlaybackState.STATE_PLAYING:
                         mMediaPlayer.pause();
-                        mPlaybackState = new PlaybackState.Builder()
-                                .setState(PlaybackState.STATE_PAUSED, 0, 1.0f)
+                        mPlaybackState = new PlaybackStateCompat.Builder()
+                                .setState(PlaybackStateCompat.STATE_PAUSED, 0, 1.0f)
                                 .build();
                         mMediaSession.setPlaybackState(mPlaybackState);
                         persistentNotif.updateNotification();
@@ -210,8 +213,8 @@ public class MediaManager extends Service {
         };
         mMediaSession.setCallback(mMediaSessionCallback);
         mMediaSession.setActive(true);
-        mMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS |
-                MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
+                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
         mMediaSession.setPlaybackState(mPlaybackState);
 
         /**
@@ -228,11 +231,10 @@ public class MediaManager extends Service {
                     }
 
                     mediaPlayer.start();
-                    mPlaybackState = new PlaybackState.Builder()
-                            .setState(PlaybackState.STATE_PLAYING, 0, 1.0f)
+                    mPlaybackState = new PlaybackStateCompat.Builder()
+                            .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1.0f)
                             .build();
                     mMediaSession.setPlaybackState(mPlaybackState);
-                    persistentNotif.updateNotification();
 
                     // Get a handler that can be used to post to the main thread
                     // http://stackoverflow.com/questions/11123621/running-code-in-main-thread-from-another-thread
@@ -317,6 +319,8 @@ public class MediaManager extends Service {
                         }
                     };
                     mainHandler.post(progressRunnable);
+
+                persistentNotif.updateNotification();
             }
         });
 
@@ -339,8 +343,8 @@ public class MediaManager extends Service {
                         mMediaPlayer.setDataSource("file://" + nextSong.getDataPath()); // Set the path via the next song
                         mMediaPlayer.prepareAsync(); // prepare and play
 
-                        mPlaybackState = new PlaybackState.Builder()
-                                .setState(PlaybackState.STATE_PLAYING, 0, 1.0f)
+                        mPlaybackState = new PlaybackStateCompat.Builder()
+                                .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1.0f)
                                 .build();
                         mMediaSession.setPlaybackState(mPlaybackState);
 
@@ -360,8 +364,8 @@ public class MediaManager extends Service {
                         Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
                         mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
 
-                        mPlaybackState = new PlaybackState.Builder()
-                                .setState(PlaybackState.STATE_NONE, 0, 1.0f)
+                        mPlaybackState = new PlaybackStateCompat.Builder()
+                                .setState(PlaybackStateCompat.STATE_NONE, 0, 1.0f)
                                 .build();
                         mMediaSession.setPlaybackState(mPlaybackState);
 
@@ -400,7 +404,7 @@ public class MediaManager extends Service {
         return mBinder;
     }
 
-    public PlaybackState getmPlaybackState() {
+    public PlaybackStateCompat getmPlaybackState() {
         return mPlaybackState;
     }
 
@@ -409,6 +413,8 @@ public class MediaManager extends Service {
     }
 
     public Song getNext() {
+        Log.d("getNext()", "Running getNext()");
+
         if (preferenceHelper.getShuffle()) {
             int newSong = currentlyPlayingIndex;
             while (newSong == currentlyPlayingIndex) {

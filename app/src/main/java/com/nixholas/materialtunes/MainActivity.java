@@ -198,7 +198,9 @@ public class MainActivity extends AppCompatActivity {
                 mediaControlsOnClickShuffle();
             }
         });
-        buttonHelper.greyOut(mediaControls_Shuffle);
+        if (!preferenceHelper.getShuffle()) {
+            buttonHelper.greyOut(mediaControls_Shuffle);
+        }
 
         mediaControls_Repeat = (ImageButton) findViewById(R.id.media_controls_repeat);
         mediaControls_Repeat.setOnClickListener(new View.OnClickListener() {
