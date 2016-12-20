@@ -30,4 +30,8 @@ public class List {
     public void setSongs(ArrayList<Song> songs) {
         this.songs = songs;
     }
+
+    public void addSong(Song song) { songs.add(song); }
+
+    public void randomizeSongs() {  }
 }

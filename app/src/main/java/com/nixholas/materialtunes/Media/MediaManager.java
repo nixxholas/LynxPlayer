@@ -135,7 +135,8 @@ public class MediaManager extends Service {
                 super.onCallStateChanged(state, incomingNumber);
             }
         };
-        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+
+        TelephonyManager mgr = (TelephonyManager) mainActivity.getSystemService(TELEPHONY_SERVICE);
         if(mgr != null) {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
