@@ -188,8 +188,6 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 .setSmallIcon(R.drawable.ic_app_icon) // It is a requirement to have a default small icon for notifications
                 .setContentTitle("MaterialTunes")
                 .build();
-
-
     }
 
     public void createNotification() {
