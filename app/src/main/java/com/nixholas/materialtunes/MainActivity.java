@@ -192,16 +192,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mediaControls_Shuffle = (ImageButton) findViewById(R.id.media_controls_shuffle);
-//        mediaControls_Shuffle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mediaControlsOnClickShuffle();
-//            }
-//        });
-        if (!preferenceHelper.getShuffle()) {
-            buttonHelper.greyOut(mediaControls_Shuffle);
+        if (preferenceHelper.getShuffle()) {
+            mediaControls_Shuffle.setAlpha(1f);
         } else {
-            buttonHelper.unGreyOut(mediaControls_Shuffle);
+            buttonHelper.greyOut(mediaControls_Shuffle);
         }
 
         mediaControls_Repeat = (ImageButton) findViewById(R.id.media_controls_repeat);
