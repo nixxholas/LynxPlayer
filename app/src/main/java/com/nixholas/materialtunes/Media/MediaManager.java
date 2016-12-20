@@ -268,12 +268,10 @@ public class MediaManager extends Service {
                         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                             if (fromUser)
                                 mMediaPlayer.seekTo(progress);
-                            //seekBar.setProgress(progress);
                         }
 
                         @Override
                         public void onStartTrackingTouch(SeekBar seekBar) {
-
                         }
 
                         @Override

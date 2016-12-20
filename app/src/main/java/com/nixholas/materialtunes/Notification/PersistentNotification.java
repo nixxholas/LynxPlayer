@@ -322,7 +322,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                 .into(400, 400)
                                 .get();
 
-
+                        // http://stackoverflow.com/questions/27209596/media-style-notification-not-working-after-update-to-android-5-0
                         if (mediaManager.mMediaPlayer.isPlaying()) {
                             // Creating a Notifcation
                             // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
