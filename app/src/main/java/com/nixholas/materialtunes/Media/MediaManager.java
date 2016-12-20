@@ -131,7 +131,6 @@ public class MediaManager extends Service {
                     mMediaPlayer.start();
                 } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
                     //A call is dialing, active or on hold
-                    mMediaPlayer.pause();
                 }
                 super.onCallStateChanged(state, incomingNumber);
             }
