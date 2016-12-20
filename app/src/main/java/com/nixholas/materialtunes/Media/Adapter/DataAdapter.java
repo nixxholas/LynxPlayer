@@ -7,8 +7,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.graphics.Palette;
+import android.util.Log;
 
 import com.nixholas.materialtunes.Media.Entities.Album;
+import com.nixholas.materialtunes.Media.Entities.Playlist;
 import com.nixholas.materialtunes.Media.Entities.Song;
 
 import java.util.concurrent.BlockingQueue;
@@ -27,26 +29,26 @@ public class DataAdapter implements Runnable {
      * Gets the number of available cores
      * (not always the same as the maximum number of cores)
      */
-    private static int NUMBER_OF_CORES =
-            Runtime.getRuntime().availableProcessors();
+    //private static int NUMBER_OF_CORES =
+    //        Runtime.getRuntime().availableProcessors();
     // Sets the amount of time an idle thread waits before terminating
-    private static final int KEEP_ALIVE_TIME = 1;
+    //private static final int KEEP_ALIVE_TIME = 1;
     // Sets the Time Unit to seconds
-    private static final TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
+    //private static final TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
     // A queue of Runnables
-    private final BlockingQueue<Runnable> mDecodeWorkQueue = new LinkedBlockingQueue<>();
+    //private final BlockingQueue<Runnable> mDecodeWorkQueue = new LinkedBlockingQueue<>();
     // Creates a thread pool manager
-    ThreadPoolExecutor mDecodeThreadPool = new ThreadPoolExecutor(
-            NUMBER_OF_CORES,       // Initial pool size
-            NUMBER_OF_CORES,       // Max pool size
-            KEEP_ALIVE_TIME,
-            KEEP_ALIVE_TIME_UNIT,
-            mDecodeWorkQueue);
+//    ThreadPoolExecutor mDecodeThreadPool = new ThreadPoolExecutor(
+//            NUMBER_OF_CORES,       // Initial pool size
+//            NUMBER_OF_CORES,       // Max pool size
+//            KEEP_ALIVE_TIME,
+//            KEEP_ALIVE_TIME_UNIT,
+//            mDecodeWorkQueue);
 
 
     // Resources-based Variables
-    Uri sArtworkUri = Uri
-            .parse("content://media/external/audio/albumart"); // For us to parse the albumArtUri
+//    Uri sArtworkUri = Uri
+//            .parse("content://media/external/audio/albumart"); // For us to parse the albumArtUri
 
     ContentResolver cr;
 
@@ -153,20 +155,6 @@ public class DataAdapter implements Runnable {
                             albumCur.getString(6));
 
                     mediaManager.albumFiles.add(newAlbum);
-
-                    /*try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr,ContentUris.withAppendedId(sArtworkUri, albumCur.getLong(0)));
-                        Bitmap emptyBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-
-                        // 2nd Layer Checks
-                        if (emptyBitmap.sameAs(bitmap)) {
-                            newAlbum.setHasAlbumArt(false);
-                        } else {
-                            newAlbum.setHasAlbumArt(true);
-                        }
-                    } catch (Exception e) {
-                        newAlbum.setHasAlbumArt(false);
-                    }*/
                 }
             }
 
@@ -175,9 +163,49 @@ public class DataAdapter implements Runnable {
 
     }
 
+    private void loadPlaylistData(ContentResolver cr) {
+        mediaManager.playLists.clear(); // Make sure we reset it first before we re-initialize to look for new playlists
+
+        /**
+         * Media Data Initialization Phase
+         */
+        // Get Content Dynamically
+        Uri playlistUri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI;
+        String playlistsSortOrder = MediaStore.Audio.Playlists.NAME + " ASC";
+        Cursor playlistCur = cr.query(playlistUri,
+                new String[]{"_id", "name"},
+                null,
+                null,
+                playlistsSortOrder);
+
+        int albumCount = 0;
+
+        if (playlistCur != null) {
+            albumCount = playlistCur.getCount();
+
+            if (albumCount > 0) {
+                while (playlistCur.moveToNext()) {
+                    // Debug
+                    //Log.d("Column 0", String.valueOf(playlistCur.getLong(0)));
+                    //Log.d("Column 1", String.valueOf(playlistCur.getString(1)));
+
+                    Playlist newPlaylist = new Playlist(
+                            playlistCur.getLong(0),
+                            playlistCur.getString(1));
+
+                    mediaManager.playLists.add(newPlaylist);
+                }
+            }
+
+            playlistCur.close();
+        }
+
+    }
+
     @Override
     public void run() {
         loadAlbumData(cr);
         loadSongData(cr);
+        loadPlaylistData(cr);
     }
 }

@@ -22,7 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nixholas.materialtunes.Media.Entities.List;
+import com.nixholas.materialtunes.Media.Entities.Playlist;
 import com.nixholas.materialtunes.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
@@ -52,14 +52,14 @@ public class ListsAdapter extends RecyclerView.Adapter<ListsAdapter.ViewHolder> 
 
     @BindView(R.id.media_controls_playpause) ImageButton mediaControls_PlayPause;
 
-    private ArrayList<List> mDataset;
+    private ArrayList<Playlist> mDataset;
     private Context context;
 
     @NonNull
     @Override
     public String getSectionName(int position) {
         //this String will be shown in a bubble for specified position
-        return mDataset.get(position).getListName().substring(0, 1);
+        return mDataset.get(position).getPlaylistName().substring(0, 1);
     }
 /*
     @Override
@@ -120,7 +120,7 @@ public class ListsAdapter extends RecyclerView.Adapter<ListsAdapter.ViewHolder> 
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ListsAdapter(ArrayList<List> dataSet) {
+    public ListsAdapter(ArrayList<Playlist> dataSet) {
         mDataset = dataSet;
     }
 
@@ -149,10 +149,10 @@ public class ListsAdapter extends RecyclerView.Adapter<ListsAdapter.ViewHolder> 
     public void onBindViewHolder(final ListsAdapter.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        final List currentList = mDataset.get(position);
+        final Playlist currentList = mDataset.get(position);
         final int currentPosition = position;
 
-        holder.title.setText(currentList.getListName());
+        holder.title.setText(currentList.getPlaylistName());
 
         holder.currentCard.setOnClickListener(new View.OnClickListener() {
             @Override

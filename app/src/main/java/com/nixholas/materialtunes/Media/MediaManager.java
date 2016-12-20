@@ -28,7 +28,7 @@ import android.widget.SeekBar;
 import com.bumptech.glide.Glide;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Album;
-import com.nixholas.materialtunes.Media.Entities.List;
+import com.nixholas.materialtunes.Media.Entities.Playlist;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.RemoteControlReceiver;
@@ -96,7 +96,7 @@ public class MediaManager extends Service {
     // MediaManager Resources
     public volatile ArrayList<Song> songFiles = new ArrayList<>();
     public volatile ArrayList<Album> albumFiles = new ArrayList<>();
-    public volatile ArrayList<List> playLists = new ArrayList<>();
+    public volatile ArrayList<Playlist> playLists = new ArrayList<>();
 
     public class ServiceBinder extends Binder {
         public MediaManager getService() {
