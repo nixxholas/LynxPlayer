@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
 import android.support.v7.graphics.Palette;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -44,7 +43,7 @@ import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
 /**
  * Created by nixho on 03-Nov-16.
  */
-public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
+public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
     // Protected Entities
     @BindView(R.id.slide_button) ImageButton slideButton;
     @BindView(R.id.slide_albumart) ImageView slideAlbumArt;
@@ -130,14 +129,14 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SongsAdapter(ArrayList<Song> dataSet) {
+    public SongAdapter(ArrayList<Song> dataSet) {
         mDataset = dataSet;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public SongsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+    public SongAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                     int viewType) {
         // create a new view
         final View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.mainfrag_cardview, parent, false);
@@ -267,7 +266,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                              * Under the hood changes
                              */
 
-                            //Log.e("SongsAdapter", "Working");
+                            //Log.e("SongAdapter", "Working");
 
                             // http://stackoverflow.com/questions/9008770/media-player-called-in-state-0-error-38-0
                             mediaManager.mMediaPlayer.reset();

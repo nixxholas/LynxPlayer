@@ -1,12 +1,7 @@
 package com.nixholas.materialtunes.Media.Adapter;
 
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
@@ -26,7 +21,6 @@ import com.nixholas.materialtunes.Media.Entities.Playlist;
 import com.nixholas.materialtunes.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
-import java.io.FileDescriptor;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -36,7 +30,7 @@ import butterknife.ButterKnife;
  * Created by nixho on 26-Nov-16.
  */
 
-public class ListsAdapter extends RecyclerView.Adapter<ListsAdapter.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
+public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
     // Protected Entities
     @BindView(R.id.slide_button)
     ImageButton slideButton;
@@ -94,7 +88,7 @@ public class ListsAdapter extends RecyclerView.Adapter<ListsAdapter.ViewHolder> 
                     PopupMenu popup = new PopupMenu(mContext, view);
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.menu_song, popup.getMenu());
-                    popup.setOnMenuItemClickListener(new ListsAdapter.ViewHolder.ListMenuClickListener());
+                    popup.setOnMenuItemClickListener(new PlaylistAdapter.ViewHolder.ListMenuClickListener());
                     popup.show();
                 }
             });
@@ -120,20 +114,20 @@ public class ListsAdapter extends RecyclerView.Adapter<ListsAdapter.ViewHolder> 
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ListsAdapter(ArrayList<Playlist> dataSet) {
+    public PlaylistAdapter(ArrayList<Playlist> dataSet) {
         mDataset = dataSet;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public ListsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                      int viewType) {
+    public PlaylistAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                         int viewType) {
         // create a new view
         final View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_cardview, parent, false);
 
         // set the view's size, margins, paddings and layout parameters'
-        ListsAdapter.ViewHolder vh = new ListsAdapter.ViewHolder(v);
+        PlaylistAdapter.ViewHolder vh = new PlaylistAdapter.ViewHolder(v);
 
         context = parent.getContext();
 
@@ -146,7 +140,7 @@ public class ListsAdapter extends RecyclerView.Adapter<ListsAdapter.ViewHolder> 
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(final ListsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final PlaylistAdapter.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final Playlist currentList = mDataset.get(position);

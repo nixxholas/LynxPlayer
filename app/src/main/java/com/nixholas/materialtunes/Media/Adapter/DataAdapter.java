@@ -178,12 +178,12 @@ public class DataAdapter implements Runnable {
                 null,
                 playlistsSortOrder);
 
-        int albumCount = 0;
+        int playlistCount = 0;
 
         if (playlistCur != null) {
-            albumCount = playlistCur.getCount();
+            playlistCount = playlistCur.getCount();
 
-            if (albumCount > 0) {
+            if (playlistCount > 0) {
                 while (playlistCur.moveToNext()) {
                     // Debug
                     //Log.d("Column 0", String.valueOf(playlistCur.getLong(0)));

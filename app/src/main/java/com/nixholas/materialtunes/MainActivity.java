@@ -1,18 +1,13 @@
 package com.nixholas.materialtunes;
 
 import android.Manifest;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Handler;
-import android.preference.Preference;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -20,10 +15,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 
 import android.widget.ImageButton;
@@ -33,20 +26,15 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.nixholas.materialtunes.Fragments.AlbumsFragment;
-import com.nixholas.materialtunes.Fragments.ListsFragment;
-import com.nixholas.materialtunes.Fragments.SongsFragment;
+import com.nixholas.materialtunes.Fragments.PlaylistFragment;
+import com.nixholas.materialtunes.Fragments.SongFragment;
 import com.nixholas.materialtunes.Media.Adapter.DataAdapter;
-import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.Media.MediaManager;
 import com.nixholas.materialtunes.Notification.PersistentNotification;
 import com.nixholas.materialtunes.UI.CustomSlidingUpLayout;
 import com.nixholas.materialtunes.UI.SlidingBarUpdater;
 import com.nixholas.materialtunes.UI.ButtonHelper;
-import com.nixholas.materialtunes.Utils.PreferenceHelper;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
@@ -341,14 +329,14 @@ public class MainActivity extends AppCompatActivity {
 
             switch (position) {
                 case 0:
-                    return SongsFragment.newInstance(position);
+                    return SongFragment.newInstance(position);
                 case 1:
                     //Log.e("AlbumFragment", "SectionsPagerAdapter/getItem Call");
                     return AlbumsFragment.newInstance(position);
                 case 2:
-                    return ListsFragment.newInstance(position);
+                    return PlaylistFragment.newInstance(position);
                 default:
-                    return SongsFragment.newInstance(position);
+                    return SongFragment.newInstance(position);
             }
         }
 
