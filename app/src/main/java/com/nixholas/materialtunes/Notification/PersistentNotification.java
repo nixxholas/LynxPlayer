@@ -75,6 +75,9 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
     static PendingIntent nextPendingIntent;
     static PendingIntent dismissPendingIntent;
 
+    // Notification RemoteViews
+    RemoteViews normalView;
+    RemoteViews bigView;
 
     private static final int NOTIFICATION_ID = 255;
     private final Context mContext = MainActivity.getInstance();
@@ -111,6 +114,24 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
         dismissPendingIntent = PendingIntent.getBroadcast(mContext, NOTI_DISMISS
                 , dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        normalView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_normal);
+        bigView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_big);
+
+        // Setup the BigView Static Contents
+        bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
+        bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
+
+        // http://stackoverflow.com/questions/13472990/implementing-onclick-listener-for-app-widget
+        bigView.setOnClickPendingIntent(R.id.notibig_playpause,
+                getPendingSelfIntent(mContext, NOTIF_PLAYPAUSE));
+        bigView.setOnClickPendingIntent(R.id.notibig_previous,
+                getPendingSelfIntent(mContext, NOTIF_PREVIOUS));
+        bigView.setOnClickPendingIntent(R.id.notibig_next,
+                getPendingSelfIntent(mContext, NOTIF_NEXT));
+        bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
+                getPendingSelfIntent(mContext, NOTIF_DISMISS));
+        bigView.setOnClickPendingIntent(R.id.notibig_layout,
+                getPendingSelfIntent(mContext, NOTIF_LAUNCH));
     }
 
     public PersistentNotification(Context mContext, View parentView) {
@@ -138,6 +159,25 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 , nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         dismissPendingIntent = PendingIntent.getBroadcast(mContext, NOTI_DISMISS
                 , dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        normalView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_normal);
+        bigView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_big);
+
+        // Setup the BigView Static Contents
+        bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
+        bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
+
+        // http://stackoverflow.com/questions/13472990/implementing-onclick-listener-for-app-widget
+        bigView.setOnClickPendingIntent(R.id.notibig_playpause,
+                getPendingSelfIntent(mContext, NOTIF_PLAYPAUSE));
+        bigView.setOnClickPendingIntent(R.id.notibig_previous,
+                getPendingSelfIntent(mContext, NOTIF_PREVIOUS));
+        bigView.setOnClickPendingIntent(R.id.notibig_next,
+                getPendingSelfIntent(mContext, NOTIF_NEXT));
+        bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
+                getPendingSelfIntent(mContext, NOTIF_DISMISS));
+        bigView.setOnClickPendingIntent(R.id.notibig_layout,
+                getPendingSelfIntent(mContext, NOTIF_LAUNCH));
     }
 
     @Override
@@ -236,6 +276,17 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
             mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
             final Song currentSong = mediaManager.getCurrent();
 
+            // Setup the bigView items
+            bigView.setTextViewText(R.id.notibig_title, currentSong.getTitle());
+            bigView.setTextViewText(R.id.notibig_artist, currentSong.getArtistName());
+            bigView.setTextViewText(R.id.notibig_album, currentSong.getAlbumName());
+
+            if (mediaManager.mMediaPlayer.isPlaying()) {
+                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
+            } else {
+                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
+            }
+
             // Debugging Album Art
             //Log.e("FilePathIsValid", filePathIsValid("content://media/e0ternal/audio/albumart/" + currentSong.getAlbumId()) + "");
 
@@ -256,6 +307,15 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
                     try {
                         // http://stackoverflow.com/questions/27394016/how-does-one-use-glide-to-download-an-image-into-a-bitmap
+                        bigView.setImageViewBitmap(R.id.notibig_albumart,
+                                Glide.with(mContext)
+                                        .load(albumArtUri)
+                                        .asBitmap()
+                                        .placeholder(R.drawable.untitled_album)
+                                        .fitCenter()
+                                        .into(400, 400)
+                                        .get());
+
                         Bitmap albumBitmap = Glide.with(mContext)
                                 .load(albumArtUri)
                                 .asBitmap()
@@ -263,6 +323,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                 .fitCenter()
                                 .into(400, 400)
                                 .get();
+
 
                         if (mediaManager.mMediaPlayer.isPlaying()) {
                             // Creating a Notifcation
@@ -283,6 +344,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                             .setCancelButtonIntent(dismissPendingIntent)
                                             .setShowActionsInCompactView(1 /* #1: pause button */, 2, 3)
                                             .setMediaSession(mediaManager.getMediaSessionToken()))
+                                    .setCustomBigContentView(bigView)
                                     // Converting albumArtUri to a Bitmap directly
                                     // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                                     //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
@@ -311,6 +373,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                             .setCancelButtonIntent(dismissPendingIntent)
                                             .setShowActionsInCompactView(1 /* #1: pause button */, 2, 3)
                                             .setMediaSession(mediaManager.getMediaSessionToken()))
+                                    .setCustomBigContentView(bigView)
                                     // Converting albumArtUri to a Bitmap directly
                                     // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                                     //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
@@ -335,35 +398,6 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 }
             }.execute();
 
-            //} else {
-                // Else, there isn't an album art for this song
-                // http://stackoverflow.com/questions/8717333/converting-drawable-resource-image-into-bitmap
-                //Bitmap largeIcon = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.untitled_album);
-
-                // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
-                /*mNotification = new NotificationCompat.Builder(mContext)
-                        // Show controls on lock screen even when user hides sensitive content.
-                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                        .setSmallIcon(R.drawable.ic_app_icon)
-                        .setOngoing(true)
-                        // Add media control buttons that invoke intents in your media service
-                        .addAction(R.drawable.ic_skip_previous_black_36dp, "Previous", prevPendingIntent) // #0
-                        .addAction(R.drawable.ic_pause_black_36dp, "Pause", pausePendingIntent)  // #1
-                        .addAction(R.drawable.ic_skip_next_black_36dp, "Next", nextPendingIntent)     // #2
-                        // Apply the media style template
-                        .setStyle(new NotificationCompat.MediaStyle()
-                                .setShowCancelButton(true)
-                                .setCancelButtonIntent(dismissPendingIntent)
-                                .setShowActionsInCompactView(0, 1 *//* #1: pause button *//*, 2)
-                                .setMediaSession(mediaManager.getMediaSessionToken()))
-                        .setLargeIcon(largeIcon)
-                        // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
-                        .setShowWhen(false) // Removes the timestamp for the notification
-                        .setContentTitle(currentSong.getTitle())
-                        .setContentText(currentSong.getArtistName())
-                        .build();*/
-            //}
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -372,9 +406,6 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
     @RequiresApi(24)
     public void updateNotificationNew() {
         final Song currentSong = mediaManager.getCurrent();
-
-        RemoteViews normalView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_normal);
-        RemoteViews bigView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_big);
 
         // Setup the normalView items
         normalView.setTextViewText(R.id.noti_title, currentSong.getTitle());
@@ -434,21 +465,18 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
             case NOTIF_PLAYPAUSE:
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_PLAYPAUSE + " Works");
-                //mediaControlsOnClickPlayPause();
                 mediaControlsOnClickPlayPause();
                 break;
 
             case NOTIF_NEXT:
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_NEXT + " Works");
-                //mediaControlsOnClickNext();
                 mediaControlsOnClickNext(MainActivity.getInstance().getCurrentFocus());
                 break;
 
             case NOTIF_PREVIOUS:
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_PREVIOUS + " Works");
-                //mediaControlsOnClickPrevious();
                 mediaControlsOnClickPrevious(MainActivity.getInstance().getCurrentFocus());
                 break;
 
@@ -462,11 +490,6 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 // Kill the whole app to give the user all the processing space we took
                 // http://stackoverflow.com/questions/3105673/how-to-kill-an-application-with-all-its-activities
                 android.os.Process.killProcess(android.os.Process.myPid());
-
-                // mediaManager.mMediaPlayer.release(); // http://stackoverflow.com/questions/3692562/how-does-one-remove-a-mediaplayer
-                // https://developer.android.com/guide/topics/media/mediaplayer.html
-                //mediaManager.mMediaPlayer = null; // Good Practice to nullify our player
-                //getInstance().finish();
                 break;
 
             case NOTIF_LAUNCH:
