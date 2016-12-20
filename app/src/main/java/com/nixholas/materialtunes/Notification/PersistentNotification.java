@@ -34,8 +34,6 @@ import java.util.concurrent.ExecutionException;
 
 import static android.os.Build.VERSION_CODES.N;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
-import static com.nixholas.materialtunes.Media.MediaNotifUpdater.mediaNotifOnClickNext;
-import static com.nixholas.materialtunes.Media.MediaNotifUpdater.mediaNotifOnClickPrevious;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPrevious;
