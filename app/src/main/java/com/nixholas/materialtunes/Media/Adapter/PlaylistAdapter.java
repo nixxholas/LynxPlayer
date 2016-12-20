@@ -31,6 +31,8 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.nixholas.materialtunes.Media.PlaylistUtil.removePlaylist;
+
 /**
  * Created by nixho on 26-Nov-16.
  */
@@ -73,6 +75,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
     static class ViewHolder extends RecyclerView.ViewHolder {
         /* each data item is just a string in this case */
         protected View v;
+        Playlist playlist;
         TextView title, dateAdded;
         ImageView overflowButton;
         Palette viewPalette;
@@ -112,6 +115,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
                         //Toast.makeText(mContext, "Action 1", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.playlist_delete:
+                        //Log.d("onMenuItemClick", title.getText().toString());
+                        removePlaylist(playlist.getPlaylistId());
                         return true;
                     default:
                 }
@@ -152,12 +157,14 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final Playlist currentList = mDataset.get(position);
+        holder.playlist = currentList;
         final long playlistId = currentList.getPlaylistId();
 
         // Convert the Unix Timestamp to a readable date format first
         // http://stackoverflow.com/questions/20654967/convert-unix-epoch-time-to-formatted-date-unexpected-date
         long unixSeconds = Long.parseLong(currentList.getPlaylistDateAdded());
         Date date = new Date(unixSeconds * 1000); // *1000 is to convert minutes to milliseconds
+        // https://developer.android.com/reference/java/text/SimpleDateFormat.html
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy"); // the format of your date
 
         holder.title.setText(currentList.getPlaylistName());

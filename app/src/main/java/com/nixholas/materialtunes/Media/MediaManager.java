@@ -94,9 +94,12 @@ public class MediaManager extends Service {
     public int currentlyPlayingIndex;
 
     // MediaManager Resources
-    public volatile ArrayList<Song> songFiles = new ArrayList<>();
-    public volatile ArrayList<Album> albumFiles = new ArrayList<>();
-    public volatile ArrayList<Playlist> playLists = new ArrayList<>();
+    public ArrayList<Song> songFiles = new ArrayList<>();
+    public ArrayList<Album> albumFiles = new ArrayList<>();
+    public ArrayList<Playlist> playLists = new ArrayList<>();
+
+    // Playlist Helper
+    public PlaylistUtil playlistUtil = new PlaylistUtil();
 
     public class ServiceBinder extends Binder {
         public MediaManager getService() {

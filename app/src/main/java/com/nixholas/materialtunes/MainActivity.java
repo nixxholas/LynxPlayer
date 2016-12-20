@@ -79,8 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Publicly Accessible Entities
     public static MediaManager mediaManager;
-
-    DataAdapter mDataAdapter;
+    public static DataAdapter mDataAdapter;
 
     // Notification Entities
     private static MainActivity finalMain;

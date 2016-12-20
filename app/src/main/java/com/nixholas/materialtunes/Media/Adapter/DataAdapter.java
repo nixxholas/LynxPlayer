@@ -203,6 +203,10 @@ public class DataAdapter implements Runnable {
 
     }
 
+    public void updatePlaylistData() {
+        loadPlaylistData(cr);
+    }
+
     @Override
     public void run() {
         loadAlbumData(cr);

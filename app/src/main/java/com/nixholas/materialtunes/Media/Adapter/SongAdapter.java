@@ -3,12 +3,14 @@ package com.nixholas.materialtunes.Media.Adapter;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.drm.DrmStore;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.nixholas.materialtunes.Fragments.Dialogs.Playlist.AddToPlaylistDialog;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
@@ -37,8 +40,10 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
+import static com.nixholas.materialtunes.Media.PlaylistUtil.removePlaylist;
 
 /**
  * Created by nixho on 03-Nov-16.
@@ -116,8 +121,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.song_playlist:
-                        Log.e("OnMenuItemClick", "SongMenuClickListener is Working");
-                        //Toast.makeText(mContext, "Action 1", Toast.LENGTH_SHORT).show();
+                        //Log.e("OnMenuItemClick", "SongMenuClickListener is Working");
+                        AddToPlaylistDialog addToPlaylistDialog = new AddToPlaylistDialog();
+                        addToPlaylistDialog.show(getInstance().getFragmentManager(), "AddToPlaylistDialogFragment");
                         return true;
                     case R.id.song_delete:
                         return true;
@@ -202,7 +208,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
 
                     Uri albumArtUri = getAlbumArtUri(currentSong.getAlbumId());
 
-                        if (mediaManager.getmPlaybackState().getState() == PlaybackState.STATE_PLAYING) {
+                        if (mediaManager.getmPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
                             /**
                              * Under the hood changes
                              */
