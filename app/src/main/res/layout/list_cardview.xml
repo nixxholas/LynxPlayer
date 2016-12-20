@@ -1,47 +1,22 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    Using Horizontal Layout to properly align the views
+http://stackoverflow.com/questions/10829835/right-align-button-in-horizontal-linearlayout -->
+<android.support.v7.widget.CardView
+    android:id="@+id/list_cardView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_height="100dp"
     android:layout_width="match_parent"
-    android:paddingBottom="2dp">
+    android:elevation="@dimen/cardview_default_elevation"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardCornerRadius="@dimen/card_album_radius">
 
-    <!-- A CardView that contains a TextView -->
-    <!--http://stackoverflow.com/questions/26997109/setting-elevation-in-xml-on-appcompat-cardview-on-android-5-0-->
-    <!--http://stackoverflow.com/questions/26961147/touch-feedback-with-recyclerview-and-cardview-->
-    <android.support.v7.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        card_view:cardUseCompatPadding="true"
-        android:id="@+id/listfrag_cardview"
-        android:stateListAnimator="@anim/lift_on_touch"
-        android:layout_gravity="center"
+    <RelativeLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        card_view:cardElevation="2dp"
-        card_view:cardCornerRadius="3dp"
-        android:focusable="true"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground">
-
-        <!--
-            Using Horizontal Layout to properly align the views
-        http://stackoverflow.com/questions/10829835/right-align-button-in-horizontal-linearlayout -->
-        <RelativeLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:id="@+id/listcard_imgandtexts"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/listcard_image"
-                    android:layout_gravity="start"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp" />
+        android:layout_height="match_parent">
 
                 <!-- http://stackoverflow.com/questions/35157145/aligning-text-view-below-text-view-in-card-view-->
                 <LinearLayout
@@ -54,14 +29,18 @@
                     <TextView
                         android:id="@+id/listcard_title"
                         android:textStyle="bold"
+                        android:textSize="36dp"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/listcard_date_added"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
-            </LinearLayout>
+                </LinearLayout>
 
             <ImageView
                 android:id="@+id/listcard_options"
@@ -76,8 +55,6 @@
                 android:src="@drawable/ic_more_vert_black_24dp"
                 tools:ignore="RtlHardcoded" />
 
-        </RelativeLayout >
+    </RelativeLayout>
 
     </android.support.v7.widget.CardView>
-
-    </LinearLayout>

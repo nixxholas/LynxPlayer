@@ -21,6 +21,8 @@ import com.nixholas.materialtunes.Media.Entities.Playlist;
 import com.nixholas.materialtunes.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -68,18 +70,19 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
     static class ViewHolder extends RecyclerView.ViewHolder {
         /* each data item is just a string in this case */
         protected View v;
-        TextView title;
+        TextView title, dateAdded;
         ImageView overflowButton;
         Palette viewPalette;
-        //private boolean isPopupVisible;
-        CardView currentCard;
+        CardView cardView;
 
         public ViewHolder(View v) {
             super(v);
             //ButterKnife.bind(this, v);
+            this.v = v;
             this.title = (TextView) v.findViewById(R.id.listcard_title);
-            this.currentCard = (CardView) v.findViewById(R.id.listfrag_cardview);
+            this.dateAdded = (TextView) v.findViewById(R.id.listcard_date_added);
             this.overflowButton = (ImageView) v.findViewById(R.id.listcard_options);
+            this.cardView = (CardView) v.findViewById(R.id.list_cardView);
             final Context mContext = v.getContext();
 
             this.overflowButton.setOnClickListener(new View.OnClickListener() {
@@ -147,12 +150,13 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         final int currentPosition = position;
 
         holder.title.setText(currentList.getPlaylistName());
+        holder.dateAdded.setText("Created on: " + currentList.getPlaylistDateAdded());
 
-        holder.currentCard.setOnClickListener(new View.OnClickListener() {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Debugging Only
-                Log.e("CardOnClick", "Clicked on List");
+                Log.e("playlistOnClick", "Clicked on List Card");
             }
         });
     }

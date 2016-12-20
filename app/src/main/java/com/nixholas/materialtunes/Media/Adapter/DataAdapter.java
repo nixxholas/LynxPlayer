@@ -173,7 +173,7 @@ public class DataAdapter implements Runnable {
         Uri playlistUri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI;
         String playlistsSortOrder = MediaStore.Audio.Playlists.NAME + " ASC";
         Cursor playlistCur = cr.query(playlistUri,
-                new String[]{"_id", "name"},
+                new String[]{"_id", "name", "date_added"},
                 null,
                 null,
                 playlistsSortOrder);
@@ -191,7 +191,8 @@ public class DataAdapter implements Runnable {
 
                     Playlist newPlaylist = new Playlist(
                             playlistCur.getLong(0),
-                            playlistCur.getString(1));
+                            playlistCur.getString(1),
+                            playlistCur.getString(2));
 
                     mediaManager.playLists.add(newPlaylist);
                 }

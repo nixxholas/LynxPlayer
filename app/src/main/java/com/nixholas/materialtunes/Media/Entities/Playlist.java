@@ -9,11 +9,13 @@ import java.util.ArrayList;
 public class Playlist {
     private long PlaylistId;
     private String PlaylistName;
+    private String PlaylistDateAdded;
     private ArrayList<Song> Songs;
 
-    public Playlist(long playlistId, String playlistName) {
+    public Playlist(long playlistId, String playlistName, String playlistDateAdded) {
         PlaylistId = playlistId;
         PlaylistName = playlistName;
+        PlaylistDateAdded = playlistDateAdded;
         Songs = new ArrayList<>();
     }
 
@@ -39,5 +41,13 @@ public class Playlist {
 
     public void setSongs(ArrayList<Song> songs) {
         Songs = songs;
+    }
+
+    public String getPlaylistDateAdded() {
+        return PlaylistDateAdded;
+    }
+
+    public void setPlaylistDateAdded(String playlistDateAdded) {
+        PlaylistDateAdded = playlistDateAdded;
     }
 }

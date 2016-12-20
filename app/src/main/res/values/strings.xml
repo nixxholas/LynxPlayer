@@ -16,4 +16,8 @@
     // Songs Fragment Strings
     <string name="songmenu_playlist">Add to playlist</string>
     <string name="songmenu_delete">Delete</string>
+
+    // Playlist Fragment Strings
+    <string name="playlistmenu_play">Add to playlist</string>
+    <string name="playlistmenu_delete">Delete</string>
 </resources>
