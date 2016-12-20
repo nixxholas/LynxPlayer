@@ -1,5 +1,6 @@
 package com.nixholas.materialtunes.Media.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -145,16 +146,19 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
     }
 
     // Replace the contents of a view (invoked by the layout manager)
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final PlaylistAdapter.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final Playlist currentList = mDataset.get(position);
-        final int currentPosition = position;
+        final long playlistId = currentList.getPlaylistId();
 
+        // Convert the Unix Timestamp to a readable date format first
+        // http://stackoverflow.com/questions/20654967/convert-unix-epoch-time-to-formatted-date-unexpected-date
         long unixSeconds = Long.parseLong(currentList.getPlaylistDateAdded());
         Date date = new Date(unixSeconds * 1000); // *1000 is to convert minutes to milliseconds
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy"); // the format of your date
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy"); // the format of your date
 
         holder.title.setText(currentList.getPlaylistName());
         holder.dateAdded.setText("Created on: " + sdf.format(date));
