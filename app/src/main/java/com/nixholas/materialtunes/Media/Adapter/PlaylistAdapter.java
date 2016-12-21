@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nixholas.materialtunes.Media.Entities.Playlist;
 import com.nixholas.materialtunes.R;
@@ -109,15 +110,18 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
                                         //Log.d("onMenuItemClick", title.getText().toString());
                                         //cardView.setVisibility(View.GONE);
                                         // http://stackoverflow.com/questions/26076965/android-recyclerview-addition-removal-of-items
-                                        removeAt(getAdapterPosition());
 
                                         new AsyncTask<Void, Void, Void>() {
                                             @Override
                                             protected Void doInBackground(Void... params) {
-                                                removePlaylist(playlist.getPlaylistId());
+                                                removePlaylist(context, playlist.getPlaylistId());
+                                                removeAt(getAdapterPosition());
                                                 return null;
                                             }
-                                        };
+                                        }.execute();
+
+                                        Toast toast = Toast.makeText(context, "Playlist Deleted", Toast.LENGTH_SHORT);
+                                        toast.show();
                                         return true;
                                     default:
                                 }

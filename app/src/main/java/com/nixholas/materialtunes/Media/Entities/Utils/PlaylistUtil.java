@@ -7,10 +7,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nixholas.materialtunes.Media.Entities.Playlist;
 
+import static android.content.ContentValues.TAG;
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mDataAdapter;
 
@@ -38,9 +40,9 @@ public class PlaylistUtil {
         mDataAdapter.updatePlaylistData();
     }
 
-    public static void removePlaylist(long selectedPlaylist) {
-        // Log.i(TAG, "deletePlaylist");
-        ContentResolver resolver = getInstance().getContentResolver();
+    public static void removePlaylist(Context context, long selectedPlaylist) {
+        Log.i(TAG, "deletePlaylist");
+        ContentResolver resolver = context.getContentResolver();
         String where = MediaStore.Audio.Playlists._ID + "=?";
         String[] whereVal = {selectedPlaylist + ""};
         resolver.delete(uri, where, whereVal);
@@ -49,6 +51,14 @@ public class PlaylistUtil {
     }
 
     public void renamePlaylist(Context context, String newplaylist, long playlist_id) {
+        // Alternative Method
+//        ContentResolver resolver = context.getContentResolver();
+//        ContentValues values = new ContentValues(1);
+//        values.put(MediaStore.Audio.Playlists.NAME, "NewPlaylist");
+//
+//        resolver.update(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI,
+//                values, "_id=" + selectedPlaylist, null);
+
         ContentResolver resolver = context.getContentResolver();
         ContentValues values = new ContentValues();
         String where = MediaStore.Audio.Playlists._ID + " =? ";

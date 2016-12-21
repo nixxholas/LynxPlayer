@@ -130,12 +130,12 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
                         // http://stackoverflow.com/questions/3805599/add-delete-view-from-layout
                         //layout.setVisibility(View.GONE); // Unorthodox lol
                         // http://stackoverflow.com/questions/26076965/android-recyclerview-addition-removal-of-items
-                        removeAt(getAdapterPosition());
 
                         new AsyncTask<Void, Void, Void>() {
                             @Override
                             protected Void doInBackground(Void... params) {
                                 removeSong(song.getId());
+                                removeAt(getAdapterPosition());
                                 return null;
                             }
                         }.execute();
