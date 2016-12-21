@@ -30,6 +30,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.Media.Entities.Utils.PlaylistUtil.removePlaylist;
 
@@ -72,7 +73,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         /* each data item is just a string in this case */
         protected View v;
         Playlist playlist;
@@ -97,38 +98,40 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
                     PopupMenu popup = new PopupMenu(mContext, view);
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.menu_playlist, popup.getMenu());
-                    popup.setOnMenuItemClickListener(new PlaylistAdapter.ViewHolder.ListMenuClickListener());
+                    popup.setOnMenuItemClickListener(new ListMenuClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+                                    case R.id.playlist_play:
+                                        //Toast.makeText(mContext, "Action 1", Toast.LENGTH_SHORT).show();
+                                        return true;
+                                    case R.id.playlist_delete:
+                                        //Log.d("onMenuItemClick", title.getText().toString());
+                                        //cardView.setVisibility(View.GONE);
+                                        // http://stackoverflow.com/questions/26076965/android-recyclerview-addition-removal-of-items
+                                        removeAt(getAdapterPosition());
+
+                                        new AsyncTask<Void, Void, Void>() {
+                                            @Override
+                                            protected Void doInBackground(Void... params) {
+                                                removePlaylist(playlist.getPlaylistId());
+                                                return null;
+                                            }
+                                        };
+                                        return true;
+                                    default:
+                                }
+                                return false;
+                        }
+                    });
                     popup.show();
                 }
             });
         }
 
-        class ListMenuClickListener implements PopupMenu.OnMenuItemClickListener {
+        abstract class ListMenuClickListener implements PopupMenu.OnMenuItemClickListener {
 
             ListMenuClickListener() {
-            }
-
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.playlist_play:
-                        //Toast.makeText(mContext, "Action 1", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.playlist_delete:
-                        //Log.d("onMenuItemClick", title.getText().toString());
-                        cardView.setVisibility(View.GONE);
-
-                        new AsyncTask<Void, Void, Void>() {
-                            @Override
-                            protected Void doInBackground(Void... params) {
-                                removePlaylist(playlist.getPlaylistId());
-                                return null;
-                            }
-                        };
-                        return true;
-                    default:
-                }
-                return false;
             }
         }
     }
@@ -191,5 +194,11 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    public void removeAt(int position) {
+        mDataset.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, mDataset.size());
     }
 }

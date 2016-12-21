@@ -16,11 +16,14 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
@@ -302,15 +305,42 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                     Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
 
                     try {
+                        final int[] color = new int[1]; // We'll use this integer to store the palette color
+
                         // http://stackoverflow.com/questions/27394016/how-does-one-use-glide-to-download-an-image-into-a-bitmap
                         bigView.setImageViewBitmap(R.id.notibig_albumart,
                                 Glide.with(mContext)
                                         .load(albumArtUri)
                                         .asBitmap()
                                         .placeholder(R.drawable.untitled_album)
+                                        .listener(new RequestListener<Uri, Bitmap>() {
+                                            @Override
+                                            public boolean onException(Exception e, Uri model, Target<Bitmap> target, boolean isFirstResource) {
+                                                return false;
+                                            }
+
+                                            @Override
+                                            public boolean onResourceReady(Bitmap resource, Uri model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                                Palette p = Palette.from(resource).generate();
+                                                Palette.Swatch swatch = p.getVibrantSwatch();
+
+                                                if (swatch != null) {
+                                                    color[0] = swatch.getRgb();
+                                                } else {
+                                                    Palette.Swatch mutedSwatch = p.getMutedSwatch();
+                                                    if (mutedSwatch != null) {
+                                                        color[0] = mutedSwatch.getRgb();
+                                                    }
+                                                }
+
+                                                return false;
+                                            }
+                                        })
                                         .fitCenter()
                                         .into(400, 400)
                                         .get());
+
+                        //Log.d("Color[0]", color[0] + "");
 
                         Bitmap albumBitmap = Glide.with(mContext)
                                 .load(albumArtUri)
@@ -346,6 +376,9 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                     //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
                                     .setLargeIcon(albumBitmap)
                                     .setSmallIcon(R.drawable.ic_app_icon)
+                                    // Set the color for the notification
+                                    // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
+                                    .setColor(color[0])
                                     // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
                                     .setShowWhen(false) // Removes the timestamp for the notification
                                     .setContentTitle(currentSong.getTitle())
@@ -376,6 +409,9 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                     //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
                                     .setLargeIcon(albumBitmap)
                                     .setSmallIcon(R.drawable.ic_app_icon)
+                                    // Set the color for the notification
+                                    // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
+                                    .setColor(color[0])
                                     // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
                                     .setShowWhen(false) // Removes the timestamp for the notification
                                     .setContentTitle(currentSong.getTitle())

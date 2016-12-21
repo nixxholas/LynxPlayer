@@ -80,7 +80,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         /* each data item is just a string in this case */
         protected View v;
         Song song;
@@ -88,7 +88,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
         ImageView songArt;
         ImageView overflowButton;
         Palette viewPalette;
-        //private boolean isPopupVisible;
         LinearLayout layout;
 
         public ViewHolder(View v) {
@@ -128,13 +127,15 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
                         return true;
                     case R.id.song_delete:
                         // We'll have a method that removes the song
-                        layout.setVisibility(View.GONE);
+                        // http://stackoverflow.com/questions/3805599/add-delete-view-from-layout
+                        //layout.setVisibility(View.GONE); // Unorthodox lol
+                        // http://stackoverflow.com/questions/26076965/android-recyclerview-addition-removal-of-items
+                        removeAt(getAdapterPosition());
 
                         new AsyncTask<Void, Void, Void>() {
                             @Override
                             protected Void doInBackground(Void... params) {
                                 removeSong(song.getId());
-
                                 return null;
                             }
                         }.execute();
@@ -382,4 +383,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
         return bm;
     }
 
+    public void removeAt(int position) {
+        mDataset.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, mDataset.size());
+    }
 }

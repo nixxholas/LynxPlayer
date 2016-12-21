@@ -26,10 +26,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nixholas.materialtunes.Fragments.AlbumsFragment;
+import com.nixholas.materialtunes.Fragments.AlbumFragment;
 import com.nixholas.materialtunes.Fragments.PlaylistFragment;
 import com.nixholas.materialtunes.Fragments.SongFragment;
 import com.nixholas.materialtunes.Media.Adapter.DataAdapter;
+import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.Media.MediaManager;
 import com.nixholas.materialtunes.Notification.PersistentNotification;
 import com.nixholas.materialtunes.UI.CustomSlidingUpLayout;
@@ -80,6 +81,11 @@ public class MainActivity extends AppCompatActivity {
     // Publicly Accessible Entities
     public static MediaManager mediaManager;
     public static DataAdapter mDataAdapter;
+
+    // Fragment Entities
+    private AlbumFragment albumFragment;
+    private PlaylistFragment playlistFragment;
+    private SongFragment songFragment;
 
     // Notification Entities
     private static MainActivity finalMain;
@@ -328,12 +334,14 @@ public class MainActivity extends AppCompatActivity {
 
             switch (position) {
                 case 0:
-                    return SongFragment.newInstance(position);
+                    songFragment = SongFragment.newInstance(position);
+                    return songFragment;
                 case 1:
                     //Log.e("AlbumFragment", "SectionsPagerAdapter/getItem Call");
-                    return AlbumsFragment.newInstance(position);
+                    return AlbumFragment.newInstance(position);
                 case 2:
-                    return PlaylistFragment.newInstance(position);
+                    playlistFragment = PlaylistFragment.newInstance(position);
+                    return playlistFragment;
                 default:
                     return SongFragment.newInstance(position);
             }
@@ -357,6 +365,10 @@ public class MainActivity extends AppCompatActivity {
             }
             return null;
         }
+    }
+
+    public PlaylistFragment getPlaylistFragment() {
+        return playlistFragment;
     }
 
     /**

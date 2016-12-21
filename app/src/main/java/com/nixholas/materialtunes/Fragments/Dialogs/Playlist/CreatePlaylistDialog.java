@@ -32,7 +32,7 @@ public class CreatePlaylistDialog extends DialogFragment {
                 .input("Name", "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        Log.d("CreatePlaylistDialog", "onInput");
+                        //Log.d("CreatePlaylistDialog", "onInput");
                         str[0] = input.toString();
 
                         addNewPlaylist(getActivity().getApplicationContext(), str[0]);
