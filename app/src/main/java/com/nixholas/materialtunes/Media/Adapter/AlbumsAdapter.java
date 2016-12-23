@@ -1,6 +1,7 @@
 package com.nixholas.materialtunes.Media.Adapter;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import static android.support.v4.content.ContextCompat.startActivity;
 
 /**
  * Created by nixho on 03-Nov-16.
@@ -154,6 +158,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 String transitionName = v.getResources().getString(R.string.transition_album_cover);
 
                 // Perform the necessary pairing
+                Pair<View, String> p1;
 
                 // We'll give the intent some data that it requires
                 intent.putExtra("albumId", currentAlbum.getId());
@@ -161,13 +166,14 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 intent.putExtra("albumName", currentAlbum.getArtistName());
                 intent.putExtra("albumArtist", currentAlbum.getArtistName());
 
-                ActivityOptionsCompat options =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,
+                ActivityOptions options =
+                        ActivityOptions.makeSceneTransitionAnimation((Activity) context,
                                 v,   // The view which starts the transition
                                 transitionName    // The transitionName of the view we’re transitioning to
                         );
-                ActivityCompat.startActivity(context, intent, options.toBundle());
-            }
+
+                startActivity(context, intent, options.toBundle());
+        }
         });
 
     }
