@@ -27,7 +27,8 @@
                 android:adjustViewBounds="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:transitionName="@string/transition_album_image"/>
 
             <TextView
                 android:id="@+id/album_cardtitle"

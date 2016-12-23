@@ -28,7 +28,7 @@ import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.transcode.ResourceTranscoder;
 import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.util.Util;
-import com.nixholas.materialtunes.Fragments.FragmentItem.AlbumItem;
+import com.nixholas.materialtunes.Fragments.FragmentItem.AlbumActivity;
 import com.nixholas.materialtunes.Media.Entities.Album;
 import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.PreferencesExample;
@@ -152,13 +152,15 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                  *
                  * http://stackoverflow.com/questions/27736848/cardview-animation-raise-and-expand-on-click
                  */
-                Intent intent = new Intent(v.getContext(), AlbumItem.class);
+                Intent intent = new Intent(v.getContext(), AlbumActivity.class);
 
                 // http://stackoverflow.com/questions/2183962/how-to-read-value-from-string-xml-in-android
                 String transitionName = v.getResources().getString(R.string.transition_album_cover);
 
                 // Perform the necessary pairing
-                Pair<View, String> p1;
+                // http://xmodulo.com/activity-transition-animations-android.html
+                Pair<View, String> imageView = new Pair<View, String>(holder.albumArt, v.getResources().getString(R.string.transition_album_image));
+                Pair<View, String> titleView = new Pair<View, String>(holder.title, v.getResources().getString(R.string.transition_album_title));
 
                 // We'll give the intent some data that it requires
                 intent.putExtra("albumId", currentAlbum.getId());
@@ -166,11 +168,15 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 intent.putExtra("albumName", currentAlbum.getArtistName());
                 intent.putExtra("albumArtist", currentAlbum.getArtistName());
 
+//                ActivityOptions options =
+//                        ActivityOptions.makeSceneTransitionAnimation((Activity) context,
+//                                v,   // The view which starts the transition
+//                                transitionName    // The transitionName of the view we’re transitioning to
+//                        );
+
                 ActivityOptions options =
-                        ActivityOptions.makeSceneTransitionAnimation((Activity) context,
-                                v,   // The view which starts the transition
-                                transitionName    // The transitionName of the view we’re transitioning to
-                        );
+                        ActivityOptions.makeSceneTransitionAnimation((Activity) context, imageView
+                        , titleView);
 
                 startActivity(context, intent, options.toBundle());
         }

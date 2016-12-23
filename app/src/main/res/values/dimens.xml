@@ -36,4 +36,7 @@
     <dimen name="notibig_button_margin">48dp</dimen>
     <dimen name="notification_info_container_padding_left">8dp</dimen>
     <dimen name="notification_info_container_padding_bottom">4dp</dimen>
+
+    <!-- Parallax Dimensions -->
+    <dimen name="parallax_image_height">180sp</dimen>
 </resources>

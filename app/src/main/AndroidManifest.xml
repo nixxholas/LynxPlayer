@@ -47,7 +47,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".Fragments.FragmentItem.AlbumItem" />-
+        <activity android:name=".Fragments.FragmentItem.AlbumActivity" />-
         <receiver android:name=".Notification.PersistentNotification"
             tools:ignore="InnerclassSeparator">
             <intent-filter>

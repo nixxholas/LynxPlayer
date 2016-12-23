@@ -23,4 +23,6 @@
     
     // Transition Strings
     <string name="transition_album_cover">Album Expand</string>
+    <string name="transition_album_image">Album Art Expand</string>
+    <string name="transition_album_title">Album Title Expand</string>
 </resources>
