@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v13.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -153,6 +154,12 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 String transitionName = v.getResources().getString(R.string.transition_album_cover);
 
                 // Perform the necessary pairing
+
+                // We'll give the intent some data that it requires
+                intent.putExtra("albumId", currentAlbum.getId());
+                intent.putExtra("albumArt", currentAlbum.getAlbumArtPath());
+                intent.putExtra("albumName", currentAlbum.getArtistName());
+                intent.putExtra("albumArtist", currentAlbum.getArtistName());
 
                 ActivityOptionsCompat options =
                         ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,
