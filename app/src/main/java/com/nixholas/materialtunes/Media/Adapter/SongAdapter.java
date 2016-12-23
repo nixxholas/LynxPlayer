@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
@@ -135,11 +136,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
                             @Override
                             protected Void doInBackground(Void... params) {
                                 removeSong(song.getId());
-                                removeAt(getAdapterPosition());
                                 return null;
                             }
                         }.execute();
 
+                        removeAt(getAdapterPosition());
+                        Toast toast = Toast.makeText(context, title.getText() + " Deleted.", Toast.LENGTH_SHORT);
+                        toast.show();
                         return true;
                     default:
                 }

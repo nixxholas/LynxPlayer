@@ -1,9 +1,14 @@
 package com.nixholas.materialtunes.Media.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v13.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +25,7 @@ import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.transcode.ResourceTranscoder;
 import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.util.Util;
+import com.nixholas.materialtunes.Fragments.FragmentItem.AlbumItem;
 import com.nixholas.materialtunes.Media.Entities.Album;
 import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.PreferencesExample;
@@ -132,6 +138,30 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(holder.albumArt);
         }
+
+        holder.currentAlbumCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 * Implementing Material Motion in Transitions
+                 *
+                 * http://stackoverflow.com/questions/27736848/cardview-animation-raise-and-expand-on-click
+                 */
+                Intent intent = new Intent(v.getContext(), AlbumItem.class);
+
+                // http://stackoverflow.com/questions/2183962/how-to-read-value-from-string-xml-in-android
+                String transitionName = v.getResources().getString(R.string.transition_album_cover);
+
+                // Perform the necessary pairing
+
+                ActivityOptionsCompat options =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,
+                                v,   // The view which starts the transition
+                                transitionName    // The transitionName of the view we’re transitioning to
+                        );
+                ActivityCompat.startActivity(context, intent, options.toBundle());
+            }
+        });
 
     }
 

@@ -46,7 +46,8 @@
                 <data android:mimeType="audio/*" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity" />-
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".Fragments.FragmentItem.AlbumItem" />-
         <receiver android:name=".Notification.PersistentNotification"
             tools:ignore="InnerclassSeparator">
             <intent-filter>

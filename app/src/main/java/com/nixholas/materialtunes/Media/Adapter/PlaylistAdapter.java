@@ -115,12 +115,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
                                             @Override
                                             protected Void doInBackground(Void... params) {
                                                 removePlaylist(context, playlist.getPlaylistId());
-                                                removeAt(getAdapterPosition());
                                                 return null;
                                             }
                                         }.execute();
 
-                                        Toast toast = Toast.makeText(context, "Playlist Deleted", Toast.LENGTH_SHORT);
+                                        removeAt(getAdapterPosition());
+                                        Toast toast = Toast.makeText(context, title.getText() + " Deleted", Toast.LENGTH_SHORT);
                                         toast.show();
                                         return true;
                                     default:

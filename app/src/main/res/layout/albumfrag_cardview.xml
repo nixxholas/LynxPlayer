@@ -14,7 +14,8 @@
         android:layout_margin="@dimen/card_margin"
         android:elevation="3dp"
         card_view:cardCornerRadius="@dimen/card_album_radius"
-        android:foreground="?android:attr/selectableItemBackground">
+        android:foreground="?android:attr/selectableItemBackground"
+        android:transitionName="@string/transition_album_cover">
 
         <RelativeLayout
             android:id="@+id/album_cardbackdrop"
