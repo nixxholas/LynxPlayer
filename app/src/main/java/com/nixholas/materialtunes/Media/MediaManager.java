@@ -468,4 +468,16 @@ public class MediaManager extends Service {
             }
         }
     }
+
+    public ArrayList<Song> getAlbumSongs(long albumId) {
+        ArrayList<Song> result = new ArrayList<>();
+
+        for (Song s : songFiles) {
+            if (s.getAlbumId() == albumId) {
+                result.add(s);
+            }
+        }
+
+        return result;
+    }
 }

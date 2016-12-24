@@ -6,11 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.v13.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -36,10 +32,6 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import static android.support.v4.content.ContextCompat.startActivity;
 
@@ -57,13 +49,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         //this String will be shown in a bubble for specified position
         return mDataset.get(position).getTitle().substring(0, 1);
     }
-/*
-    @Override
-    public String getSectionTitle(int position) {
-        return mDataset.get(position).getTitle().substring(0, 1);
-    }*/
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         public View v;
         TextView title, artistName;
         ImageView albumArt;
