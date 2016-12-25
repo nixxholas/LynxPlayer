@@ -2,6 +2,7 @@ package com.nixholas.materialtunes.Media.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         AlbumAdapter.ViewHolder vh = new AlbumAdapter.ViewHolder(v);
 
         // http://stackoverflow.com/questions/32136973/how-to-get-a-context-in-a-recycler-view-adapter
-        context = parent.getContext();
+        //context = parent.getContext();
 
         return vh;
     }
@@ -54,9 +55,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(AlbumAdapter.ViewHolder holder, int position) {
         final Song currentSong = mDataset.get(position);
+        //Log.d("AlbumAdapter", "Current Song: " + currentSong.getTitle());
 
         holder.title.setText(currentSong.getTitle());
-        holder.duration.setText(currentSong.getDuration());
+        holder.duration.setText(currentSong.getDuration() + "");
     }
 
     @Override

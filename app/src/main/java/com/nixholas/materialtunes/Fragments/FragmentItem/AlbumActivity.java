@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.nixholas.materialtunes.Media.Adapter.AlbumAdapter;
 import com.nixholas.materialtunes.R;
 
@@ -18,24 +19,22 @@ import static com.nixholas.materialtunes.MainActivity.mediaManager;
 
 public class AlbumActivity extends AppCompatActivity {
     // Recycler View and it's components
-    ObservableRecyclerView recyclerView;
-    ObservableRecyclerView.Adapter rVAdapter;
-    ObservableRecyclerView.LayoutManager rVLayoutManager;
+    RecyclerView recyclerView;
+    RecyclerView.Adapter rVAdapter;
+    RecyclerView.LayoutManager rVLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.albumsfrag_expandedview); // Set the content view of course.
 
         // http://stackoverflow.com/questions/10602335/passing-extra-data-from-an-activity-to-an-intent
         long albumId = getIntent().getExtras().getLong("albumId");
 
-        recyclerView = (ObservableRecyclerView) findViewById(R.id.albumexpanded_recycler);
-
+        recyclerView = (RecyclerView) findViewById(R.id.albumexpanded_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         rVAdapter = new AlbumAdapter(mediaManager.getAlbumSongs(albumId));
         recyclerView.setAdapter(rVAdapter);
-
-        setContentView(R.layout.albumsfrag_expandedview); // Set the content view of course.
     }
 }
