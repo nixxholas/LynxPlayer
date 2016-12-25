@@ -13,6 +13,8 @@ import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by nixholas on 23/12/16.
@@ -58,7 +60,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         //Log.d("AlbumAdapter", "Current Song: " + currentSong.getTitle());
 
         holder.title.setText(currentSong.getTitle());
-        holder.duration.setText(currentSong.getDuration() + "");
+        holder.duration.setText(String.format(Locale.ENGLISH, "%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(currentSong.getDuration()),
+                TimeUnit.MILLISECONDS.toSeconds(currentSong.getDuration()) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(currentSong.getDuration()))));
     }
 
     @Override

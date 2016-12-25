@@ -29,6 +29,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -272,7 +273,7 @@ public class MediaManager extends Service {
                     // Retrieve the length of the song and set it into the Maximum Text View
                     //mediaSeekText_Maximum.setText(getCurrent().getDuration() + "");
                     // http://stackoverflow.com/questions/625433/how-to-convert-milliseconds-to-x-mins-x-seconds-in-java
-                    mediaSeekText_Maximum.setText(String.format("%02d:%02d",
+                    mediaSeekText_Maximum.setText(String.format(Locale.ENGLISH, "%02d:%02d",
                             TimeUnit.MILLISECONDS.toMinutes(songDuration),
                             TimeUnit.MILLISECONDS.toSeconds(songDuration) -
                                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(songDuration))
@@ -319,7 +320,7 @@ public class MediaManager extends Service {
                                     // Set current time
                                     //mediaSeekText_Progress.setText(mMediaPlayer.getCurrentPosition() + "");
                                     //mediaSeekText_Progress.setText(msecondsToString(mMediaPlayer.getCurrentPosition()));
-                                    mediaSeekText_Progress.setText(String.format("%02d:%02d",
+                                    mediaSeekText_Progress.setText(String.format(Locale.ENGLISH, "%02d:%02d",
                                             TimeUnit.MILLISECONDS.toMinutes(currentPosition),
                                             TimeUnit.MILLISECONDS.toSeconds(currentPosition) -
                                                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(currentPosition))
