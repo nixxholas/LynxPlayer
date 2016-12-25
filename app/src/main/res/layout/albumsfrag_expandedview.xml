@@ -3,6 +3,7 @@
 http://stackoverflow.com/questions/30564588/design-support-library-collapsingtoolbarlayout-toolbar-not-getting-pinned-o
 http://stackoverflow.com/questions/26515058/this-activity-already-has-an-action-bar-supplied-by-the-window-decor
 http://www.techotopia.com/index.php/Working_with_the_Android_AppBar_and_Collapsing_Toolbar_Layouts
+http://stackoverflow.com/questions/34632497/anchor-imageview-to-collapsing-toolbar
 
 Best Reference/s
 http://www.mindgrub.com/blog/matt-stanford/implementing-collapsing-toolbar-android-material-design -->
@@ -14,7 +15,7 @@ http://www.mindgrub.com/blog/matt-stanford/implementing-collapsing-toolbar-andro
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/albumexpanded_appbar"
-        android:layout_height="350sp"
+        android:layout_height="400dp"
         android:layout_width="match_parent"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -27,6 +28,7 @@ http://www.mindgrub.com/blog/matt-stanford/implementing-collapsing-toolbar-andro
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleMarginEnd="64dp">
 
+            <!-- http://stackoverflow.com/questions/4668001/android-stretch-image-in-imageview-to-fit-screen -->
             <ImageView
                 android:id="@+id/albumexpanded_image"
                 android:layout_width="match_parent"
@@ -48,14 +50,48 @@ http://www.mindgrub.com/blog/matt-stanford/implementing-collapsing-toolbar-andro
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/albumexpanded_nestedscroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:padding="@dimen/albumsfragment_padding_side">
+
+        <!-- http://stackoverflow.com/questions/16699772/scrollview-can-host-only-one-direct-child -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/albumexpanded_title"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/albumexpanded_artist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
         <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
             android:id="@+id/albumexpanded_recycler"
             android:layout_height="match_parent"
             android:layout_width="match_parent" />
+
+        </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

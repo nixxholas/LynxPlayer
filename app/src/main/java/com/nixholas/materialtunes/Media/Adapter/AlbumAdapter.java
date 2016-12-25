@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>  {
     private ArrayList<Song> mDataset;
     private Context context;
+    int color, textColor;
 
     class ViewHolder extends RecyclerView.ViewHolder {
         public View v;
@@ -37,7 +38,11 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         }
     }
 
-    public AlbumAdapter (ArrayList<Song> mDataset) { this.mDataset = mDataset; }
+    public AlbumAdapter (ArrayList<Song> mDataset, int color, int textColor) {
+        this.mDataset = mDataset;
+        this.color = color;
+        this.textColor = textColor;
+    }
 
     @Override
     public AlbumAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
