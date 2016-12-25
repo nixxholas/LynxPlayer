@@ -2,6 +2,7 @@ package com.nixholas.materialtunes.Media.Adapter;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
