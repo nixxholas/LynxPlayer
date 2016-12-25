@@ -28,6 +28,8 @@ import com.bumptech.glide.util.Util;
 import com.nixholas.materialtunes.Fragments.FragmentItem.AlbumActivity;
 import com.nixholas.materialtunes.Media.Entities.Album;
 import com.nixholas.materialtunes.R;
+import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmap;
+import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmapTranscoder;
 import com.nixholas.materialtunes.Utils.PreferencesExample;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
@@ -152,7 +154,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
                 // We'll give the intent some data that it requires
                 intent.putExtra("albumId", currentAlbum.getId());
-                intent.putExtra("albumArt", currentAlbum.getAlbumArtPath());
+                intent.putExtra("albumArtUri", currentAlbum.getAlbumArtPath());
                 intent.putExtra("albumName", currentAlbum.getArtistName());
                 intent.putExtra("albumArtist", currentAlbum.getArtistName());
 
@@ -177,66 +179,4 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         return mDataset.size();
     }
 
-}
-
-class PaletteBitmap {
-    public final Palette palette;
-    public final Bitmap bitmap;
-
-    public PaletteBitmap(@NonNull Bitmap bitmap, @NonNull Palette palette) {
-        this.bitmap = bitmap;
-        this.palette = palette;
-    }
-
-    Bitmap getBitmap() {
-        return bitmap;
-    }
-}
-
-class PaletteBitmapResource implements Resource<PaletteBitmap> {
-    private final PaletteBitmap paletteBitmap;
-    private final BitmapPool bitmapPool;
-
-    public PaletteBitmapResource(@NonNull PaletteBitmap paletteBitmap, @NonNull BitmapPool bitmapPool) {
-        this.paletteBitmap = paletteBitmap;
-        this.bitmapPool = bitmapPool;
-    }
-
-    @Override
-    public PaletteBitmap get() {
-        return paletteBitmap;
-    }
-
-    @Override
-    public int getSize() {
-        return Util.getBitmapByteSize(paletteBitmap.bitmap);
-    }
-
-    @Override
-    public void recycle() {
-        if (!bitmapPool.put(paletteBitmap.bitmap)) {
-            paletteBitmap.bitmap.recycle();
-        }
-    }
-}
-
-class PaletteBitmapTranscoder implements ResourceTranscoder<Bitmap, PaletteBitmap> {
-    private final BitmapPool bitmapPool;
-
-    public PaletteBitmapTranscoder(@NonNull Context context) {
-        this.bitmapPool = Glide.get(context).getBitmapPool();
-    }
-
-    @Override
-    public Resource<PaletteBitmap> transcode(Resource<Bitmap> toTranscode) {
-        Bitmap bitmap = toTranscode.get();
-        Palette palette = new Palette.Builder(bitmap).generate();
-        PaletteBitmap result = new PaletteBitmap(bitmap, palette);
-        return new PaletteBitmapResource(result, bitmapPool);
-    }
-
-    @Override
-    public String getId() {
-        return PaletteBitmapTranscoder.class.getName();
-    }
 }
