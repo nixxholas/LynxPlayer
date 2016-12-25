@@ -481,4 +481,21 @@ public class MediaManager extends Service {
 
         return result;
     }
+
+    public boolean findDuplicateAlbum(Album album) {
+        for (Album a : albumFiles) {
+            if (a.getArtistName().equals(album.getArtistName()) &&
+                    a.getTitle().equals(album.getTitle())) { // If we really find a dupe
+                for (Song s : songFiles) { // Set all the existing songs
+                    if (s.getAlbumId() == album.getId()) { // To the existing album
+                        s.setAlbumId(a.getId());
+                        s.setAlbumName(a.getTitle());
+                    }
+                }
+                return true; // Then return true
+            }
+        }
+
+        return false;
+    }
 }

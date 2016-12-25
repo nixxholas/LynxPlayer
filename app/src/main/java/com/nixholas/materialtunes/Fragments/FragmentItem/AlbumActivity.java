@@ -85,7 +85,7 @@ public class AlbumActivity extends AppCompatActivity {
                 .asBitmap()
                 .transcode(new PaletteBitmapTranscoder(this), PaletteBitmap.class)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .fitCenter().load(Uri.fromFile(new File(albumArtUri)))
+                .fitCenter().loa    d(Uri.fromFile(new File(albumArtUri)))
                 .into(new ImageViewTarget<PaletteBitmap>(albumArt) {
                     @Override
                     protected void setResource(PaletteBitmap resource) {

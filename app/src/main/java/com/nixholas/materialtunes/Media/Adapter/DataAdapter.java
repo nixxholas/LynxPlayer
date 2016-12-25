@@ -154,7 +154,11 @@ public class DataAdapter implements Runnable {
                             albumCur.getInt(5),
                             albumCur.getString(6));
 
-                    mediaManager.albumFiles.add(newAlbum);
+                    if (mediaManager.findDuplicateAlbum(newAlbum)) {
+                        // Do nothing
+                    } else {
+                        mediaManager.albumFiles.add(newAlbum);
+                    }
                 }
             }
 

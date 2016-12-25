@@ -7,14 +7,14 @@ package com.nixholas.materialtunes.Media.Entities;
  */
 
 public class Song {
-    private final String dataPath;
-    private final long albumId;
-    private final String albumName;
-    private final long artistId;
-    private final String artistName;
-    private final int duration;
-    private final long id;
-    private final String title;
+    private String dataPath;
+    private long albumId;
+    private String albumName;
+    private long artistId;
+    private String artistName;
+    private int duration;
+    private long id;
+    private String title;
 
     /**
      * Default Constructor
@@ -72,5 +72,37 @@ public class Song {
         this.artistName = _artistName;
         this.albumName = _albumName;
         this.duration = _duration;
+    }
+
+    public void setDataPath(String dataPath) {
+        this.dataPath = dataPath;
+    }
+
+    public void setAlbumId(long albumId) {
+        this.albumId = albumId;
+    }
+
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
+    }
+
+    public void setArtistId(long artistId) {
+        this.artistId = artistId;
+    }
+
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
