@@ -155,7 +155,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 // We'll give the intent some data that it requires
                 intent.putExtra("albumId", currentAlbum.getId());
                 intent.putExtra("albumArtUri", currentAlbum.getAlbumArtPath());
-                intent.putExtra("albumName", currentAlbum.getArtistName());
+                intent.putExtra("albumName", currentAlbum.getTitle());
                 intent.putExtra("albumArtist", currentAlbum.getArtistName());
 
 //                ActivityOptions options =

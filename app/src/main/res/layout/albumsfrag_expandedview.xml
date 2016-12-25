@@ -1,24 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- References
+http://stackoverflow.com/questions/30564588/design-support-library-collapsingtoolbarlayout-toolbar-not-getting-pinned-o
+http://stackoverflow.com/questions/26515058/this-activity-already-has-an-action-bar-supplied-by-the-window-decor
+http://www.techotopia.com/index.php/Working_with_the_Android_AppBar_and_Collapsing_Toolbar_Layouts
+
+Best Reference/s
+http://www.mindgrub.com/blog/matt-stanford/implementing-collapsing-toolbar-android-material-design -->
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/albumexpanded_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.CollapsingToolbarLayout
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/albumexpanded_appbar"
+        android:layout_height="350sp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <ImageView
-            android:id="@+id/albumexpanded_image"
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/albumexpanded_collapsetoolbar"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp">
 
-    </android.support.design.widget.CollapsingToolbarLayout>
+            <ImageView
+                android:id="@+id/albumexpanded_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="parallax"/>
 
-    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-        android:id="@+id/albumexpanded_recycler"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/albumexpanded_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+            android:id="@+id/albumexpanded_recycler"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/albumexpanded_fab"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_anchor="@id/albumexpanded_appbar"
+        app:layout_anchorGravity="bottom|right|end"/>
 
 </android.support.design.widget.CoordinatorLayout>
