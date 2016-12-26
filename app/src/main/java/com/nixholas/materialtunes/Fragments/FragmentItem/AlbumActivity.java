@@ -68,7 +68,7 @@ public class AlbumActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // What to do when the back button is clicked
-                finish();
+                supportFinishAfterTransition(); // http://stackoverflow.com/questions/26600239/animate-imageview-between-two-activities-using-shared-element-transitions-with-c
             }
         });
 
@@ -173,5 +173,5 @@ public class AlbumActivity extends AppCompatActivity {
 
         rVAdapter = new AlbumAdapter(mediaManager.getAlbumSongs(albumId), color, textColor);
         recyclerView.setAdapter(rVAdapter);
-    }
+        }
 }

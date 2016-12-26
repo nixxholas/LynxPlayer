@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
@@ -57,6 +58,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         public View v;
         TextView title, artistName;
         ImageView albumArt;
+        Palette.Swatch swatch, mutedSwatch;
         CardView currentAlbumCard;
 
         public ViewHolder(View v) {
@@ -107,11 +109,11 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                         @Override
                         protected void setResource(PaletteBitmap resource) {
                             holder.albumArt.setImageBitmap(resource.getBitmap());
-                            Palette.Swatch swatch = resource.palette.getVibrantSwatch();
-                            if (swatch != null) {
-                                int color = swatch.getRgb();
+                            holder.swatch = resource.palette.getVibrantSwatch();
+                            if (holder.swatch != null) {
+                                int color = holder.swatch.getRgb();
                                 holder.currentAlbumCard.setBackgroundColor(color);
-                                int textColor = PreferencesExample.getBlackWhiteColor(swatch.getTitleTextColor());
+                                int textColor = PreferencesExample.getBlackWhiteColor(holder.swatch.getTitleTextColor());
                                 holder.title.setTextColor(textColor);
                                 holder.artistName.setTextColor(textColor);
                             } else {
@@ -129,9 +131,34 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         } else { // Since it does not have an album art
             Glide.with(context)
+                    .fromResource()
+                    .asBitmap()
+                    .transcode(new PaletteBitmapTranscoder(context), PaletteBitmap.class)
                     .load(R.drawable.untitled_album)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .into(holder.albumArt);
+                    .into(new ImageViewTarget<PaletteBitmap>(holder.albumArt) {
+                        @Override
+                        protected void setResource(PaletteBitmap resource) {
+                            holder.albumArt.setImageBitmap(resource.getBitmap());
+                            holder.swatch = resource.palette.getVibrantSwatch();
+                            if (holder.swatch != null) {
+                                int color = holder.swatch.getRgb();
+                                holder.currentAlbumCard.setBackgroundColor(color);
+                                int textColor = PreferencesExample.getBlackWhiteColor(holder.swatch.getTitleTextColor());
+                                holder.title.setTextColor(textColor);
+                                holder.artistName.setTextColor(textColor);
+                            } else {
+                                holder.mutedSwatch = resource.palette.getMutedSwatch();
+                                if (holder.mutedSwatch != null) {
+                                    int color = holder.mutedSwatch.getRgb();
+                                    holder.currentAlbumCard.setBackgroundColor(color);
+                                    int textColor = PreferencesExample.getBlackWhiteColor(holder.mutedSwatch.getTitleTextColor());
+                                    holder.title.setTextColor(textColor);
+                                    holder.artistName.setTextColor(textColor);
+                                }
+                            }
+                        }
+                    });
         }
 
         holder.currentAlbumCard.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +172,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 Intent intent = new Intent(v.getContext(), AlbumActivity.class);
                 int w = v.getWidth();
                 int h = v.getHeight();
-                float maxRadius = (float) Math.sqrt(w * w / 4 + h * h / 4);
+//                float maxRadius = (float) Math.sqrt(w * w / 4 + h * h / 4);
 
                 // http://stackoverflow.com/questions/2183962/how-to-read-value-from-string-xml-in-android
                 String transitionName = v.getResources().getString(R.string.transition_album_cover);
@@ -161,16 +188,14 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 intent.putExtra("albumName", currentAlbum.getTitle());
                 intent.putExtra("albumArtist", currentAlbum.getArtistName());
 
-//                ActivityOptions options =
-//                        ActivityOptions.makeSceneTransitionAnimation((Activity) context,
-//                                v,   // The view which starts the transition
-//                                transitionName    // The transitionName of the view we’re transitioning to
-//                        );
-
-//                ActivityOptions options =
-//                        ActivityOptions.makeSceneTransitionAnimation((Activity) context, imageView
-//                        , titleView);
+                /**
+                 * We'll have to split apart the AOptions so that we can invoke the methods that
+                 * API Level 23 and above can be used for those OSes that are above API Level 23.
+                 *
+                 * http://stackoverflow.com/questions/38411878/how-do-i-create-the-marshmallow-open-activity-animation
+                 */
                 ActivityOptions options;
+
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                     options = ActivityOptions.makeClipRevealAnimation(v, 0, 0, w, h);
                 } else {
