@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -35,9 +36,10 @@ public class AlbumActivity extends AppCompatActivity {
     FastScrollRecyclerView recyclerView;
     FastScrollRecyclerView.Adapter rVAdapter;
     NestedScrollView nestedScrollView;
+    RelativeLayout relativeLayout;
     ImageView albumArt;
     TextView title, artist;
-    int color, textColor;
+    int color, textColor, darkColor, darkTextColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,48 +75,98 @@ public class AlbumActivity extends AppCompatActivity {
         // Setup the static elements
         albumArt = (ImageView) findViewById(R.id.albumexpanded_image);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.albumexpanded_collapsetoolbar);
+        relativeLayout = (RelativeLayout) findViewById(R.id.albumexpanded_staticinfo);
         title = (TextView) findViewById(R.id.albumexpanded_title);
         artist = (TextView) findViewById(R.id.albumexpanded_artist);
 
         title.setText(albumName);
         artist.setText(albumArtist);
 
-        // http://stackoverflow.com/questions/35997439/palette-using-with-glide-sometimes-fail-to-load-dark-vibrant-color
-        Glide.with(this)
-                .fromUri()
-                .asBitmap()
-                .transcode(new PaletteBitmapTranscoder(this), PaletteBitmap.class)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .fitCenter().loa    d(Uri.fromFile(new File(albumArtUri)))
-                .into(new ImageViewTarget<PaletteBitmap>(albumArt) {
-                    @Override
-                    protected void setResource(PaletteBitmap resource) {
-                        albumArt.setImageBitmap(resource.getBitmap());
-                        Palette.Swatch swatch = resource.palette.getVibrantSwatch();
-                        if (swatch != null) {
-                            color = swatch.getRgb();
-                            collapsingToolbarLayout.setBackgroundColor(color);
-                            nestedScrollView.setBackgroundColor(color);
-                            textColor = PreferencesExample.getBlackWhiteColor(swatch.getTitleTextColor());
-                            collapsingToolbarLayout.setExpandedTitleColor(textColor);
-                            collapsingToolbarLayout.setCollapsedTitleTextColor(textColor);
-                            title.setTextColor(textColor);
-                            artist.setTextColor(textColor);
-                        } else {
-                            Palette.Swatch mutedSwatch = resource.palette.getMutedSwatch();
-                            if (mutedSwatch != null) {
-                                color = mutedSwatch.getRgb();
+        if (albumArtUri != null) {
+            // http://stackoverflow.com/questions/35997439/palette-using-with-glide-sometimes-fail-to-load-dark-vibrant-color
+            Glide.with(this)
+                    .fromUri()
+                    .asBitmap()
+                    .transcode(new PaletteBitmapTranscoder(this), PaletteBitmap.class)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .fitCenter().load(Uri.fromFile(new File(albumArtUri)))
+                    .into(new ImageViewTarget<PaletteBitmap>(albumArt) {
+                        @Override
+                        protected void setResource(PaletteBitmap resource) {
+                            albumArt.setImageBitmap(resource.getBitmap());
+                            Palette.Swatch swatch = resource.palette.getVibrantSwatch();
+                            Palette.Swatch darkSwatch = resource.palette.getDarkVibrantSwatch();
+                            if (swatch != null && darkSwatch != null) {
+                                color = swatch.getRgb();
+                                darkColor = darkSwatch.getRgb();
                                 collapsingToolbarLayout.setBackgroundColor(color);
                                 nestedScrollView.setBackgroundColor(color);
-                                textColor = PreferencesExample.getBlackWhiteColor(mutedSwatch.getTitleTextColor());
+                                relativeLayout.setBackgroundColor(darkSwatch.getRgb());
+                                textColor = PreferencesExample.getBlackWhiteColor(swatch.getTitleTextColor());
+                                collapsingToolbarLayout.setExpandedTitleColor(textColor);
+                                collapsingToolbarLayout.setCollapsedTitleTextColor(textColor);
+                                title.setTextColor(swatch.getTitleTextColor());
+                                artist.setTextColor(swatch.getBodyTextColor());
+                            } else {
+                                Palette.Swatch mutedSwatch = resource.palette.getMutedSwatch();
+                                Palette.Swatch darkMutedSwatch = resource.palette.getDarkMutedSwatch();
+                                if (mutedSwatch != null && darkMutedSwatch != null) {
+                                    color = mutedSwatch.getRgb();
+                                    collapsingToolbarLayout.setBackgroundColor(color);
+                                    nestedScrollView.setBackgroundColor(color);
+                                    relativeLayout.setBackgroundColor(darkMutedSwatch.getRgb());
+                                    textColor = PreferencesExample.getBlackWhiteColor(mutedSwatch.getTitleTextColor());
+                                    collapsingToolbarLayout.setExpandedTitleColor(textColor);
+                                    collapsingToolbarLayout.setCollapsedTitleTextColor(textColor);
+                                    title.setTextColor(mutedSwatch.getTitleTextColor());
+                                    artist.setTextColor(mutedSwatch.getBodyTextColor());
+                                }
+                            }
+                        }
+                    });
+        } else {
+            // https://github.com/bumptech/glide/issues/588
+            Glide.with(this)
+                    .fromResource()
+                    .asBitmap()
+                    .transcode(new PaletteBitmapTranscoder(this), PaletteBitmap.class)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .fitCenter()
+                    .load(R.drawable.untitled_album)
+                    .into(new ImageViewTarget<PaletteBitmap>(albumArt) {
+                        @Override
+                        protected void setResource(PaletteBitmap resource) {
+                            albumArt.setImageBitmap(resource.getBitmap());
+                            Palette.Swatch swatch = resource.palette.getVibrantSwatch();
+                            Palette.Swatch darkSwatch = resource.palette.getDarkVibrantSwatch();
+                            if (swatch != null && darkSwatch != null) {
+                                color = swatch.getRgb();
+                                collapsingToolbarLayout.setBackgroundColor(color);
+                                nestedScrollView.setBackgroundColor(color);
+                                relativeLayout.setBackgroundColor(darkSwatch.getRgb());
+                                textColor = PreferencesExample.getBlackWhiteColor(swatch.getTitleTextColor());
                                 collapsingToolbarLayout.setExpandedTitleColor(textColor);
                                 collapsingToolbarLayout.setCollapsedTitleTextColor(textColor);
                                 title.setTextColor(textColor);
                                 artist.setTextColor(textColor);
+                            } else {
+                                Palette.Swatch mutedSwatch = resource.palette.getMutedSwatch();
+                                Palette.Swatch darkMutedSwatch = resource.palette.getDarkMutedSwatch();
+                                if (mutedSwatch != null && darkMutedSwatch != null) {
+                                    color = mutedSwatch.getRgb();
+                                    collapsingToolbarLayout.setBackgroundColor(color);
+                                    nestedScrollView.setBackgroundColor(color);
+                                    relativeLayout.setBackgroundColor(darkMutedSwatch.getRgb());
+                                    textColor = PreferencesExample.getBlackWhiteColor(mutedSwatch.getTitleTextColor());
+                                    collapsingToolbarLayout.setExpandedTitleColor(textColor);
+                                    collapsingToolbarLayout.setCollapsedTitleTextColor(textColor);
+                                    title.setTextColor(textColor);
+                                    artist.setTextColor(textColor);
+                                }
                             }
                         }
-                    }
-                });
+                    });
+        }
 
         recyclerView = (FastScrollRecyclerView) findViewById(R.id.albumexpanded_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

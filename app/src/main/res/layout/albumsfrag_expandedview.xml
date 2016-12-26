@@ -7,7 +7,8 @@ http://stackoverflow.com/questions/34632497/anchor-imageview-to-collapsing-toolb
 
 Best Reference/s
 http://www.mindgrub.com/blog/matt-stanford/implementing-collapsing-toolbar-android-material-design -->
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/albumexpanded_layout"
     android:layout_width="match_parent"
@@ -53,8 +54,7 @@ http://www.mindgrub.com/blog/matt-stanford/implementing-collapsing-toolbar-andro
         android:id="@+id/albumexpanded_nestedscroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:padding="@dimen/albumsfragment_padding_side">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!-- http://stackoverflow.com/questions/16699772/scrollview-can-host-only-one-direct-child -->
         <LinearLayout
@@ -63,13 +63,15 @@ http://www.mindgrub.com/blog/matt-stanford/implementing-collapsing-toolbar-andro
             android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/albumexpanded_staticinfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="@dimen/albumsfragment_padding_side">
 
                 <TextView
                     android:id="@+id/albumexpanded_title"

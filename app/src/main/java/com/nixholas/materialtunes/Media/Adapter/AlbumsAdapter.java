@@ -143,6 +143,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                  * http://stackoverflow.com/questions/27736848/cardview-animation-raise-and-expand-on-click
                  */
                 Intent intent = new Intent(v.getContext(), AlbumActivity.class);
+                int w = v.getWidth();
+                int h = v.getHeight();
+                float maxRadius = (float) Math.sqrt(w * w / 4 + h * h / 4);
 
                 // http://stackoverflow.com/questions/2183962/how-to-read-value-from-string-xml-in-android
                 String transitionName = v.getResources().getString(R.string.transition_album_cover);
@@ -164,9 +167,19 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 //                                transitionName    // The transitionName of the view we’re transitioning to
 //                        );
 
-                ActivityOptions options =
-                        ActivityOptions.makeSceneTransitionAnimation((Activity) context, imageView
-                        , titleView);
+//                ActivityOptions options =
+//                        ActivityOptions.makeSceneTransitionAnimation((Activity) context, imageView
+//                        , titleView);
+                ActivityOptions options;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    options = ActivityOptions.makeClipRevealAnimation(v, 0, 0, w, h);
+                } else {
+                    options =
+                        ActivityOptions.makeSceneTransitionAnimation((Activity) context,
+                                v,   // The view which starts the transition
+                                transitionName    // The transitionName of the view we’re transitioning to
+                        );
+                }
 
                 startActivity(context, intent, options.toBundle());
         }
