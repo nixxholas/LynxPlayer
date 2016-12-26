@@ -172,15 +172,15 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 Intent intent = new Intent(v.getContext(), AlbumActivity.class);
                 int w = v.getWidth();
                 int h = v.getHeight();
-//                float maxRadius = (float) Math.sqrt(w * w / 4 + h * h / 4);
+                // float maxRadius = (float) Math.sqrt(w * w / 4 + h * h / 4);
 
                 // http://stackoverflow.com/questions/2183962/how-to-read-value-from-string-xml-in-android
                 String transitionName = v.getResources().getString(R.string.transition_album_cover);
 
                 // Perform the necessary pairing
                 // http://xmodulo.com/activity-transition-animations-android.html
-                Pair<View, String> imageView = new Pair<View, String>(holder.albumArt, v.getResources().getString(R.string.transition_album_image));
-                Pair<View, String> titleView = new Pair<View, String>(holder.title, v.getResources().getString(R.string.transition_album_title));
+                //Pair<View, String> imageView = new Pair<View, String>(holder.albumArt, v.getResources().getString(R.string.transition_album_image));
+                //Pair<View, String> titleView = new Pair<View, String>(holder.title, v.getResources().getString(R.string.transition_album_title));
 
                 // We'll give the intent some data that it requires
                 intent.putExtra("albumId", currentAlbum.getId());

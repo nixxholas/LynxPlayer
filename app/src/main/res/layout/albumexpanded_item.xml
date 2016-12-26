@@ -9,7 +9,8 @@
     android:id="@+id/albumsfragitem_layout"
     android:layout_gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="85dp">
+    android:layout_height="85dp"
+    android:foreground="?android:attr/selectableItemBackground">
 
         <!--
             Using Horizontal Layout to properly align the views
