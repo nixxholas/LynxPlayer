@@ -30,6 +30,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -80,6 +81,7 @@ public class MediaManager extends Service {
     public int currentlyPlayingIndex;
 
     // MediaManager Resources
+    public volatile ArrayList<Song> managerQueue; // We need a queue for the mediaplayer
     public ArrayList<Song> songFiles = new ArrayList<>();
     public ArrayList<Album> albumFiles = new ArrayList<>();
     public ArrayList<Playlist> playLists = new ArrayList<>();
@@ -406,6 +408,8 @@ public class MediaManager extends Service {
     public Song getCurrent() {
         return songFiles.get(currentlyPlayingIndex);
     }
+
+    public Song getCurrentQueue() { return managerQueue.get(currentlyPlayingIndex); }
 
     public Song getNext() {
         Log.d("getNext()", "Running getNext()");
