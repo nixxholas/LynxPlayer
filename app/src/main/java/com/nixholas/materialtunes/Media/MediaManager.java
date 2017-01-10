@@ -132,6 +132,11 @@ public class MediaManager extends Service {
         //Log.e("onCreate: MediaManager", "Working");
         audioManager = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
 
+        /**
+         * Temporary fix for AOBException for getCurrent
+         */
+        //this.managerQueue.addAll(songFiles);
+
         PhoneStateListener phoneStateListener = new PhoneStateListener() {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
@@ -253,6 +258,7 @@ public class MediaManager extends Service {
                 }
             }
         };
+
         mMediaSession.setCallback(mMediaSessionCallback);
         mMediaSession.setActive(true);
         mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
@@ -430,10 +436,17 @@ public class MediaManager extends Service {
     //        return songFiles.get(currentlyPlayingIndex);
     //    }
 
-    public Song getCurrent() { return managerQueue.get(currentlyPlayingIndex); }
+    public Song getCurrent() {
+        // If the MediaManager has already been playing
+        if (!managerQueue.isEmpty()) {
+            return managerQueue.get(currentlyPlayingIndex);
+        } else {
+            return songFiles.get(currentlyPlayingIndex);
+        }
+    }
 
     public Song getNext() {
-        Log.d("getNext()", "Running getNext()");
+        //Log.d("getNext()", "Running getNext()");
 
         if (preferenceHelper.getShuffle()) {
             int newSong = currentlyPlayingIndex;

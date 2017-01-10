@@ -120,11 +120,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (mediaManager == null) {
-            mediaManager = new MediaManager(this);
-            finalMain = this;
-        }
-
         slidedRelativeLayout = (RelativeLayout) findViewById(R.id.slided_layout);
         slidingUpPanelLayout = (CustomSlidingUpLayout) findViewById(R.id.sliding_layout);
 
@@ -199,20 +194,25 @@ public class MainActivity extends AppCompatActivity {
         });
         buttonHelper.greyOut(mediaControls_Repeat);
 
+        // Setup the MediaManager and hide the sliding bar if the MediaManager is null.
+        //        if (mediaManager == null) {
+        //            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+        //            mediaManager = new MediaManager(this);
+        //            finalMain = this;
+        //        } else {
+        //            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        //            SlidingBarUpdater.updateSlideBar(MainActivity.this);
+        //        }
+
+        mediaManager = new MediaManager(this);
+        finalMain = this;
+
         // Setup the notifications
         Handler mHandler = new Handler();
         //Context appContext = getBaseContext().getApplicationContext();
         mHandler.post(persistentNotif = new PersistentNotification(MainActivity.this));
 
         mDataAdapter.run();
-
-        // Hide the panel first, since nothing is being played
-        if (mediaManager.mMediaPlayer == null) {
-            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
-        } else {
-            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-            SlidingBarUpdater.updateSlideBar(MainActivity.this);
-        }
 
         mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
