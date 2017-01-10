@@ -22,6 +22,7 @@ import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmap;
 import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmapTranscoder;
 import com.nixholas.materialtunes.Utils.PreferencesExample;
+import com.nixholas.materialtunes.Utils.TextColorHelper;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.File;
@@ -101,7 +102,7 @@ public class AlbumActivity extends AppCompatActivity {
                                 collapsingToolbarLayout.setBackgroundColor(color);
                                 nestedScrollView.setBackgroundColor(color);
                                 relativeLayout.setBackgroundColor(darkSwatch.getRgb());
-                                textColor = PreferencesExample.getBlackWhiteColor(swatch.getTitleTextColor());
+                                textColor = TextColorHelper.getBlackWhiteColor(swatch.getTitleTextColor());
                                 collapsingToolbarLayout.setExpandedTitleColor(textColor);
                                 collapsingToolbarLayout.setCollapsedTitleTextColor(textColor);
                                 title.setTextColor(swatch.getTitleTextColor());
@@ -114,7 +115,7 @@ public class AlbumActivity extends AppCompatActivity {
                                     collapsingToolbarLayout.setBackgroundColor(color);
                                     nestedScrollView.setBackgroundColor(color);
                                     relativeLayout.setBackgroundColor(darkMutedSwatch.getRgb());
-                                    textColor = PreferencesExample.getBlackWhiteColor(mutedSwatch.getTitleTextColor());
+                                    textColor = TextColorHelper.getBlackWhiteColor(mutedSwatch.getTitleTextColor());
                                     collapsingToolbarLayout.setExpandedTitleColor(textColor);
                                     collapsingToolbarLayout.setCollapsedTitleTextColor(textColor);
                                     title.setTextColor(mutedSwatch.getTitleTextColor());
@@ -143,7 +144,7 @@ public class AlbumActivity extends AppCompatActivity {
                                 collapsingToolbarLayout.setBackgroundColor(color);
                                 nestedScrollView.setBackgroundColor(color);
                                 relativeLayout.setBackgroundColor(darkSwatch.getRgb());
-                                textColor = PreferencesExample.getBlackWhiteColor(swatch.getTitleTextColor());
+                                textColor = TextColorHelper.getBlackWhiteColor(swatch.getTitleTextColor());
                                 collapsingToolbarLayout.setExpandedTitleColor(textColor);
                                 collapsingToolbarLayout.setCollapsedTitleTextColor(textColor);
                                 title.setTextColor(textColor);
@@ -156,7 +157,7 @@ public class AlbumActivity extends AppCompatActivity {
                                     collapsingToolbarLayout.setBackgroundColor(color);
                                     nestedScrollView.setBackgroundColor(color);
                                     relativeLayout.setBackgroundColor(darkMutedSwatch.getRgb());
-                                    textColor = PreferencesExample.getBlackWhiteColor(mutedSwatch.getTitleTextColor());
+                                    textColor = TextColorHelper.getBlackWhiteColor(mutedSwatch.getTitleTextColor());
                                     collapsingToolbarLayout.setExpandedTitleColor(textColor);
                                     collapsingToolbarLayout.setCollapsedTitleTextColor(textColor);
                                     title.setTextColor(textColor);
