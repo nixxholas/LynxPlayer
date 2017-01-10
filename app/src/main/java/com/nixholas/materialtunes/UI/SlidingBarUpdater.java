@@ -3,7 +3,6 @@ package com.nixholas.materialtunes.UI;
 import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.support.v7.graphics.Palette;
 

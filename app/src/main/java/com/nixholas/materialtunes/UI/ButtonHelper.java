@@ -1,8 +1,5 @@
 package com.nixholas.materialtunes.UI;
 
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.media.Image;
 import android.widget.ImageButton;
 
 /**

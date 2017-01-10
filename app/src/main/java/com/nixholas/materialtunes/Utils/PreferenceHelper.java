@@ -18,7 +18,7 @@ public class PreferenceHelper {
     public static final String REPEAT = "repeat";
 
     private static SharedPreferences mPreferences;
-    private static SharedPreferences.Editor mPreferenceEditor;
+    static SharedPreferences.Editor mPreferenceEditor;
 
     public PreferenceHelper(Context mContext) {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);

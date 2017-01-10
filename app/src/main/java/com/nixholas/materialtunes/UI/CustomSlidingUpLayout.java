@@ -2,7 +2,6 @@ package com.nixholas.materialtunes.UI;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 

@@ -28,11 +28,9 @@ import com.nixholas.materialtunes.Utils.RemoteControlReceiver;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Locale;
-import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -428,11 +426,11 @@ public class MediaManager extends Service {
         return mPlaybackState;
     }
 
-//    public Song getCurrent() {
-//        return songFiles.get(currentlyPlayingIndex);
-//    }
+    //    public Song getCurrent() {
+    //        return songFiles.get(currentlyPlayingIndex);
+    //    }
 
-    public Song getCurrent() { return managerQueue.get(currentlyPlayingIndex) ; }
+    public Song getCurrent() { return managerQueue.get(currentlyPlayingIndex); }
 
     public Song getNext() {
         Log.d("getNext()", "Running getNext()");

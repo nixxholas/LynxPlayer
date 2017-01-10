@@ -1,22 +1,13 @@
 package com.nixholas.materialtunes.Media.Adapter;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v7.graphics.Palette;
-import android.util.Log;
 
 import com.nixholas.materialtunes.Media.Entities.Album;
 import com.nixholas.materialtunes.Media.Entities.Playlist;
 import com.nixholas.materialtunes.Media.Entities.Song;
-
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 

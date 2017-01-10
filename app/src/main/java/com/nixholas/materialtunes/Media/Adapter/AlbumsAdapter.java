@@ -2,17 +2,13 @@ package com.nixholas.materialtunes.Media.Adapter;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +17,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.Resource;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.transcode.ResourceTranscoder;
 import com.bumptech.glide.request.target.ImageViewTarget;
-import com.bumptech.glide.util.Util;
 import com.nixholas.materialtunes.Fragments.FragmentItem.AlbumActivity;
 import com.nixholas.materialtunes.Media.Entities.Album;
 import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmap;
 import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmapTranscoder;
-import com.nixholas.materialtunes.Utils.PreferencesExample;
+import com.nixholas.materialtunes.Utils.TextColorHelper;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.File;
@@ -113,7 +105,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                             if (holder.swatch != null) {
                                 int color = holder.swatch.getRgb();
                                 holder.currentAlbumCard.setBackgroundColor(color);
-                                int textColor = PreferencesExample.getBlackWhiteColor(holder.swatch.getTitleTextColor());
+                                int textColor = TextColorHelper.getBlackWhiteColor(holder.swatch.getTitleTextColor());
                                 holder.title.setTextColor(textColor);
                                 holder.artistName.setTextColor(textColor);
                             } else {
@@ -121,7 +113,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                                 if (mutedSwatch != null) {
                                     int color = mutedSwatch.getRgb();
                                     holder.currentAlbumCard.setBackgroundColor(color);
-                                    int textColor = PreferencesExample.getBlackWhiteColor(mutedSwatch.getTitleTextColor());
+                                    int textColor = TextColorHelper.getBlackWhiteColor(mutedSwatch.getTitleTextColor());
                                     holder.title.setTextColor(textColor);
                                     holder.artistName.setTextColor(textColor);
                                 }
@@ -144,7 +136,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                             if (holder.swatch != null) {
                                 int color = holder.swatch.getRgb();
                                 holder.currentAlbumCard.setBackgroundColor(color);
-                                int textColor = PreferencesExample.getBlackWhiteColor(holder.swatch.getTitleTextColor());
+                                int textColor = TextColorHelper.getBlackWhiteColor(holder.swatch.getTitleTextColor());
                                 holder.title.setTextColor(textColor);
                                 holder.artistName.setTextColor(textColor);
                             } else {
@@ -152,7 +144,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                                 if (holder.mutedSwatch != null) {
                                     int color = holder.mutedSwatch.getRgb();
                                     holder.currentAlbumCard.setBackgroundColor(color);
-                                    int textColor = PreferencesExample.getBlackWhiteColor(holder.mutedSwatch.getTitleTextColor());
+                                    int textColor = TextColorHelper.getBlackWhiteColor(holder.mutedSwatch.getTitleTextColor());
                                     holder.title.setTextColor(textColor);
                                     holder.artistName.setTextColor(textColor);
                                 }
@@ -197,7 +189,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 ActivityOptions options;
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    options = ActivityOptions.makeClipRevealAnimation(v, 0, 0, w, h);
+                    options = ActivityOptions
+                            .makeClipRevealAnimation(v, 0, 0, w, h);
                 } else {
                     options =
                         ActivityOptions.makeSceneTransitionAnimation((Activity) context,

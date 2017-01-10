@@ -7,10 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.nixholas.materialtunes.Media.Entities.Playlist;
 
 import static android.content.ContentValues.TAG;
 import static com.nixholas.materialtunes.MainActivity.getInstance;
@@ -99,7 +95,7 @@ public class PlaylistUtil {
         final int base = cur.getInt(0);
         cur.close();
         ContentValues values = new ContentValues();
-        values.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, Integer.valueOf(base + audioId));
+        values.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, base + audioId);
         values.put(MediaStore.Audio.Playlists.Members.AUDIO_ID, audioId);
         resolver.insert(uri, values);
 

@@ -30,7 +30,6 @@ import com.nixholas.materialtunes.Fragments.AlbumFragment;
 import com.nixholas.materialtunes.Fragments.PlaylistFragment;
 import com.nixholas.materialtunes.Fragments.SongFragment;
 import com.nixholas.materialtunes.Media.Adapter.DataAdapter;
-import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.Media.MediaManager;
 import com.nixholas.materialtunes.Notification.PersistentNotification;
 import com.nixholas.materialtunes.UI.CustomSlidingUpLayout;
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     // Fragment Entities
     private AlbumFragment albumFragment;
     private PlaylistFragment playlistFragment;
-    private SongFragment songFragment;
+    SongFragment songFragment;
 
     // Notification Entities
     private static MainActivity finalMain;

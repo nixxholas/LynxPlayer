@@ -1,11 +1,5 @@
 package com.nixholas.materialtunes.Media.Entities;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v7.graphics.Palette;
-
 /**
  * Created by nixho on 03-Nov-16.
  */

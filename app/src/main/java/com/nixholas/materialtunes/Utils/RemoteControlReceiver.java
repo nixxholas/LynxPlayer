@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.KeyEvent;
 
-import java.io.IOException;
-
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 
 /**
