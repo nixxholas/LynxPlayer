@@ -28,6 +28,7 @@ import com.nixholas.materialtunes.Utils.RemoteControlReceiver;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Queue;
@@ -81,7 +82,20 @@ public class MediaManager extends Service {
     public int currentlyPlayingIndex;
 
     // MediaManager Resources
-    public volatile ArrayList<Song> managerQueue; // We need a queue for the mediaplayer
+    /**
+     * Main Queue of the whole program
+     *
+     * R2 == Reasons why ArrayDeque was used
+     *
+     * 3x Faster than LinkedList
+     * http://microbenchmarks.appspot.com/run/limpbizkit@gmail.com/com.publicobject.blog.TreeListBenchmark
+     * http://stackoverflow.com/questions/6129805/what-is-the-fastest-java-collection-with-the-basic-functionality-of-a-queue
+     *
+     * R1 == Switched to ConcurrentLinkedQueue
+     *
+     * http://stackoverflow.com/questions/616484/how-to-use-concurrentlinkedqueue
+     */
+    public volatile Queue<Song> managerQueue = new ArrayDeque<>(); // We need a queue for the mediaplayer
     public ArrayList<Song> songFiles = new ArrayList<>();
     public ArrayList<Album> albumFiles = new ArrayList<>();
     public ArrayList<Playlist> playLists = new ArrayList<>();
