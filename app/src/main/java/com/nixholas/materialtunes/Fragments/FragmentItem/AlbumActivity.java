@@ -10,6 +10,7 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -43,14 +44,10 @@ public class AlbumActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            postponeEnterTransition();
-        } else {
-            supportPostponeEnterTransition();
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.albumsfrag_expandedview); // Set the content view of course.
+
+        postponeEnterTransition();
 
         // http://stackoverflow.com/questions/10602335/passing-extra-data-from-an-activity-to-an-intent
         long albumId = getIntent().getExtras().getLong("albumId");
@@ -180,12 +177,34 @@ public class AlbumActivity extends AppCompatActivity {
         rVAdapter = new AlbumAdapter(mediaManager.getAlbumSongs(albumId), color, textColor);
         recyclerView.setAdapter(rVAdapter);
 
+        startPostponedEnterTransition();
+    }
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            startPostponedEnterTransition();
-        } else {
-            supportStartPostponedEnterTransition();
-        }
 
+    /**
+     * Schedules the shared element transition to be started immediately
+     * after the shared element has been measured and laid out within the
+     * activity's view hierarchy. Some common places where it might make
+     * sense to call this method are:
+     * <p>
+     * (1) Inside a Fragment's onCreateView() method (if the shared element
+     * lives inside a Fragment hosted by the called Activity).
+     * <p>
+     * (2) Inside a Picasso Callback object (if you need to wait for Picasso to
+     * asynchronously load/scale a bitmap before the transition can begin).
+     * <p>
+     * (3) Inside a LoaderCallback's onLoadFinished() method (if the shared
+     * element depends on data queried by a Loader).
+     */
+    private void scheduleStartPostponedTransition(final View sharedElement) {
+        sharedElement.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
+                        startPostponedEnterTransition();
+                        return true;
+                    }
+                });
     }
 }

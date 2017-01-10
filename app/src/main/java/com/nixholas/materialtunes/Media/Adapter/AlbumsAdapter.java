@@ -176,8 +176,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
                 // Perform the necessary pairing
                 // http://xmodulo.com/activity-transition-animations-android.html
-//                Pair<View, String> imageView = new Pair<View, String>(holder.albumArt, v.getResources().getString(R.string.transition_album_image));
-//                Pair<View, String> titleView = new Pair<View, String>(holder.title, v.getResources().getString(R.string.transition_album_title));
+                Pair<View, String> imageView = new Pair<View, String>(holder.albumArt, v.getResources().getString(R.string.transition_album_image));
+                Pair<View, String> titleView = new Pair<View, String>(holder.title, v.getResources().getString(R.string.transition_album_title));
 
                 // We'll give the intent some data that it requires
                 intent.putExtra("albumId", currentAlbum.getId());
@@ -191,22 +191,22 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                  *
                  * http://stackoverflow.com/questions/38411878/how-do-i-create-the-marshmallow-open-activity-animation
                  */
-                ActivityOptions options;
+                ActivityOptionsCompat options;
 
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    options = ActivityOptions
-                            .makeClipRevealAnimation(v, 0, 0, w, h);
+//                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+//                    options = ActivityOptions
+//                            .makeClipRevealAnimation(v, 0, 0, w, h);
+//
+//                } else {
+//                    options =
+//                        ActivityOptions.makeSceneTransitionAnimation((Activity) context,
+//                                v,   // The view which starts the transition
+//                                transitionName    // The transitionName of the view we’re transitioning to
+//                        );
+//                }
 
-                } else {
-                    options =
-                        ActivityOptions.makeSceneTransitionAnimation((Activity) context,
-                                v,   // The view which starts the transition
-                                transitionName    // The transitionName of the view we’re transitioning to
-                        );
-                }
-
-                //                options =
-                //                        ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, imageView, titleView);
+                                options =
+                                        ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, imageView, titleView);
 
                 startActivity(context, intent, options.toBundle());
         }
