@@ -63,6 +63,13 @@ public class PreferenceHelper {
     public final boolean getShuffle() { return mPreferences.getBoolean(SHUFFLE, false); }
 
     public void setRepeat(int value) {
+        /**
+         * Integer Values
+         *
+         * 0 = Repeat none
+         * 1 = Repeat All
+         * 2 = Repeat One Only
+         */
         // http://stackoverflow.com/questions/16194567/android-sharedpreferences-how-to-save-a-simple-int-variable
         mPreferenceEditor = mPreferences.edit();
         mPreferenceEditor.putInt(REPEAT, value);

@@ -30,6 +30,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Queue;
 import java.util.Random;
@@ -85,6 +86,14 @@ public class MediaManager extends Service {
     /**
      * Main Queue of the whole program
      *
+     * R3 == Reasons why LinkedList was used
+     *
+     * ArrayDeque is unable to have native support for shuffling.
+     * Shuffling is key for any music player, because the user wants a
+     * randomizer for his queue.
+     *
+     * Further support from: http://stackoverflow.com/questions/19258696/how-do-i-shuffle-a-deque
+     *
      * R2 == Reasons why ArrayDeque was used
      *
      * 3x Faster than LinkedList
@@ -95,7 +104,7 @@ public class MediaManager extends Service {
      *
      * http://stackoverflow.com/questions/616484/how-to-use-concurrentlinkedqueue
      */
-    public volatile Queue<Song> managerQueue = new ArrayDeque<>(); // We need a queue for the mediaplayer
+    public volatile LinkedList<Song> managerQueue = new LinkedList<>(); // We need a queue for the mediaplayer
     public ArrayList<Song> songFiles = new ArrayList<>();
     public ArrayList<Album> albumFiles = new ArrayList<>();
     public ArrayList<Playlist> playLists = new ArrayList<>();
@@ -370,7 +379,7 @@ public class MediaManager extends Service {
                         /**
                          * Under The Hood changes
                          */
-                        Song currentSong = songFiles.get(currentlyPlayingIndex); // Get the current song that just ended
+                        Song currentSong = managerQueue.get(currentlyPlayingIndex); // Get the current song that just ended
                         mMediaPlayer.reset(); // Reset the player first
                         Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
                         mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
@@ -419,11 +428,11 @@ public class MediaManager extends Service {
         return mPlaybackState;
     }
 
-    public Song getCurrent() {
-        return songFiles.get(currentlyPlayingIndex);
-    }
+//    public Song getCurrent() {
+//        return songFiles.get(currentlyPlayingIndex);
+//    }
 
-    public Song getCurrentQueue() { return managerQueue.get(currentlyPlayingIndex); }
+    public Song getCurrent() { return managerQueue.get(currentlyPlayingIndex) ; }
 
     public Song getNext() {
         Log.d("getNext()", "Running getNext()");
@@ -431,35 +440,46 @@ public class MediaManager extends Service {
         if (preferenceHelper.getShuffle()) {
             int newSong = currentlyPlayingIndex;
             while (newSong == currentlyPlayingIndex) {
-                newSong = shufflerRandomizer.nextInt(songFiles.size());
+                newSong = shufflerRandomizer.nextInt(managerQueue.size());
             }
             currentlyPlayingIndex = newSong;
         } else {
             currentlyPlayingIndex++;
-            if (currentlyPlayingIndex == songFiles.size()) {
+            if (currentlyPlayingIndex == managerQueue.size()) {
                 currentlyPlayingIndex = 0;
             }
         }
 
-        return songFiles.get(currentlyPlayingIndex);
+        return managerQueue.get(currentlyPlayingIndex);
     }
 
     public Song getPrevious() {
         if (preferenceHelper.getShuffle()) {
             int newSong = currentlyPlayingIndex;
             while (newSong == currentlyPlayingIndex) {
-                newSong = shufflerRandomizer.nextInt(songFiles.size());
+                newSong = shufflerRandomizer.nextInt(managerQueue.size());
             }
             currentlyPlayingIndex = newSong;
         } else {
             if (currentlyPlayingIndex == 0) {
-                currentlyPlayingIndex = songFiles.size();
+                currentlyPlayingIndex = managerQueue.size();
             } else {
                 currentlyPlayingIndex--;
             }
         }
 
-        return songFiles.get(currentlyPlayingIndex);
+        return managerQueue.get(currentlyPlayingIndex);
+    }
+
+    public void repeatAllOnQueue(Song currentSong) {
+        for (Song s : songFiles) {
+            if (s.getId() == currentSong.getId()) {
+                // Do nothing
+            } else {
+                // Add the song to the queue
+                managerQueue.add(s);
+            }
+        }
     }
 
     public RepeatState getRepeatState() {
@@ -471,9 +491,9 @@ public class MediaManager extends Service {
     }
 
     public void purgeSong(long songId) {
-        for (int i = 0; i < songFiles.size(); i++) {
-            if (songFiles.get(i).getId() == songId) {
-                songFiles.remove(i);
+        for (int i = 0; i < managerQueue.size(); i++) {
+            if (managerQueue.get(i).getId() == songId) {
+                managerQueue.remove(i);
                 break;
             }
         }

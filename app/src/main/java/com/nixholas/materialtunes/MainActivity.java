@@ -411,22 +411,31 @@ public class MainActivity extends AppCompatActivity {
     public void mediaControlsOnClickRepeat () {
         if (mediaManager.getRepeatState() == MediaManager.RepeatState.NOREPEAT) {
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
+
             // Next is repeat all..
             mediaManager.setRepeatState(MediaManager.RepeatState.REPEATALL);
             //Log.e("getmPlaybackState()", "Repeat All");
             buttonHelper.unGreyOut(mediaControls_Repeat);
+            preferenceHelper.setRepeat(1);
+
         } else if (mediaManager.getRepeatState() == MediaManager.RepeatState.REPEATALL) {
             mediaManager.mMediaPlayer.setLooping(true);
+
             // Next is repeat one only..
             //http://stackoverflow.com/questions/9461270/media-player-looping-android
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_24dp);
             mediaManager.setRepeatState(MediaManager.RepeatState.REPEATONE);
+            preferenceHelper.setRepeat(2);
+
         } else {
             mediaManager.mMediaPlayer.setLooping(false);
             mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
+
             // Next is repeat nothing..
             mediaManager.setRepeatState(MediaManager.RepeatState.NOREPEAT);
             buttonHelper.greyOut(mediaControls_Repeat);
+            preferenceHelper.setRepeat(0);
+
         }
     }
 

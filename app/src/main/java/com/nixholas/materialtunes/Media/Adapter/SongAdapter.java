@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
@@ -219,6 +220,12 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
                     //Log.e("LOG ", currentSong.getDataPath());
                     mediaManager.currentlyPlayingIndex = currentPosition;
                     Uri audioUri = Uri.parse("file://" + currentSong.getDataPath());
+
+                    if (preferenceHelper.getRepeat() == 1) { // We're repeating all
+                        // Add all the remaining songs to the queue and clear it as well
+                        mediaManager.managerQueue.clear();
+                        mediaManager.repeatAllOnQueue(currentSong);
+                    }
 
                     /*Uri sArtworkUri = Uri
                             .parse("content://media/external/audio/albumart");
