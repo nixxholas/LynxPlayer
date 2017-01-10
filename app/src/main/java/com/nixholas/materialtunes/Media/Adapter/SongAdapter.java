@@ -217,14 +217,25 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
 
                 try {
                     //Log.e("LOG ", currentSong.getDataPath());
-                    mediaManager.currentlyPlayingIndex = currentPosition;
+
+                    /**
+                     * This line breaks the Queue system.
+                     */
+                    //mediaManager.currentlyPlayingIndex = currentPosition;
+
                     Uri audioUri = Uri.parse("file://" + currentSong.getDataPath());
 
                     if (preferenceHelper.getRepeat() == 1) { // We're repeating all
                         // Add all the remaining songs to the queue and clear it as well
                         mediaManager.managerQueue.clear();
                         mediaManager.repeatAllOnQueue(currentSong);
+                    } else { // We're only repeating one so...
+                        // Just add the current song to the queue
+                        // The same goes for repeating none
+                        mediaManager.managerQueue.add(currentSong);
                     }
+
+                    mediaManager.currentlyPlayingIndex = mediaManager.managerQueue.indexOf(currentSong);
 
                     /*Uri sArtworkUri = Uri
                             .parse("content://media/external/audio/albumart");
