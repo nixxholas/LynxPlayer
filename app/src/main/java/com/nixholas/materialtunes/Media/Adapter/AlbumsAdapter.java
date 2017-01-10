@@ -96,7 +96,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                     .asBitmap()
                     .transcode(new PaletteBitmapTranscoder(context), PaletteBitmap.class)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .fitCenter().load(Uri.fromFile(new File(currentAlbum.getAlbumArtPath())))
+                    .fitCenter()
+                    .animate(R.anim.fadein)
+                    .load(Uri.fromFile(new File(currentAlbum.getAlbumArtPath())))
                     .into(new ImageViewTarget<PaletteBitmap>(holder.albumArt) {
                         @Override
                         protected void setResource(PaletteBitmap resource) {
@@ -127,6 +129,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                     .asBitmap()
                     .transcode(new PaletteBitmapTranscoder(context), PaletteBitmap.class)
                     .load(R.drawable.untitled_album)
+                    .animate(R.anim.fadein)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(new ImageViewTarget<PaletteBitmap>(holder.albumArt) {
                         @Override
