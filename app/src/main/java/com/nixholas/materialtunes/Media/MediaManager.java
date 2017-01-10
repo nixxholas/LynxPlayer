@@ -446,12 +446,14 @@ public class MediaManager extends Service {
     }
 
     public Song getNext() {
-        //Log.d("getNext()", "Running getNext()");
+        Log.d("getNext()", "Running getNext()");
 
         if (preferenceHelper.getShuffle()) {
             int newSong = currentlyPlayingIndex;
-            while (newSong == currentlyPlayingIndex) {
-                newSong = shufflerRandomizer.nextInt(managerQueue.size());
+            if (managerQueue.size() > 1) { // Don't let a Deadlock happen
+                while (newSong == currentlyPlayingIndex) {
+                    newSong = shufflerRandomizer.nextInt(managerQueue.size());
+                }
             }
             currentlyPlayingIndex = newSong;
         } else {
@@ -467,8 +469,10 @@ public class MediaManager extends Service {
     public Song getPrevious() {
         if (preferenceHelper.getShuffle()) {
             int newSong = currentlyPlayingIndex;
-            while (newSong == currentlyPlayingIndex) {
-                newSong = shufflerRandomizer.nextInt(managerQueue.size());
+            if (managerQueue.size() > 1) { // Don't let a Deadlock happen
+                while (newSong == currentlyPlayingIndex) {
+                    newSong = shufflerRandomizer.nextInt(managerQueue.size());
+                }
             }
             currentlyPlayingIndex = newSong;
         } else {
@@ -482,7 +486,15 @@ public class MediaManager extends Service {
         return managerQueue.get(currentlyPlayingIndex);
     }
 
-    public void repeatAllOnQueue(Song currentSong) {
+    /**
+     * This method is made such that all the songs are queued since the user is playing a song
+     * directly from the songs tab
+     * @param currentSong
+     */
+    public void putAllOnQueue(Song currentSong) {
+        // Let's first put the current song into the queue
+        managerQueue.add(currentSong);
+
         for (Song s : songFiles) {
             if (s.getId() == currentSong.getId()) {
                 // Do nothing

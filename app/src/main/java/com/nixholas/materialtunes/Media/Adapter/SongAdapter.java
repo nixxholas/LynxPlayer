@@ -225,16 +225,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
 
                     Uri audioUri = Uri.parse("file://" + currentSong.getDataPath());
 
-                    if (preferenceHelper.getRepeat() == 1) { // We're repeating all
-                        // Add all the remaining songs to the queue and clear it as well
-                        mediaManager.managerQueue.clear();
-                        mediaManager.repeatAllOnQueue(currentSong);
-                    } else { // We're only repeating one so...
-                        // Just add the current song to the queue
-                        // The same goes for repeating none
-                        mediaManager.managerQueue.add(currentSong);
-                    }
+                    // Add all the remaining songs to the queue and clear it as well
+                    mediaManager.managerQueue.clear();
+                    mediaManager.putAllOnQueue(currentSong);
 
+                    //Log.d("LOG Song Index: ", mediaManager.managerQueue.indexOf(currentSong) + "");
                     mediaManager.currentlyPlayingIndex = mediaManager.managerQueue.indexOf(currentSong);
 
                     /*Uri sArtworkUri = Uri
