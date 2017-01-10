@@ -43,6 +43,12 @@ public class AlbumActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            postponeEnterTransition();
+        } else {
+            supportPostponeEnterTransition();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.albumsfrag_expandedview); // Set the content view of course.
 
@@ -173,5 +179,13 @@ public class AlbumActivity extends AppCompatActivity {
 
         rVAdapter = new AlbumAdapter(mediaManager.getAlbumSongs(albumId), color, textColor);
         recyclerView.setAdapter(rVAdapter);
+
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            startPostponedEnterTransition();
+        } else {
+            supportStartPostponedEnterTransition();
         }
+
+    }
 }

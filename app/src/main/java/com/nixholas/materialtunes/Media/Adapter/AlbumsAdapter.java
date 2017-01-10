@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -174,8 +176,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
                 // Perform the necessary pairing
                 // http://xmodulo.com/activity-transition-animations-android.html
-                //Pair<View, String> imageView = new Pair<View, String>(holder.albumArt, v.getResources().getString(R.string.transition_album_image));
-                //Pair<View, String> titleView = new Pair<View, String>(holder.title, v.getResources().getString(R.string.transition_album_title));
+//                Pair<View, String> imageView = new Pair<View, String>(holder.albumArt, v.getResources().getString(R.string.transition_album_image));
+//                Pair<View, String> titleView = new Pair<View, String>(holder.title, v.getResources().getString(R.string.transition_album_title));
 
                 // We'll give the intent some data that it requires
                 intent.putExtra("albumId", currentAlbum.getId());
@@ -194,6 +196,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                     options = ActivityOptions
                             .makeClipRevealAnimation(v, 0, 0, w, h);
+
                 } else {
                     options =
                         ActivityOptions.makeSceneTransitionAnimation((Activity) context,
@@ -201,6 +204,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                                 transitionName    // The transitionName of the view we’re transitioning to
                         );
                 }
+
+                //                options =
+                //                        ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, imageView, titleView);
 
                 startActivity(context, intent, options.toBundle());
         }
