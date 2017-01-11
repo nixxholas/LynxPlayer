@@ -171,13 +171,13 @@ public class AlbumActivity extends AppCompatActivity {
                     });
         }
 
+        startPostponedEnterTransition();
+
         recyclerView = (FastScrollRecyclerView) findViewById(R.id.albumexpanded_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         rVAdapter = new AlbumAdapter(mediaManager.getAlbumSongs(albumId), color, textColor);
         recyclerView.setAdapter(rVAdapter);
-
-        startPostponedEnterTransition();
     }
 
 
