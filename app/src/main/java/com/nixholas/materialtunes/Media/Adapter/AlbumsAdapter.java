@@ -172,7 +172,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 // float maxRadius = (float) Math.sqrt(w * w / 4 + h * h / 4);
 
                 // http://stackoverflow.com/questions/2183962/how-to-read-value-from-string-xml-in-android
-                //String transitionName = v.getResources().getString(R.string.transition_album_cover);
+                String transitionName = v.getResources().getString(R.string.transition_album_cover);
 
                 // Perform the necessary pairing
                 // http://xmodulo.com/activity-transition-animations-android.html
