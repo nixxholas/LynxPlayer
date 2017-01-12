@@ -167,8 +167,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                  * http://stackoverflow.com/questions/27736848/cardview-animation-raise-and-expand-on-click
                  */
                 Intent intent = new Intent(v.getContext(), AlbumActivity.class);
-                int w = v.getWidth();
-                int h = v.getHeight();
+                //int w = v.getWidth();
+                //int h = v.getHeight();
                 // float maxRadius = (float) Math.sqrt(w * w / 4 + h * h / 4);
 
                 // http://stackoverflow.com/questions/2183962/how-to-read-value-from-string-xml-in-android
@@ -176,8 +176,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
                 // Perform the necessary pairing
                 // http://xmodulo.com/activity-transition-animations-android.html
-                Pair<View, String> imageView = new Pair<View, String>(holder.albumArt, v.getResources().getString(R.string.transition_album_image));
-                Pair<View, String> titleView = new Pair<View, String>(holder.title, v.getResources().getString(R.string.transition_album_title));
+//                Pair<View, String> imageView = new Pair<View, String>(holder.albumArt, v.getResources().getString(R.string.transition_album_image));
+//                Pair<View, String> titleView = new Pair<View, String>(holder.title, v.getResources().getString(R.string.transition_album_title));
 
                 // We'll give the intent some data that it requires
                 intent.putExtra("albumId", currentAlbum.getId());
@@ -193,20 +193,20 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                  */
                 ActivityOptionsCompat options;
 
-//                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-//                    options = ActivityOptions
-//                            .makeClipRevealAnimation(v, 0, 0, w, h);
-//
-//                } else {
-//                    options =
-//                        ActivityOptions.makeSceneTransitionAnimation((Activity) context,
-//                                v,   // The view which starts the transition
-//                                transitionName    // The transitionName of the view we’re transitioning to
-//                        );
-//                }
+                //                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                //                    options = ActivityOptions
+                //                            .makeClipRevealAnimation(v, 0, 0, w, h);
+                //
+                //                } else {
+                                    options =
+                                        ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,
+                                                v,   // The view which starts the transition
+                                                transitionName    // The transitionName of the view we’re transitioning to
+                                        );
+                //                }
 
-                                options =
-                                        ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, imageView, titleView);
+//                                options =
+//                                        ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, imageView, titleView);
 
                 startActivity(context, intent, options.toBundle());
         }
