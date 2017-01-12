@@ -12,48 +12,14 @@
     android:layout_height="match_parent"
     android:clickable="true">
 
-    <LinearLayout
-        android:id="@+id/slided_song_texts"
-        android:padding="@dimen/fragment_padding_topbottom"
-        android:background="@color/cardview_dark_background"
-        android:orientation="horizontal"
+    <!--http://stackoverflow.com/questions/26724247/how-to-position-an-imageview-on-top-of-a-linearlayout-with-->
+    <FrameLayout
+        android:id="@+id/slided_framelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/slided_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="@dimen/fragment_padding_topbottom"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_keyboard_arrow_down_white_36dp"/>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/slided_title"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:textColor="@android:color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/slided_artist"
-                android:textSize="13sp"
-                android:textColor="@android:color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <!--http://stackoverflow.com/questions/17499789/set-position-of-seekbar-below-an-image-view-->
-    <ImageView
+        <!--http://stackoverflow.com/questions/17499789/set-position-of-seekbar-below-an-image-view-->
+        <ImageView
             android:id="@+id/slided_image"
             android:adjustViewBounds="true"
             android:layout_width="match_parent"
@@ -63,8 +29,50 @@
             android:contentDescription="slided album art" />
 
         <LinearLayout
+            android:id="@+id/slided_song_texts"
+            android:padding="@dimen/fragment_padding_topbottom"
+            android:background="@color/cardview_dark_background"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/slided_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/fragment_padding_topbottom"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_keyboard_arrow_down_white_36dp"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/slided_title"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/slided_artist"
+                    android:textSize="13sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+        <LinearLayout
             android:id="@+id/media_controls_container"
-            android:layout_below="@id/slided_image"
+            android:layout_below="@id/slided_framelayout"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/ic_album_overflow_height"
