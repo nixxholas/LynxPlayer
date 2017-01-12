@@ -45,6 +45,7 @@ import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
 import static com.nixholas.materialtunes.Media.Entities.Utils.SongUtil.removeSong;
+import static com.nixholas.materialtunes.Utils.AlbumService.getAlbumArtUri;
 
 /**
  * Created by nixho on 03-Nov-16.
@@ -369,10 +370,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
     @Override
     public int getItemCount() {
         return mDataset.size();
-    }
-
-    public Uri getAlbumArtUri(long albumID) {
-        return ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), albumID);
     }
 
     public Bitmap getAlbumart(Long album_id)
