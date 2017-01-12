@@ -31,10 +31,11 @@
         <LinearLayout
             android:id="@+id/slided_song_texts"
             android:padding="@dimen/fragment_padding_topbottom"
-            android:background="@color/cardview_dark_background"
+            android:background="@android:color/transparent"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <ImageButton
                 android:id="@+id/slided_close"

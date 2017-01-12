@@ -190,6 +190,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                  * API Level 23 and above can be used for those OSes that are above API Level 23.
                  *
                  * http://stackoverflow.com/questions/38411878/how-do-i-create-the-marshmallow-open-activity-animation
+                 *
+                 * Important Post-ActivityOptionsCompat Guides
+                 * http://www.androiddesignpatterns.com/2015/03/activity-postponed-shared-element-transitions-part3b.html
                  */
                 ActivityOptionsCompat options;
 
