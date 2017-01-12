@@ -52,26 +52,31 @@
 
         From the link referencing StackOverFlow, gravity handles its children and
         layout_gravity handles itself.
+
+        It took me awhile to understand, and this also helped me along the way.
+        http://stackoverflow.com/questions/17580059/android-center-textview-in-linearlayout
         -->
     <LinearLayout
         android:id="@+id/slided_texts"
+        android:paddingTop="@dimen/card_padding_openSource"
         android:layout_below="@id/slided_framelayout"
         android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/slided_title"
             android:textStyle="bold"
-            android:textSize="15sp"
+            android:textSize="20sp"
             android:textColor="@android:color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/slided_artist"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textColor="@android:color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
