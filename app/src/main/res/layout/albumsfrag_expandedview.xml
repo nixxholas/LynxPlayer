@@ -72,17 +72,19 @@ http://www.mindgrub.com/blog/matt-stanford/implementing-collapsing-toolbar-andro
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/albumsfragment_padding_side">
+                android:padding="@dimen/card_padding_openSource">
 
                 <TextView
                     android:id="@+id/albumexpanded_title"
                     android:transitionName="@string/transition_album_title"
                     android:textStyle="bold"
+                    android:textSize="20sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/albumexpanded_artist"
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
