@@ -20,7 +20,7 @@
     <dimen name="albumsfragment_padding_topbottom">6dp</dimen>
 
     <!-- CardView in the Sliding Up Layout -->
-    <dimen name="slideduplayout_cardpadding">-8dp</dimen>
+    <dimen name="slideduplayout_cardpadding">-2dp</dimen>
 
     <dimen name="item_offset">10dp</dimen>
     <dimen name="detail_backdrop_height">250dp</dimen>
