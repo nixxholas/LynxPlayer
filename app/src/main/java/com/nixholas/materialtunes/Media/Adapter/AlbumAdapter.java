@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
+import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.slideAlbumArt;
@@ -73,7 +74,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         AlbumAdapter.ViewHolder vh = new AlbumAdapter.ViewHolder(v);
 
         // http://stackoverflow.com/questions/32136973/how-to-get-a-context-in-a-recycler-view-adapter
-        //context = parent.getContext();
+        context = parent.getContext();
 
         return vh;
     }
@@ -133,13 +134,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                     mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
                     slideSongTitle.setText(currentSong.getTitle());
                     slideSongArtist.setText(currentSong.getArtistName());
-                    Glide.with(context)
+                    Glide.with(getInstance().getApplicationContext())
                             .load(albumArtUri)
                             .asBitmap()
                             .placeholder(R.drawable.untitled_album)
                             .into(slideAlbumArt);
 
-                    Glide.with(context)
+                    Glide.with(getInstance().getApplicationContext())
                             .load(albumArtUri)
                             .asBitmap()
                             .placeholder(R.drawable.untitled_album)
@@ -193,12 +194,12 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                     mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
                     slideSongTitle.setText(currentSong.getTitle());
                     slideSongArtist.setText(currentSong.getArtistName());
-                    Glide.with(context)
+                    Glide.with(getInstance().getApplicationContext())
                             .load(albumArtUri)
                             .placeholder(R.drawable.untitled_album)
                             .into(slideAlbumArt);
 
-                    Glide.with(context)
+                    Glide.with(getInstance().getApplicationContext())
                             .load(albumArtUri)
                             .asBitmap()
                             .placeholder(R.drawable.untitled_album)
