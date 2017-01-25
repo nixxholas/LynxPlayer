@@ -72,6 +72,7 @@ public class MediaManager extends Service {
     private MediaSessionCompat mMediaSession;
     public MediaPlayer mMediaPlayer = new MediaPlayer();
     public RemoteControlReceiver remoteControlReceiver;
+    private MediaDB mediaDB;
 
     // MediaManager Sub Objects
     public boolean mediaPlayerIsPaused;
