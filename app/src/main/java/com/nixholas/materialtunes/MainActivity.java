@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -375,7 +376,8 @@ public class MainActivity extends AppCompatActivity {
      * @param v
      */
     public void slideButtonOnClick(View v) {
-        //Log.e("Slide Button", "Clicked");
+        Log.e("Slide Button", "Clicked");
+
         if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
             // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
             if (mediaManager.mediaPlayerIsPaused) { // If the current song is paused,
