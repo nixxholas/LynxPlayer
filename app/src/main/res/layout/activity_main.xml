@@ -118,25 +118,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
 
+                    <!-- http://stackoverflow.com/questions/2507798/prevent-textview-from-wrapping-in-parent -->
                     <TextView
                         android:id="@+id/slide_songtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
 
                     <TextView
                         android:id="@+id/slide_songartist"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
 
                 </LinearLayout>
 
                <!-- http://stackoverflow.com/questions/30959610/apply-material-design-touch-ripple-to-imagebutton-->
                 <ImageButton
                     android:id="@+id/slide_button"
+                    android:layout_toRightOf="@id/slide_texts"
                     android:src="@drawable/ic_play_arrow_black_24dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:layout_width="36dp"

@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.ParcelFileDescriptor;
@@ -239,7 +240,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
 
                     Uri albumArtUri = getAlbumArtUri(currentSong.getAlbumId());
 
-                        if (mediaManager.getmPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
+                        if (mediaManager.getmPlaybackState().getState() == PlaybackState.STATE_PLAYING) {
                             /**
                              * Under the hood changes
                              */
