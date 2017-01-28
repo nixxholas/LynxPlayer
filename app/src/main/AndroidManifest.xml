@@ -32,10 +32,13 @@
             </intent-filter>
         </activity>
 
+        <!-- android:configChanges
+        http://stackoverflow.com/questions/34455170/actionbaractivity-content-gets-reset-when-orientation-changed-drawerlayout-->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|screenLayout">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MUSIC_PLAYER" />
@@ -46,8 +49,10 @@
                 <data android:mimeType="audio/*" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".Fragments.FragmentItem.AlbumActivity" />
+        <activity android:name=".SettingsActivity"
+            android:configChanges="orientation|screenSize|screenLayout" />
+        <activity android:name=".Fragments.FragmentItem.AlbumActivity"
+            android:configChanges="orientation|screenSize|screenLayout" />
         <receiver android:name=".Notification.PersistentNotification"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
