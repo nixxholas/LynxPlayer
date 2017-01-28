@@ -80,7 +80,6 @@
                 android:id="@+id/slide_layout"
                 android:clipChildren="false"
                 android:layout_width="match_parent"
-                android:padding="0dp"
                 android:layout_height="68dp"
                 android:orientation="horizontal">
 
@@ -119,7 +118,7 @@
                     android:layout_height="match_parent">
 
                     <!-- http://stackoverflow.com/questions/2507798/prevent-textview-from-wrapping-in-parent -->
-                    <TextView
+                    <com.nixholas.materialtunes.UI.Text.SemiBoldTextView
                         android:id="@+id/slide_songtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -128,7 +127,7 @@
                         android:maxLines="1"
                         android:ellipsize="end"/>
 
-                    <TextView
+                    <com.nixholas.materialtunes.UI.Text.RegularTextView
                         android:id="@+id/slide_songartist"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -142,7 +141,6 @@
                <!-- http://stackoverflow.com/questions/30959610/apply-material-design-touch-ripple-to-imagebutton-->
                 <ImageButton
                     android:id="@+id/slide_button"
-                    android:layout_toRightOf="@id/slide_texts"
                     android:src="@drawable/ic_play_arrow_black_24dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:layout_width="36dp"
