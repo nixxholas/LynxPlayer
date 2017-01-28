@@ -356,11 +356,12 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                     .addAction(R.drawable.ic_skip_next_black_36dp, "Next", nextPendingIntent)     // #2
                                     .addAction(R.drawable.ic_close_black_36dp, "Close", dismissPendingIntent) // #3
                                     // Apply the media style template
-                                    .setStyle(new NotificationCompat.MediaStyle()
-                                            .setShowCancelButton(true)
-                                            .setCancelButtonIntent(dismissPendingIntent)
-                                            .setShowActionsInCompactView(1 /* #1: pause button */, 2, 3)
-                                            .setMediaSession(mediaManager.getMediaSessionToken()))
+//                                    .setStyle(new NotificationCompat.MediaStyle()
+//                                            .setShowCancelButton(true)
+//                                            .setCancelButtonIntent(dismissPendingIntent)
+//                                            .setShowActionsInCompactView(1 /* #1: pause button */, 2, 3)
+//                                            .setMediaSession(mediaManager.getMediaSessionToken()))
+                                    .setCustomContentView(normalView)
                                     .setCustomBigContentView(bigView)
                                     // Converting albumArtUri to a Bitmap directly
                                     // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
@@ -389,11 +390,12 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                     .addAction(R.drawable.ic_skip_next_black_36dp, "Next", nextPendingIntent)     // #2
                                     .addAction(R.drawable.ic_close_black_36dp, "Close", dismissPendingIntent) // #3
                                     // Apply the media style template
-                                    .setStyle(new NotificationCompat.MediaStyle()
-                                            .setShowCancelButton(true)
-                                            .setCancelButtonIntent(dismissPendingIntent)
-                                            .setShowActionsInCompactView(1 /* #1: pause button */, 2, 3)
-                                            .setMediaSession(mediaManager.getMediaSessionToken()))
+//                                    .setStyle(new NotificationCompat.MediaStyle()
+//                                            .setShowCancelButton(true)
+//                                            .setCancelButtonIntent(dismissPendingIntent)
+//                                            .setShowActionsInCompactView(1 /* #1: pause button */, 2, 3)
+//                                            .setMediaSession(mediaManager.getMediaSessionToken()))
+                                    .setCustomContentView(normalView)
                                     .setCustomBigContentView(bigView)
                                     // Converting albumArtUri to a Bitmap directly
                                     // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri

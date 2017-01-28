@@ -2,6 +2,7 @@ package com.nixholas.materialtunes.Media.Adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.graphics.Palette;
@@ -115,7 +116,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
             try {
                 Uri albumArtUri = getAlbumArtUri(currentSong.getAlbumId());
 
-                if (mediaManager.getmPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
+                if (mediaManager.getmPlaybackState().getState() == PlaybackState.STATE_PLAYING) {
                     /**
                      * Under the hood changes
                      */

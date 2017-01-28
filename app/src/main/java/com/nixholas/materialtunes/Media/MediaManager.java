@@ -5,12 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.Rating;
+import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.ResultReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.telephony.PhoneStateListener;
@@ -69,7 +72,8 @@ public class MediaManager extends Service {
 
     // Main Objects for MediaManager
     public AudioManager audioManager;
-    private MediaSessionCompat mMediaSession;
+    // MediaSession allows interaction with media controllers, volume keys, media buttons, and transport controls
+    //public MediaSession mMediaSession;
     public MediaPlayer mMediaPlayer = new MediaPlayer();
     public RemoteControlReceiver remoteControlReceiver;
     private MediaDB mediaDB;
@@ -78,7 +82,7 @@ public class MediaManager extends Service {
     public boolean mediaPlayerIsPaused;
     public RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
     private Random shufflerRandomizer;
-    private PlaybackStateCompat mPlaybackState;
+    private PlaybackState mPlaybackState;
     public int currentlyPlayingIndex;
 
     // MediaManager Resources
@@ -119,9 +123,9 @@ public class MediaManager extends Service {
 
     private Binder mBinder = new MediaManager.ServiceBinder();
 
-    public MediaSessionCompat.Token getMediaSessionToken() {
-        return mMediaSession.getSessionToken();
-    }
+//    public MediaSession.Token getMediaSessionToken() {
+//        return mMediaSession.getSessionToken();
+//    }
 
     public enum RepeatState {
         NOREPEAT,
@@ -132,6 +136,8 @@ public class MediaManager extends Service {
     public MediaManager(final MainActivity mainActivity) {
         //Log.e("onCreate: MediaManager", "Working");
         audioManager = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
+
+        mediaDB = new MediaDB(this); // Instantiate the SQLite Object
 
         /**
          * Temporary fix for AOBException for getCurrent
@@ -149,6 +155,8 @@ public class MediaManager extends Service {
                     mMediaPlayer.start();
                 } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
                     //A call is dialing, active or on hold
+                    // Phone is on idle, so we shall start playing.
+                    mMediaPlayer.start();
                 }
                 super.onCallStateChanged(state, incomingNumber);
             }
@@ -161,110 +169,178 @@ public class MediaManager extends Service {
 
         mediaPlayerIsPaused = false;
         shufflerRandomizer = new Random();
-        mPlaybackState = new PlaybackStateCompat.Builder()
-                .setState(PlaybackStateCompat.STATE_NONE, 0, 1.0f)
+        mPlaybackState = new PlaybackState.Builder()
+                .setState(PlaybackState.STATE_NONE, 0, 1.0f)
                 .build();
-        mMediaSession = new MediaSessionCompat(mainActivity, "mSession");
-        MediaSessionCompat.Callback mMediaSessionCallback = new MediaSessionCompat.Callback() {
-
-            @Override
-            public void onPlayFromSearch(String query, Bundle extras) {
-                Log.e("onPlayFromSearch", "Running");
-                //Uri uri = extras.getParcelable(PARAM_TRACK_URI);
-                //onPlayFromUri(uri, null);
-            }
-
-            @Override
-            public void onPlayFromUri(Uri uri, Bundle extras) {
-                try {
-                    Log.e("onPlayFromUri", "Running");
-
-                    switch (mPlaybackState.getState()) {
-                        case PlaybackState.STATE_PLAYING:
-                        case PlaybackState.STATE_PAUSED:
-                            mMediaPlayer.reset();
-                            mMediaPlayer.setDataSource(MediaManager.this, uri);
-                            mMediaPlayer.prepare();
-                            mPlaybackState = new PlaybackStateCompat.Builder()
-                                    .setState(PlaybackStateCompat.STATE_CONNECTING, 0, 1.0f)
-                                    .build();
-                            mMediaSession.setPlaybackState(mPlaybackState);
-                            break;
-                        case PlaybackState.STATE_NONE:
-                            mMediaPlayer.setDataSource(MediaManager.this, uri);
-                            mMediaPlayer.prepare();
-                            mPlaybackState = new PlaybackStateCompat.Builder()
-                                    .setState(PlaybackStateCompat.STATE_CONNECTING, 0, 1.0f)
-                                    .build();
-                            mMediaSession.setPlaybackState(mPlaybackState);
-                            break;
-
-                    }
-                } catch (IOException e) {
-
-                }
-
-            }
-
-            @Override
-            public void onPlay() {
-                Log.e("onPlay", "Running");
-                switch (mPlaybackState.getState()) {
-                    case PlaybackState.STATE_PAUSED:
-                        mMediaPlayer.start();
-                        mPlaybackState = new PlaybackStateCompat.Builder()
-                                .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1.0f)
-                                .build();
-                        mMediaSession.setPlaybackState(mPlaybackState);
-                        persistentNotif.updateNotification();
-                        break;
-
-                }
-            }
-
-            @Override
-            public void onPause() {
-                Log.e("onPause", "Running");
-                switch (mPlaybackState.getState()) {
-                    case PlaybackState.STATE_PLAYING:
-                        mMediaPlayer.pause();
-                        mPlaybackState = new PlaybackStateCompat.Builder()
-                                .setState(PlaybackStateCompat.STATE_PAUSED, 0, 1.0f)
-                                .build();
-                        mMediaSession.setPlaybackState(mPlaybackState);
-                        persistentNotif.updateNotification();
-                        break;
-
-                }
-            }
-
-            @Override
-            public void onRewind() {
-                Log.e("onRewind", "Running");
-                switch (mPlaybackState.getState()) {
-                    case PlaybackState.STATE_PLAYING:
-                        mMediaPlayer.seekTo(mMediaPlayer.getCurrentPosition() - 10000);
-                        break;
-
-                }
-            }
-
-            @Override
-            public void onFastForward() {
-                Log.e("onFastForward", "Running");
-                switch (mPlaybackState.getState()) {
-                    case PlaybackState.STATE_PLAYING:
-                        mMediaPlayer.seekTo(mMediaPlayer.getCurrentPosition() + 10000);
-                        break;
-                }
-            }
-        };
-
-        mMediaSession.setCallback(mMediaSessionCallback);
-        mMediaSession.setActive(true);
-        mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-        mMediaSession.setPlaybackState(mPlaybackState);
+//        mMediaSession = new MediaSession(mainActivity, "mSession");
+//
+//        mMediaSession.setCallback(new MediaSession.Callback() {
+//            @Override
+//            public void onCommand(String command, Bundle args, ResultReceiver cb) {
+//                super.onCommand(command, args, cb);
+//            }
+//
+//            @Override
+//            public boolean onMediaButtonEvent(Intent mediaButtonIntent) {
+//                return super.onMediaButtonEvent(mediaButtonIntent);
+//            }
+//
+//            @Override
+//            public void onPrepare() {
+//                super.onPrepare();
+//            }
+//
+//            @Override
+//            public void onPrepareFromMediaId(String mediaId, Bundle extras) {
+//                super.onPrepareFromMediaId(mediaId, extras);
+//            }
+//
+//            @Override
+//            public void onPrepareFromSearch(String query, Bundle extras) {
+//                Log.e("onPlayFromSearch", "Running");
+//                Uri uri = extras.getParcelable("PARAM_TRACK_URI");
+//                onPlayFromUri(uri, null);
+//            }
+//
+//            @Override
+//            public void onPrepareFromUri(Uri uri, Bundle extras) {
+//                super.onPrepareFromUri(uri, extras);
+//            }
+//
+//            @Override
+//            public void onPlay() {
+//                Log.e("onPlay", "Running");
+//                switch (mPlaybackState.getState()) {
+//                    case PlaybackState.STATE_PAUSED:
+//                        mMediaPlayer.start();
+//                        mPlaybackState = new PlaybackState.Builder()
+//                                .setState(PlaybackState.STATE_PLAYING, 0, 1.0f)
+//                                .build();
+//                        mMediaSession.setPlaybackState(mPlaybackState);
+//                        persistentNotif.updateNotification();
+//                        break;
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onPlayFromSearch(String query, Bundle extras) {
+//                super.onPlayFromSearch(query, extras);
+//            }
+//
+//            @Override
+//            public void onPlayFromMediaId(String mediaId, Bundle extras) {
+//                super.onPlayFromMediaId(mediaId, extras);
+//            }
+//
+//            @Override
+//            public void onPlayFromUri(Uri uri, Bundle extras) {
+//                try {
+//                    Log.e("onPlayFromUri", "Running");
+//
+//                    switch (mPlaybackState.getState()) {
+//                        case PlaybackState.STATE_PLAYING:
+//                        case PlaybackState.STATE_PAUSED:
+//                            mMediaPlayer.reset();
+//                            mMediaPlayer.setDataSource(MediaManager.this, uri);
+//                            mMediaPlayer.prepare();
+//                            mPlaybackState = new PlaybackState.Builder()
+//                                    .setState(PlaybackState.STATE_CONNECTING, 0, 1.0f)
+//                                    .build();
+//                            mMediaSession.setPlaybackState(mPlaybackState);
+//                            break;
+//                        case PlaybackState.STATE_NONE:
+//                            mMediaPlayer.setDataSource(MediaManager.this, uri);
+//                            mMediaPlayer.prepare();
+//                            mPlaybackState = new PlaybackState.Builder()
+//                                    .setState(PlaybackState.STATE_CONNECTING, 0, 1.0f)
+//                                    .build();
+//                            mMediaSession.setPlaybackState(mPlaybackState);
+//                            break;
+//
+//                    }
+//                } catch (IOException e) {
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onSkipToQueueItem(long id) {
+//                super.onSkipToQueueItem(id);
+//            }
+//
+//            @Override
+//            public void onPause() {
+//                Log.e("onPause", "Running");
+//                switch (mPlaybackState.getState()) {
+//                    case PlaybackState.STATE_PLAYING:
+//                        mMediaPlayer.pause();
+//                        mPlaybackState = new PlaybackState.Builder()
+//                                .setState(PlaybackState.STATE_PAUSED, 0, 1.0f)
+//                                .build();
+//                        mMediaSession.setPlaybackState(mPlaybackState);
+//                        persistentNotif.updateNotification();
+//                        break;
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onSkipToNext() {
+//                super.onSkipToNext();
+//            }
+//
+//            @Override
+//            public void onSkipToPrevious() {
+//                super.onSkipToPrevious();
+//            }
+//
+//            @Override
+//            public void onFastForward() {
+//                Log.e("onFastForward", "Running");
+//                switch (mPlaybackState.getState()) {
+//                    case PlaybackState.STATE_PLAYING:
+//                        mMediaPlayer.seekTo(mMediaPlayer.getCurrentPosition() + 10000);
+//                        break;
+//                }
+//            }
+//
+//            @Override
+//            public void onRewind() {
+//                Log.e("onRewind", "Running");
+//                switch (mPlaybackState.getState()) {
+//                    case PlaybackState.STATE_PLAYING:
+//                        mMediaPlayer.seekTo(mMediaPlayer.getCurrentPosition() - 10000);
+//                        break;
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onStop() {
+//                super.onStop();
+//            }
+//
+//            @Override
+//            public void onSeekTo(long pos) {
+//                super.onSeekTo(pos);
+//            }
+//
+//            @Override
+//            public void onSetRating(Rating rating) {
+//                super.onSetRating(rating);
+//            }
+//
+//            @Override
+//            public void onCustomAction(String action, Bundle extras) {
+//                super.onCustomAction(action, extras);
+//            }
+//        });
+//
+//        mMediaSession.setActive(true);
+//        mMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS |
+//                MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+//        mMediaSession.setPlaybackState(mPlaybackState);
 
         /**
          * Some management methods for the MediaPlayer Object
@@ -280,10 +356,10 @@ public class MediaManager extends Service {
                     }
 
                     mediaPlayer.start();
-                    mPlaybackState = new PlaybackStateCompat.Builder()
-                            .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1.0f)
+                    mPlaybackState = new PlaybackState.Builder()
+                            .setState(PlaybackState.STATE_PLAYING, 0, 1.0f)
                             .build();
-                    mMediaSession.setPlaybackState(mPlaybackState);
+                    //mMediaSession.setPlaybackState(mPlaybackState);
 
                     // Get a handler that can be used to post to the main thread
                     // http://stackoverflow.com/questions/11123621/running-code-in-main-thread-from-another-thread
@@ -389,10 +465,10 @@ public class MediaManager extends Service {
                         Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
                         mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
 
-                        mPlaybackState = new PlaybackStateCompat.Builder()
-                                .setState(PlaybackStateCompat.STATE_NONE, 0, 1.0f)
+                        mPlaybackState = new PlaybackState.Builder()
+                                .setState(PlaybackState.STATE_NONE, 0, 1.0f)
                                 .build();
-                        mMediaSession.setPlaybackState(mPlaybackState);
+                        //mMediaSession.setPlaybackState(mPlaybackState);
 
                         // Update the UI
                         slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
@@ -429,7 +505,7 @@ public class MediaManager extends Service {
         return mBinder;
     }
 
-    public PlaybackStateCompat getmPlaybackState() {
+    public PlaybackState getmPlaybackState() {
         return mPlaybackState;
     }
 
