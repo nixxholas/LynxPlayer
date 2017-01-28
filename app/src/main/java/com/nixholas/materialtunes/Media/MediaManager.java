@@ -1,8 +1,11 @@
 package com.nixholas.materialtunes.Media;
 
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.Rating;
@@ -37,6 +40,7 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import static android.provider.BaseColumns._ID;
 import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
@@ -51,6 +55,10 @@ import static com.nixholas.materialtunes.MainActivity.slided_SongTitle;
 import static com.nixholas.materialtunes.MainActivity.slidingSeekBar;
 import static com.nixholas.materialtunes.MainActivity.slidingUpPanelLayout;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
+import static com.nixholas.materialtunes.Utils.DBConstants.ALBUM;
+import static com.nixholas.materialtunes.Utils.DBConstants.COUNT;
+import static com.nixholas.materialtunes.Utils.DBConstants.MEDIACOUNT_TABLE;
+import static com.nixholas.materialtunes.Utils.DBConstants.TITLE;
 
 /**
  * Created by nixho on 02-Nov-16.
@@ -137,7 +145,7 @@ public class MediaManager extends Service {
         //Log.e("onCreate: MediaManager", "Working");
         audioManager = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
 
-        mediaDB = new MediaDB(this); // Instantiate the SQLite Object
+        mediaDB = new MediaDB(mainActivity.getApplicationContext()); // Instantiate the SQLite Object
 
         /**
          * Temporary fix for AOBException for getCurrent
@@ -444,6 +452,16 @@ public class MediaManager extends Service {
                     mainHandler.post(progressRunnable);
 
                 persistentNotif.updateNotification();
+
+                // Finally, bump the counter in the SQLite table
+
+                // Debugging Purposes Only
+//                Log.d("checkWithDB on " + getCurrent().getTitle(),
+//                        checkWithDB(getCurrent().getAlbumId(), getCurrent().getTitle()) + "");
+//
+//                if (!checkWithDB(getCurrent().getAlbumId(), getCurrent().getTitle())) {
+//                    newCountToDB(getCurrent().getAlbumId(), getCurrent().getTitle());
+//                }
             }
         });
 
@@ -636,4 +654,32 @@ public class MediaManager extends Service {
 
         return false;
     }
+
+    private void newCountToDB(long album, String title) {
+        SQLiteDatabase db = mediaDB.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COUNT, 1);
+        values.put(ALBUM, album);
+        values.put(TITLE, title);
+        db.insertOrThrow(MEDIACOUNT_TABLE, null, values);
+        db.close();
+    }
+
+    private boolean checkWithDB(long album, String title) {
+        SQLiteDatabase db = mediaDB.getReadableDatabase();
+        // http://stackoverflow.com/questions/9280692/android-sqlite-select-query
+        Cursor c = db.rawQuery("SELECT " + COUNT + " FROM " + MEDIACOUNT_TABLE
+                + " WHERE " + TITLE + " = '" + title + "'"
+                + " AND " + ALBUM + " = "+ album, null);
+        if (c.moveToFirst()) {
+            c.close();
+            db.close();
+            return true;
+        } else {
+            c.close();
+            db.close();
+            return false;
+        }
+    }
+
 }

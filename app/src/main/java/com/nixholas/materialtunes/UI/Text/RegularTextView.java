@@ -34,7 +34,7 @@ public class RegularTextView extends TextView {
     }
 
     private void init() {
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Montserrat-Regular.ttf");
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Poppins-Regular.ttf");
         setTypeface(tf);
     }
 }

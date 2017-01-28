@@ -31,7 +31,7 @@ public class SemiBoldTextView extends TextView {
     }
 
     private void init() {
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Montserrat-SemiBold.ttf");
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Poppins-SemiBold.ttf");
         setTypeface(tf);
     }
 }

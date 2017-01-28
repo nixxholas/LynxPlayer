@@ -7,10 +7,10 @@ import android.provider.BaseColumns;
  */
 
 public interface DBConstants extends BaseColumns {
-    public static final String TABLE_NAME = "medialog";
+    public static final String MEDIACOUNT_TABLE = "mediacount";
 
     // columns
-    public static final String TIME = "time";
+    public static final String ALBUM = "album";
     public static final String TITLE = "title";
     public static final String COUNT = "count";
 }
