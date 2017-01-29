@@ -180,7 +180,7 @@ public class MediaDB extends SQLiteOpenHelper{
         SQLiteDatabase db = getReadableDatabase();
         HashMap<Long, Long> mediaCount = new HashMap<>();
 
-        String countAndId = "SELECT" + MEDIASTOREID + ", " + PLAYCOUNT
+        String countAndId = "SELECT " + MEDIASTOREID + ", " + PLAYCOUNT
                 + " FROM " + MEDIACOUNT_TABLE;
 
         Cursor c = db.rawQuery(countAndId, null);
