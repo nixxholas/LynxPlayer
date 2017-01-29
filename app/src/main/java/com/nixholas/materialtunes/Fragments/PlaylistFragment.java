@@ -1,6 +1,9 @@
 package com.nixholas.materialtunes.Fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -69,6 +72,11 @@ public class PlaylistFragment extends Fragment {
 
                 // Update the counts first
                 mediaManager.updateAllPlayCount();
+
+                // Launch the activity
+                Intent intent = new Intent(v.getContext(), MostPlayedActivity.class);
+
+                startActivity(intent);
             }
         });
 

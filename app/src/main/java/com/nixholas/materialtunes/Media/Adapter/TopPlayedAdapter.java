@@ -22,7 +22,6 @@ import java.util.ArrayList;
 public class TopPlayedAdapter extends RecyclerView.Adapter<TopPlayedAdapter.ViewHolder> {
     private ArrayList<Song> mDataset;
     private Context context;
-    int color, textColor;
 
     class ViewHolder extends RecyclerView.ViewHolder {
         public View v;
@@ -37,10 +36,8 @@ public class TopPlayedAdapter extends RecyclerView.Adapter<TopPlayedAdapter.View
         }
     }
 
-    public TopPlayedAdapter(ArrayList<Song> mDataset, int color, int textColor) {
+    public TopPlayedAdapter(ArrayList<Song> mDataset) {
         this.mDataset = mDataset;
-        this.color = color;
-        this.textColor = textColor;
     }
 
     @Override
