@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!-- A CardView that contains a TextView -->
+    <!--http://stackoverflow.com/questions/26997109/setting-elevation-in-xml-on-appcompat-cardview-on-android-5-0-->
+    <!--http://stackoverflow.com/questions/26961147/touch-feedback-with-recyclerview-and-cardview-->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:stateListAnimator="@anim/lift_on_touch"
+    android:id="@+id/topplayeditem_layout"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="85dp"
+    android:foreground="?android:attr/selectableItemBackground">
+
+        <!--
+            Using Horizontal Layout to properly align the views
+        http://stackoverflow.com/questions/10829835/right-align-button-in-horizontal-linearlayout -->
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <!-- http://stackoverflow.com/questions/35157145/aligning-text-view-below-text-view-in-card-view-->
+                <LinearLayout
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:layout_marginLeft="@dimen/fab_margin"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/topplayeditem_title"
+                        android:textStyle="bold"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/topplayeditem_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/topplayeditem_options"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|end"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/appbar_padding_top"
+                android:layout_marginRight="@dimen/appbar_padding_top"
+                android:src="@drawable/ic_more_vert_black_24dp"
+                tools:ignore="RtlHardcoded" />
+
+        </RelativeLayout >
+
+</RelativeLayout>
