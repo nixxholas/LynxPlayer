@@ -12,7 +12,9 @@ import com.nixholas.materialtunes.Media.Entities.Song;
 import java.lang.reflect.Array;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.provider.BaseColumns._ID;
 import static com.nixholas.materialtunes.Utils.DBConstants.MEDIACOUNT_TABLE;
@@ -172,5 +174,25 @@ public class MediaDB extends SQLiteOpenHelper{
         }
 
         return topPlayedId;
+    }
+
+    public HashMap<Long, Long> retrieveCountFromDB() {
+        SQLiteDatabase db = getReadableDatabase();
+        HashMap<Long, Long> mediaCount = new HashMap<>();
+
+        String countAndId = "SELECT" + MEDIASTOREID + ", " + PLAYCOUNT
+                + " FROM " + MEDIACOUNT_TABLE;
+
+        Cursor c = db.rawQuery(countAndId, null);
+
+        // Loop throughout all of the results and add it to the topPlayed ArrayList
+        if (c.moveToFirst()) {
+            do {
+                // Add to the hashmap
+                mediaCount.put(c.getLong(0), c.getLong(1));
+            } while (c.moveToNext());
+        }
+
+        return mediaCount;
     }
 }

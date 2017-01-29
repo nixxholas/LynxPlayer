@@ -668,6 +668,12 @@ public class MediaManager extends Service {
             topPlayed.clear();
         }
 
+        HashMap<Long, Long> count = mediaDB.retrieveCountFromDB();
+        // Then we update the the database with the songfiles
+        for (Song s : songFiles) {
+            s.setCount(count.get(s.getId()));
+        }
+
         // Finally, update the playlist via the Database
         for (Long mediaStoreId : mediaDB.retrieveTopPlayed()) {
             for (Song s : songFiles) {
@@ -678,4 +684,11 @@ public class MediaManager extends Service {
         }
     }
 
+    public void updateAllPlayCount() {
+        HashMap<Long, Long> count = mediaDB.retrieveCountFromDB();
+
+        for (Song s : songFiles) {
+            s.setCount(count.get(s.getId()));
+        }
+    }
 }

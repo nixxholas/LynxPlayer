@@ -66,6 +66,9 @@ public class PlaylistFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // We'll have to launch a fragment for the most played
+
+                // Update the counts first
+                mediaManager.updateAllPlayCount();
             }
         });
 
