@@ -196,7 +196,19 @@ public class MainActivity extends AppCompatActivity {
                 mediaControlsOnClickRepeat();
             }
         });
-        buttonHelper.greyOut(mediaControls_Repeat);
+
+        switch (preferenceHelper.getRepeat()) {
+            case 0: // Repeat None
+                buttonHelper.greyOut(mediaControls_Repeat);
+                break;
+            case 1: // Repeat All
+                // Don't have to greyout
+                break;
+            case 2: // Repeat One Only
+                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_48dp);
+                break;
+        }
+
 
         // Setup the MediaManager and hide the sliding bar if the MediaManager is null.
         //        if (mediaManager == null) {
