@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 /**

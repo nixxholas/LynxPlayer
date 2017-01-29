@@ -692,7 +692,9 @@ public class MediaManager extends Service {
 
         if (!count.isEmpty()) {
             for (Song s : songFiles) {
-                s.setCount(count.get(s.getId()));
+                if (count.containsKey(s.getId())) {
+                    s.setCount(count.get(s.getId()));
+                }
             }
         } else {
             Toast.makeText(MainActivity.getInstance(), "No Data Found for Play Count.", Toast.LENGTH_SHORT).show();
