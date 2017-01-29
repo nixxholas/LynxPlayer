@@ -53,6 +53,8 @@
             android:configChanges="orientation|screenSize|screenLayout" />
         <activity android:name=".Fragments.FragmentItem.AlbumActivity"
             android:configChanges="orientation|screenSize|screenLayout" />
+        <activity android:name=".Fragments.MostPlayedActivity"
+            android:configChanges="orientation|screenSize|screenLayout" />
         <receiver android:name=".Notification.PersistentNotification"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
