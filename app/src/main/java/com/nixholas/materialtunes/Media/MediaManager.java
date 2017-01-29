@@ -23,6 +23,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Album;
@@ -687,8 +688,12 @@ public class MediaManager extends Service {
     public void updateAllPlayCount() {
         HashMap<Long, Long> count = mediaDB.retrieveCountFromDB();
 
-        for (Song s : songFiles) {
-            s.setCount(count.get(s.getId()));
+        if (!count.isEmpty()) {
+            for (Song s : songFiles) {
+                s.setCount(count.get(s.getId()));
+            }
+        } else {
+            Toast.makeText(this, "No Data Found for Play Count.", Toast.LENGTH_SHORT).show();
         }
     }
 }
