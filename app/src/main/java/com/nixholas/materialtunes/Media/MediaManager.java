@@ -115,6 +115,7 @@ public class MediaManager extends Service {
     public ArrayList<Song> songFiles = new ArrayList<>();
     public ArrayList<Album> albumFiles = new ArrayList<>();
     public ArrayList<Playlist> playLists = new ArrayList<>();
+    public ArrayList<Song> topPlayed = new ArrayList<>();
 
     // Playlist Helper
     public PlaylistUtil playlistUtil = new PlaylistUtil();
@@ -465,7 +466,10 @@ public class MediaManager extends Service {
                 } else {
                     // Since it exists, give it's row an increment in the playcount column
                     Log.d("mediaDBCheck", "This song exists in the DB");
+                    mediaDB.incrementMediaCount(getCurrent());
                 }
+
+                updateTopPlayed(); // finally, update the top played list
             }
         });
 
@@ -657,6 +661,21 @@ public class MediaManager extends Service {
         }
 
         return false;
+    }
+
+    public void updateTopPlayed() {
+        if (!topPlayed.isEmpty()) { // Clear the list first before we repopulate.
+            topPlayed.clear();
+        }
+
+        // Finally, update the playlist via the Database
+        for (Long mediaStoreId : mediaDB.retrieveTopPlayed()) {
+            for (Song s : songFiles) {
+                if (mediaStoreId == s.getId()) {
+                    topPlayed.add(s);
+                }
+            }
+        }
     }
 
 }
