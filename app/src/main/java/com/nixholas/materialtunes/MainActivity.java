@@ -221,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
         //        }
 
         mediaManager = new MediaManager(this);
+        mediaManager.initializeMediaDB(this);
         finalMain = this;
 
         // Setup the notifications

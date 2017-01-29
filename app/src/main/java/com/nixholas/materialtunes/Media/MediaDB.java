@@ -9,10 +9,12 @@ import android.util.Log;
 
 import com.nixholas.materialtunes.Media.Entities.Song;
 
+import java.util.HashMap;
+
 import static android.provider.BaseColumns._ID;
-import static com.nixholas.materialtunes.Utils.DBConstants.ALBUM;
-import static com.nixholas.materialtunes.Utils.DBConstants.COUNT;
+import static com.nixholas.materialtunes.Utils.DBConstants.ALBUMTITLE;
 import static com.nixholas.materialtunes.Utils.DBConstants.MEDIACOUNT_TABLE;
+import static com.nixholas.materialtunes.Utils.DBConstants.PLAYCOUNT;
 import static com.nixholas.materialtunes.Utils.DBConstants.TITLE;
 
 /**
@@ -21,7 +23,7 @@ import static com.nixholas.materialtunes.Utils.DBConstants.TITLE;
 
 public class MediaDB extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "MaterialTunes";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     public MediaDB(Context ctx) {
         super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,8 +34,8 @@ public class MediaDB extends SQLiteOpenHelper{
         Log.d("MediaDB", "onCreate");
         db.execSQL("CREATE TABLE " + MEDIACOUNT_TABLE + " (" + _ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COUNT + "INTEGER, "
-                + ALBUM + "INTEGER, "
+                + PLAYCOUNT + "INTEGER, "
+                + ALBUMTITLE + "TEXT, "
                 + TITLE + " TEXT NOT NULL);");
     }
 
@@ -49,8 +51,8 @@ public class MediaDB extends SQLiteOpenHelper{
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COUNT, song.getCount()); // Song Play Count
-        values.put(ALBUM, song.getAlbumId()); // Album ID
+        values.put(PLAYCOUNT, song.getCount()); // Song Play Count
+        values.put(ALBUMTITLE, song.getAlbumName()); // Album ID
         values.put(TITLE, song.getTitle()); // Song Title
 
         // Inserting Row
@@ -58,12 +60,12 @@ public class MediaDB extends SQLiteOpenHelper{
         db.close(); // Closing database connection
     }
 
-    public long retrieveSongCount(long albumId, String songTitle) {
-        SQLiteDatabase db = this.getReadableDatabase();
+    public long retrieveSongCount(String albumTitle, String songTitle) {
+        SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(MEDIACOUNT_TABLE, new String[]{ _ID,
-                TITLE, ALBUM, COUNT}, TITLE + "=?, " + ALBUM + "=?",
-        new String[]{songTitle, String.valueOf(albumId)}, null, null, null, null);
+                TITLE, ALBUMTITLE, PLAYCOUNT}, TITLE + "=?, " + ALBUMTITLE + "=?",
+        new String[]{songTitle, albumTitle}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
@@ -72,4 +74,41 @@ public class MediaDB extends SQLiteOpenHelper{
     }
 
 
+    public void newCountToDB(String albumTitle, String title) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(PLAYCOUNT, 1);
+        values.put(ALBUMTITLE, albumTitle);
+        values.put(TITLE, title);
+        db.insertOrThrow(MEDIACOUNT_TABLE, null, values);
+        db.close();
+    }
+
+    public boolean checkMediaCountIfExists(String albumTitle, String title) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        // Check if table has any rows first
+        String count = "SELECT count(*) FROM " + MEDIACOUNT_TABLE;
+        Cursor mcursor = db.rawQuery(count, null);
+
+        mcursor.moveToFirst();
+        int tableCount = mcursor.getInt(0);
+        if (tableCount > 0) {
+            // http://stackoverflow.com/questions/9280692/android-sqlite-select-query
+            Cursor c = db.rawQuery("SELECT " + _ID + " FROM " + MEDIACOUNT_TABLE
+                    + " WHERE " + TITLE + " = '" + title + "'"
+                    + " AND " + ALBUMTITLE + " = '"+ albumTitle + "'", null);
+            if (c.moveToFirst()) {
+                c.close();
+                db.close();
+                return true;
+            } else {
+                c.close();
+                db.close();
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }
