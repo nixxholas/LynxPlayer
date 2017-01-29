@@ -10,7 +10,7 @@ public interface DBConstants extends BaseColumns {
     public static final String MEDIACOUNT_TABLE = "mediacount";
 
     // columns
-    public static final String ALBUMTITLE = "albumtitle";
+    public static final String MEDIASTOREID = "mediastoreid";
     public static final String TITLE = "title";
     public static final String PLAYCOUNT = "playcount";
 }

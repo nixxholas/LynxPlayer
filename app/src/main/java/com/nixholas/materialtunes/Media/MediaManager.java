@@ -456,12 +456,14 @@ public class MediaManager extends Service {
                 // Finally, bump the counter in the SQLite table
 
                 // Debugging Purposes Only
-                Log.d("checkWithDB on " + getCurrent().getTitle(),
-                        mediaDB.checkMediaCountIfExists(getCurrent().getAlbumName(), getCurrent().getTitle()) + "");
-//
-//                if (!checkWithDB(getCurrent().getAlbumId(), getCurrent().getTitle())) {
-//                    newCountToDB(getCurrent().getAlbumId(), getCurrent().getTitle());
-//                }
+                // Log.d("checkWithDB on " + getCurrent().getTitle(),
+                // mediaDB.checkMediaCountIfExists(getCurrent().getId(), getCurrent().getTitle()) + "");
+
+                if (!mediaDB.checkMediaCountIfExists(getCurrent().getId(), getCurrent().getTitle())) {
+                    mediaDB.addSongToMediaCount(getCurrent());
+                } else {
+                    // Since it exists, give it's row an increment in the playcount column
+                }
             }
         });
 

@@ -12,8 +12,8 @@ import com.nixholas.materialtunes.Media.Entities.Song;
 import java.util.HashMap;
 
 import static android.provider.BaseColumns._ID;
-import static com.nixholas.materialtunes.Utils.DBConstants.ALBUMTITLE;
 import static com.nixholas.materialtunes.Utils.DBConstants.MEDIACOUNT_TABLE;
+import static com.nixholas.materialtunes.Utils.DBConstants.MEDIASTOREID;
 import static com.nixholas.materialtunes.Utils.DBConstants.PLAYCOUNT;
 import static com.nixholas.materialtunes.Utils.DBConstants.TITLE;
 
@@ -23,7 +23,7 @@ import static com.nixholas.materialtunes.Utils.DBConstants.TITLE;
 
 public class MediaDB extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "MaterialTunes";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     public MediaDB(Context ctx) {
         super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,7 +35,7 @@ public class MediaDB extends SQLiteOpenHelper{
         db.execSQL("CREATE TABLE " + MEDIACOUNT_TABLE + " (" + _ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + PLAYCOUNT + "INTEGER, "
-                + ALBUMTITLE + "TEXT, "
+                + MEDIASTOREID + "INTEGER, "
                 + TITLE + " TEXT NOT NULL);");
     }
 
@@ -52,7 +52,7 @@ public class MediaDB extends SQLiteOpenHelper{
 
         ContentValues values = new ContentValues();
         values.put(PLAYCOUNT, song.getCount()); // Song Play Count
-        values.put(ALBUMTITLE, song.getAlbumName()); // Album ID
+        values.put(MEDIASTOREID, song.getAlbumName()); // Album Name
         values.put(TITLE, song.getTitle()); // Song Title
 
         // Inserting Row
@@ -60,12 +60,16 @@ public class MediaDB extends SQLiteOpenHelper{
         db.close(); // Closing database connection
     }
 
-    public long retrieveSongCount(String albumTitle, String songTitle) {
+    public void incrementMediaCount(Song song) {
+
+    }
+
+    public long retrieveSongCount(long mediaStoreId, String songTitle) {
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(MEDIACOUNT_TABLE, new String[]{ _ID,
-                TITLE, ALBUMTITLE, PLAYCOUNT}, TITLE + "=?, " + ALBUMTITLE + "=?",
-        new String[]{songTitle, albumTitle}, null, null, null, null);
+                TITLE, MEDIASTOREID, PLAYCOUNT}, TITLE + "=?, " + MEDIASTOREID + "=?",
+        new String[]{songTitle, String.valueOf(mediaStoreId)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
@@ -74,17 +78,17 @@ public class MediaDB extends SQLiteOpenHelper{
     }
 
 
-    public void newCountToDB(String albumTitle, String title) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(PLAYCOUNT, 1);
-        values.put(ALBUMTITLE, albumTitle);
-        values.put(TITLE, title);
-        db.insertOrThrow(MEDIACOUNT_TABLE, null, values);
-        db.close();
-    }
+//    public void newCountToDB(String albumTitle, String title) {
+//        SQLiteDatabase db = getWritableDatabase();
+//        ContentValues values = new ContentValues();
+//        values.put(PLAYCOUNT, 1);
+//        values.put(ALBUMTITLE, albumTitle);
+//        values.put(TITLE, title);
+//        db.insertOrThrow(MEDIACOUNT_TABLE, null, values);
+//        db.close();
+//    }
 
-    public boolean checkMediaCountIfExists(String albumTitle, String title) {
+    public boolean checkMediaCountIfExists(long mediaStoreId, String title) {
         SQLiteDatabase db = getWritableDatabase();
 
         // Check if table has any rows first
@@ -94,11 +98,12 @@ public class MediaDB extends SQLiteOpenHelper{
         mcursor.moveToFirst();
         int tableCount = mcursor.getInt(0);
         if (tableCount > 0) {
+            mcursor.close();
             // Finally, check if the actual song exists
             // http://stackoverflow.com/questions/9280692/android-sqlite-select-query
             Cursor c = db.rawQuery("SELECT " + _ID + " FROM " + MEDIACOUNT_TABLE
                     + " WHERE " + TITLE + " = '" + title + "'"
-                    + " AND " + ALBUMTITLE + " = '"+ albumTitle + "'", null);
+                    + " AND " + MEDIASTOREID + " = "+ mediaStoreId, null);
             if (c.moveToFirst()) {
                 c.close();
                 db.close();
@@ -109,6 +114,8 @@ public class MediaDB extends SQLiteOpenHelper{
                 return false;
             }
         } else {
+            mcursor.close();
+            db.close();
             return false;
         }
     }
