@@ -26,8 +26,9 @@ public class TopPlayedAdapter extends RecyclerView.Adapter<TopPlayedAdapter.View
         TextView title, count;
         RelativeLayout currentLayout;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
+        public ViewHolder(View v) {
+            super(v);
+            this.v = v;
             this.currentLayout = (RelativeLayout) v.findViewById(R.id.topplayeditem_layout);
             this.title = (TextView) v.findViewById(R.id.topplayeditem_title);
             this.count = (TextView) v.findViewById(R.id.topplayeditem_count);

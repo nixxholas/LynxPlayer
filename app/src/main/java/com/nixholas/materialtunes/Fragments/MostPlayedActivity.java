@@ -48,6 +48,7 @@ public class MostPlayedActivity extends AppCompatActivity {
         recyclerView = (FastScrollRecyclerView) findViewById(R.id.mostplayed_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        mediaManager.updateTopPlayed();
         rVAdapter = new TopPlayedAdapter(mediaManager.topPlayed);
         recyclerView.setAdapter(rVAdapter);
     }

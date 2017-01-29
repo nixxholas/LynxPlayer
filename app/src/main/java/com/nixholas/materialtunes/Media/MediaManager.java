@@ -664,6 +664,7 @@ public class MediaManager extends Service {
         return false;
     }
 
+    // Updates the songFiles and the topPlayed
     public void updateTopPlayed() {
         if (!topPlayed.isEmpty()) { // Clear the list first before we repopulate.
             topPlayed.clear();
@@ -687,6 +688,7 @@ public class MediaManager extends Service {
         }
     }
 
+    // Updates the songFiles
     public void updateAllPlayCount() {
         HashMap<Long, Long> count = mediaDB.retrieveCountFromDB();
 
