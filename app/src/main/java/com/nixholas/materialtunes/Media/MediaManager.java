@@ -693,7 +693,7 @@ public class MediaManager extends Service {
                 s.setCount(count.get(s.getId()));
             }
         } else {
-            Toast.makeText(this, "No Data Found for Play Count.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.getInstance(), "No Data Found for Play Count.", Toast.LENGTH_SHORT).show();
         }
     }
 }
