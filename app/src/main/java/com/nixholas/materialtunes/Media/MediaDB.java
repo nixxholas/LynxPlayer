@@ -23,7 +23,7 @@ import static com.nixholas.materialtunes.Utils.DBConstants.TITLE;
 
 public class MediaDB extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "MaterialTunes";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     public MediaDB(Context ctx) {
         super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
@@ -94,6 +94,7 @@ public class MediaDB extends SQLiteOpenHelper{
         mcursor.moveToFirst();
         int tableCount = mcursor.getInt(0);
         if (tableCount > 0) {
+            // Finally, check if the actual song exists
             // http://stackoverflow.com/questions/9280692/android-sqlite-select-query
             Cursor c = db.rawQuery("SELECT " + _ID + " FROM " + MEDIACOUNT_TABLE
                     + " WHERE " + TITLE + " = '" + title + "'"
