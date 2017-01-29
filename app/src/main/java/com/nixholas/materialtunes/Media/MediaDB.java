@@ -10,6 +10,7 @@ import android.util.Log;
 import com.nixholas.materialtunes.Media.Entities.Song;
 
 import java.lang.reflect.Array;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +60,9 @@ public class MediaDB extends SQLiteOpenHelper{
             ContentValues values = new ContentValues();
             values.put(PLAYCOUNT, song.getCount()); // Song Play Count
             values.put(MEDIASTOREID, song.getId()); // Song's MediaStore Id
-            values.put(TITLE, song.getTitle()); // Song Title
+
+            String title = song.getTitle().replaceAll("([^a-zA-Z0-9])", "\\$1");
+            values.put(TITLE, title); // Song Title
 
             // Inserting Row
             db.insert(MEDIACOUNT_TABLE, null, values);
@@ -75,7 +78,7 @@ public class MediaDB extends SQLiteOpenHelper{
         // http://stackoverflow.com/questions/25149580/sql-server-existing-column-and-value-incrementing
         String increment = "UPDATE " + MEDIACOUNT_TABLE
                 + " SET " + PLAYCOUNT + " = " + PLAYCOUNT + " + 1 "
-                + "WHERE " + TITLE + " = '" + song.getTitle() + "' "
+                + "WHERE " + TITLE + " = '" + song.getTitle().replaceAll("([^a-zA-Z0-9])", "\\$1") + "' "
                 + "AND " + MEDIASTOREID + " = " + song.getId();
 
         db.execSQL(increment);
@@ -116,6 +119,10 @@ public class MediaDB extends SQLiteOpenHelper{
         int tableCount = mcursor.getInt(0);
         if (tableCount > 0) {
             mcursor.close();
+
+            // Perform a string check
+            title = title.replaceAll("([^a-zA-Z0-9])", "\\$1");
+
             // Finally, check if the actual song exists
             // http://stackoverflow.com/questions/9280692/android-sqlite-select-query
             Cursor c = db.rawQuery("SELECT " + _ID + " FROM " + MEDIACOUNT_TABLE
