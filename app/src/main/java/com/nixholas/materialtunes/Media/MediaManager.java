@@ -672,7 +672,9 @@ public class MediaManager extends Service {
         HashMap<Long, Long> count = mediaDB.retrieveCountFromDB();
         // Then we update the the database with the songfiles
         for (Song s : songFiles) {
-            s.setCount(count.get(s.getId()));
+            if (count.containsKey(s.getId())) {
+                s.setCount(count.get(s.getId()));
+            }
         }
 
         // Finally, update the playlist via the Database

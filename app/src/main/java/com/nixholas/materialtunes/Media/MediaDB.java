@@ -189,6 +189,8 @@ public class MediaDB extends SQLiteOpenHelper{
         if (c.moveToFirst()) {
             do {
                 // Add to the hashmap
+                Log.d("Column 0 ", c.getLong(0) + "");
+                Log.d("Column 1 ", c.getLong(1) + "");
                 mediaCount.put(c.getLong(0), c.getLong(1));
             } while (c.moveToNext());
         }
