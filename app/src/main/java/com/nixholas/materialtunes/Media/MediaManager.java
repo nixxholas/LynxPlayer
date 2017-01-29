@@ -460,9 +460,11 @@ public class MediaManager extends Service {
                 // mediaDB.checkMediaCountIfExists(getCurrent().getId(), getCurrent().getTitle()) + "");
 
                 if (!mediaDB.checkMediaCountIfExists(getCurrent().getId(), getCurrent().getTitle())) {
+                    Log.d("mediaDBCheck", "This song does not exist in the DB");
                     mediaDB.addSongToMediaCount(getCurrent());
                 } else {
                     // Since it exists, give it's row an increment in the playcount column
+                    Log.d("mediaDBCheck", "This song exists in the DB");
                 }
             }
         });
