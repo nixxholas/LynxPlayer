@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        SlidingBarUpdater.updateSlideBar(getApplicationContext());
+        SlidingBarUpdater.updateSlideBar(this);
     }
 
 
