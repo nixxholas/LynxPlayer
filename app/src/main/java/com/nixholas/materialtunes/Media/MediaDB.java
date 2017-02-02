@@ -9,12 +9,9 @@ import android.util.Log;
 
 import com.nixholas.materialtunes.Media.Entities.Song;
 
-import java.lang.reflect.Array;
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static android.provider.BaseColumns._ID;
 import static com.nixholas.materialtunes.Utils.DBConstants.MEDIACOUNT_TABLE;

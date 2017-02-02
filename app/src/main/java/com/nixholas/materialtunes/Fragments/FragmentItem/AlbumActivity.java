@@ -22,7 +22,6 @@ import com.nixholas.materialtunes.Media.Adapter.AlbumAdapter;
 import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmap;
 import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmapTranscoder;
-import com.nixholas.materialtunes.Utils.PreferencesExample;
 import com.nixholas.materialtunes.Utils.TextColorHelper;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
