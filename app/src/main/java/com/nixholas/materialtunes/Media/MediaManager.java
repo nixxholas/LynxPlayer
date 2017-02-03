@@ -69,7 +69,7 @@ public class MediaManager extends Service {
     public AudioManager audioManager;
     // MediaSession allows interaction with media controllers, volume keys, media buttons, and transport controls
     //public MediaSession mMediaSession;
-    public MediaPlayer mMediaPlayer = new MediaPlayer();
+    public final MediaPlayer mMediaPlayer = new MediaPlayer();
     public RemoteControlReceiver remoteControlReceiver;
     private MediaDB mediaDB;
 
@@ -416,7 +416,7 @@ public class MediaManager extends Service {
                             }
                             mainHandler.postDelayed(this, 1000);*/
 
-                                if (mediaManager.mMediaPlayer != null) {
+                                if (mMediaPlayer != null) {
                                     // http://stackoverflow.com/questions/35027321/seek-bar-and-media-player-and-a-time-of-a-track
                                     //set seekbar progress
                                     slidingSeekBar.setProgress(mMediaPlayer.getCurrentPosition());

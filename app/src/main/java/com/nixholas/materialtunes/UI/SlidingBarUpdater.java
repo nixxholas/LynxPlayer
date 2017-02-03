@@ -9,12 +9,14 @@ import android.support.v7.graphics.Palette;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 
 import java.util.concurrent.TimeUnit;
 
 import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
+import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_Shuffle;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
@@ -35,7 +37,7 @@ import static com.nixholas.materialtunes.MainActivity.slidingSeekBar;
  */
 
 public class SlidingBarUpdater {
-    public static void updateSlideBar(Context context) {
+    public static void updateSlideBar(MainActivity mainActivity) {
         ButtonHelper buttonHelper = new ButtonHelper();
         Song currentSong = mediaManager.getCurrent();
 
@@ -48,13 +50,13 @@ public class SlidingBarUpdater {
 
         // Collapsed View Layout
         // http://stackoverflow.com/questions/32136973/how-to-get-a-context-in-a-recycler-view-adapter
-        Glide.with(context)
+        Glide.with(mainActivity.getApplicationContext())
                 .load(albumArtUri)
                 .asBitmap()
                 .placeholder(R.drawable.untitled_album)
                 .into(slideAlbumArt);
 
-        Glide.with(context)
+        Glide.with(mainActivity.getApplicationContext())
                 .load(albumArtUri)
                 .asBitmap()
                 .placeholder(R.drawable.untitled_album)
@@ -121,7 +123,6 @@ public class SlidingBarUpdater {
         } else {
             buttonHelper.unGreyOut(mediaControls_Shuffle);
         }
-
 
     }
 }
