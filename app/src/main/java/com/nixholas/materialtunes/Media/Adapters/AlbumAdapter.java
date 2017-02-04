@@ -1,10 +1,9 @@
-package com.nixholas.materialtunes.Media.Adapter;
+package com.nixholas.materialtunes.Media.Adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.session.PlaybackState;
 import android.net.Uri;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
-import com.nixholas.materialtunes.Utils.PreferenceHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;

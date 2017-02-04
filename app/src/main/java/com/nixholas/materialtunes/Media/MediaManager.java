@@ -69,7 +69,7 @@ public class MediaManager extends Service {
     public AudioManager audioManager;
     // MediaSession allows interaction with media controllers, volume keys, media buttons, and transport controls
     //public MediaSession mMediaSession;
-    public final MediaPlayer mMediaPlayer = new MediaPlayer();
+    public MediaPlayer mMediaPlayer;
     public RemoteControlReceiver remoteControlReceiver;
     private MediaDB mediaDB;
 
@@ -133,11 +133,16 @@ public class MediaManager extends Service {
         mediaDB = new MediaDB(context);
     }
 
+    public MediaManager() {} // Don't use this at all please, it's pointless, like your life lol.
+
     public MediaManager(final MainActivity mainActivity) {
         //Log.e("onCreate: MediaManager", "Working");
         audioManager = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
 
         //mediaDB = new MediaDB(mainActivity.getApplicationContext()); // Instantiate the SQLite Object
+
+        // Instantiate the MediaPlayer Object
+        mMediaPlayer = new MediaPlayer();
 
         /**
          * Temporary fix for AOBException for getCurrent

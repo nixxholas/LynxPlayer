@@ -1,4 +1,4 @@
-package com.nixholas.materialtunes.Media.Adapter;
+package com.nixholas.materialtunes.Media.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

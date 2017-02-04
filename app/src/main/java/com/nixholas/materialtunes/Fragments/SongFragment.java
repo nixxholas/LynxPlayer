@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nixholas.materialtunes.Media.Adapter.SongAdapter;
+import com.nixholas.materialtunes.Media.Adapters.SongAdapter;
 import com.nixholas.materialtunes.R;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;

@@ -1,7 +1,6 @@
 package com.nixholas.materialtunes;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -32,7 +31,7 @@ import android.widget.Toast;
 import com.nixholas.materialtunes.Fragments.AlbumFragment;
 import com.nixholas.materialtunes.Fragments.PlaylistFragment;
 import com.nixholas.materialtunes.Fragments.SongFragment;
-import com.nixholas.materialtunes.Media.Adapter.DataAdapter;
+import com.nixholas.materialtunes.Media.Adapters.DataAdapter;
 import com.nixholas.materialtunes.Media.MediaManager;
 import com.nixholas.materialtunes.Notification.PersistentNotification;
 import com.nixholas.materialtunes.UI.CustomSlidingUpLayout;

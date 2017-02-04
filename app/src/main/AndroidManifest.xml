@@ -36,13 +36,13 @@
         http://stackoverflow.com/questions/34455170/actionbaractivity-content-gets-reset-when-orientation-changed-drawerlayout-->
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTop"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize|screenLayout">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MUSIC_PLAYER" />
-
                 <category android:name="android.intent.category.APP_MUSIC" />
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -61,6 +61,12 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".Media.MediaManager"
+            android:enabled="true"
+            android:process=":materialtunes"
+            android:exported="false"/>
     </application>
 
 </manifest>

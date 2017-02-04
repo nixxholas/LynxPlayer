@@ -1,4 +1,4 @@
-package com.nixholas.materialtunes.Media.Adapter;
+package com.nixholas.materialtunes.Media.Adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
