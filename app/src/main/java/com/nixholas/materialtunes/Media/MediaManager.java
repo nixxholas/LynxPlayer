@@ -697,4 +697,16 @@ public class MediaManager extends Service {
             Toast.makeText(MainActivity.getInstance(), "No Data Found for Play Count.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void purgeMediaplayer() {
+        if (mMediaPlayer != null) { // Check first
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.pause();
+                mMediaPlayer.stop();
+                mMediaPlayer.reset();
+            } else {
+                mMediaPlayer.reset();
+            }
+        }
+    }
 }

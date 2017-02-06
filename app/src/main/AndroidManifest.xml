@@ -49,7 +49,8 @@
                 <data android:mimeType="audio/*" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity"
+        <activity
+            android:name=".SettingsActivity"
             android:configChanges="orientation|screenSize|screenLayout" />
         <activity android:name=".Fragments.FragmentItem.AlbumActivity"
             android:configChanges="orientation|screenSize|screenLayout" />
