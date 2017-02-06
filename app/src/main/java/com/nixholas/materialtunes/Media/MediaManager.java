@@ -701,8 +701,8 @@ public class MediaManager extends Service {
     public void purgeMediaplayer() {
         if (mMediaPlayer != null) { // Check first
             if (mMediaPlayer.isPlaying()) {
-                mMediaPlayer.pause();
-                mMediaPlayer.stop();
+                //mMediaPlayer.pause();
+                //mMediaPlayer.stop();
                 mMediaPlayer.reset();
             } else {
                 mMediaPlayer.reset();

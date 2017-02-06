@@ -182,7 +182,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
         bigView.setOnClickPendingIntent(R.id.notibig_layout,
                 PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
                                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
-                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT));
+                        PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
     @Override
@@ -235,7 +235,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
         bigView.setOnClickPendingIntent(R.id.notibig_layout,
                 PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
                                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
-                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT));
+                        PendingIntent.FLAG_UPDATE_CURRENT));
         normalView.setOnClickPendingIntent(R.id.noti_dismiss,
                 getPendingSelfIntent(mContext, NOTIF_DISMISS));
 
