@@ -10,24 +10,24 @@ import com.github.paolorotolo.appintro.AppIntro2;
 import com.nixholas.materialtunes.Fragments.IntroFragment;
 import com.nixholas.materialtunes.Utils.PreferenceHelper;
 
+import static com.nixholas.materialtunes.MainActivity.getInstance;
+import static com.nixholas.materialtunes.MainActivity.mDataAdapter;
+import static com.nixholas.materialtunes.MainActivity.preferenceHelper;
+
 /**
  * Created by nixho on 10-Nov-16.
  */
 
 public class IntroActivity extends AppIntro2 {
-    // Permanent Entities
-    public static PreferenceHelper preferenceHelper;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferenceHelper = new PreferenceHelper(getApplicationContext());
 
-        if (preferenceHelper.getIntroDone()) {
-            // Let's end this and go straight to the Main Activity
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        }
+//        if (preferenceHelper.getIntroDone()) {
+//            // Let's end this and go straight to the Main Activity
+//            startActivity(new Intent(this, MainActivity.class));
+//            finish();
+//        }
 
         // Add your slide fragments here.
         // AppIntro will automatically generate the dots indicator and buttons.
@@ -81,6 +81,7 @@ public class IntroActivity extends AppIntro2 {
          *  to face this nonsense again
          */
         preferenceHelper.setIntroDone(true);
+        mDataAdapter.run();
 
         // Do something when users tap on Done button.
         Intent mainIntent = new Intent(this, MainActivity.class);

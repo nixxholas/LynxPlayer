@@ -37,9 +37,9 @@ import com.nixholas.materialtunes.Notification.PersistentNotification;
 import com.nixholas.materialtunes.UI.CustomSlidingUpLayout;
 import com.nixholas.materialtunes.UI.SlidingBarUpdater;
 import com.nixholas.materialtunes.UI.ButtonHelper;
+import com.nixholas.materialtunes.Utils.PreferenceHelper;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPrevious;
@@ -54,6 +54,9 @@ import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnC
 public class MainActivity extends AppCompatActivity {
     // Protected Entities
     ButtonHelper buttonHelper = new ButtonHelper();
+
+    // Permanent Entities
+    public static PreferenceHelper preferenceHelper;
 
     // Sliding Up Bar
     public static ImageView slideAlbumArt;
@@ -111,6 +114,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        preferenceHelper = new PreferenceHelper(getApplicationContext());
+
+        if (!preferenceHelper.getIntroDone()) {
+            Intent intent = new Intent(this, IntroActivity.class);
+            startActivity(intent);
+        }
+
         // Request for proper permissions first
         // https://developer.android.com/training/permissions/requesting.html
         ActivityCompat.requestPermissions(this,
@@ -254,7 +264,10 @@ public class MainActivity extends AppCompatActivity {
                 // result of the request.
             }
         }
-        mDataAdapter.run();
+
+        if (preferenceHelper.getIntroDone()) {
+            mDataAdapter.run();
+        }
 
         mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
@@ -322,6 +335,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("onResume(): ", "is running");
 
+        if (preferenceHelper.getIntroDone())
         SlidingBarUpdater.updateSlideBar(finalMain);
     }
 

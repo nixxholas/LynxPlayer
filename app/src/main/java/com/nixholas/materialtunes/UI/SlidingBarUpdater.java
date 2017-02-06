@@ -15,11 +15,11 @@ import com.nixholas.materialtunes.R;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_Shuffle;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Maximum;
+import static com.nixholas.materialtunes.MainActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.slideAlbumArt;
 import static com.nixholas.materialtunes.MainActivity.slideButton;
 import static com.nixholas.materialtunes.MainActivity.slideSongArtist;
