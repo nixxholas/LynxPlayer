@@ -11,5 +11,4 @@ public class AlbumService {
     public static Uri getAlbumArtUri(long albumID) {
         return ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), albumID);
     }
-
 }

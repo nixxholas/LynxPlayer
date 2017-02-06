@@ -60,7 +60,6 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
     Intent pauseIntent;
     Intent nextIntent;
     Intent dismissIntent;
-    //Intent launchIntent;
 
     static PendingIntent prevPendingIntent;
     static PendingIntent pausePendingIntent;
@@ -110,6 +109,9 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
         normalView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_normal);
         bigView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_big);
+
+        // Setup the normalView Static Contents
+        normalView.setImageViewResource(R.id.noti_dismiss, R.drawable.ic_close_black_36dp);
 
         // Setup the BigView Static Contents
         bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
@@ -422,6 +424,9 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                     .build();
                         }
 
+                        bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
+                                color[0]);
+
                         mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
 
                         mNotificationManager.notify(NOTIFICATION_ID, mNotification); // Notify the app to notify the system
@@ -525,7 +530,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 mNotificationManager.cancel(255);
                 //mediaManager.mMediaPlayer.release();
                 mediaManager.purgeMediaplayer();
-                
+
                 // Kill the whole app to give the user all the processing space we took
                 // http://stackoverflow.com/questions/3105673/how-to-kill-an-application-with-all-its-activities
                 //android.os.Process.killProcess(android.os.Process.myPid());
