@@ -128,8 +128,9 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 //        bigView.setOnClickPendingIntent(R.id.notibig_layout,
 //                getPendingSelfIntent(mContext, NOTIF_LAUNCH));
         bigView.setOnClickPendingIntent(R.id.notibig_layout,
-                PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class),
-                        PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_UPDATE_CURRENT));
+                PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                        PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
     public PersistentNotification(Context mContext, View parentView) {
@@ -175,7 +176,9 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
         bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
                 getPendingSelfIntent(mContext, NOTIF_DISMISS));
         bigView.setOnClickPendingIntent(R.id.notibig_layout,
-                getPendingSelfIntent(mContext, NOTIF_LAUNCH));
+                PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT));
     }
 
     @Override
@@ -226,7 +229,9 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
         bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
                 getPendingSelfIntent(mContext, NOTIF_DISMISS));
         bigView.setOnClickPendingIntent(R.id.notibig_layout,
-                getPendingSelfIntent(mContext, NOTIF_LAUNCH));
+                PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT));
         normalView.setOnClickPendingIntent(R.id.noti_image_end,
                 getPendingSelfIntent(mContext, NOTIF_DISMISS));
 
@@ -464,10 +469,11 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 getPendingSelfIntent(mContext, NOTIF_NEXT));
         bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
                 getPendingSelfIntent(mContext, NOTIF_DISMISS));
-//        bigView.setOnClickPendingIntent(R.id.notibig_layout,
-//                getPendingSelfIntent(mContext, NOTIF_LAUNCH));
+        // bigView.setOnClickPendingIntent(R.id.notibig_layout,
+        //       getPendingSelfIntent(mContext, NOTIF_LAUNCH));
         bigView.setOnClickPendingIntent(R.id.notibig_layout,
-                PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class),
+                PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT));
 
 
@@ -530,13 +536,13 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
             case NOTIF_LAUNCH:
                 //Intent mainIntent = new Intent(context, MainActivity.class);
-                //mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                // mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 // http://stackoverflow.com/questions/5029354/how-can-i-programmatically-open-close-notifications-in-android
                 //Intent closeIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
 
-                //mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // http://stackoverflow.com/questions/3689581/calling-startactivity-from-outside-of-an-activity
-                //context.sendBroadcast(closeIntent);
-                //mContext.startActivity(mainIntent);
+                // mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // http://stackoverflow.com/questions/3689581/calling-startactivity-from-outside-of-an-activity
+                // context.sendBroadcast(closeIntent);
+                // mContext.startActivity(mainIntent);
                 break;
 
             default:
