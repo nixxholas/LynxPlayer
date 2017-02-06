@@ -8,6 +8,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.RequiresApi;
@@ -23,6 +24,7 @@ import com.bumptech.glide.request.target.Target;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
+import com.nixholas.materialtunes.Utils.SwatchEnum;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;
@@ -75,6 +77,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
     private final Context mContext = MainActivity.getInstance();
     private NotificationManager mNotificationManager;
     private Notification mNotification;
+    private SwatchEnum backgroundSwatchEnum = SwatchEnum.NULL; // Initialize with null first
 
     // NormalView Widgets
 
@@ -233,7 +236,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
                                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT));
-        normalView.setOnClickPendingIntent(R.id.noti_image_end,
+        normalView.setOnClickPendingIntent(R.id.noti_dismiss,
                 getPendingSelfIntent(mContext, NOTIF_DISMISS));
 
         // Debugging Album Art
@@ -329,10 +332,14 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
                                                 if (swatch != null) {
                                                     color[0] = swatch.getRgb();
+                                                    backgroundSwatchEnum = SwatchEnum.VIBRANT;
                                                 } else {
                                                     Palette.Swatch mutedSwatch = p.getMutedSwatch();
                                                     if (mutedSwatch != null) {
                                                         color[0] = mutedSwatch.getRgb();
+                                                        backgroundSwatchEnum = SwatchEnum.DULL;
+                                                    } else {
+                                                        backgroundSwatchEnum = SwatchEnum.NULL;
                                                     }
                                                 }
 
@@ -424,8 +431,80 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                     .build();
                         }
 
-                        bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
-                                color[0]);
+                        /**
+                         * Now we'll need to set the colors appropriately
+                         */
+
+                        switch (backgroundSwatchEnum) {
+                            case VIBRANT: // If it's vibrant
+                                // The icons need to be bright
+                                // Setup the BigView Static Contents
+                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_white_36dp);
+                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_white_36dp);
+                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_white_36dp);
+
+                                if (mediaManager.mMediaPlayer.isPlaying()) {
+                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_white_36dp);
+                                } else {
+                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_white_36dp);
+                                }
+
+                                bigView.setInt(R.id.notibig_title, "setTextColor",
+                                        Color.WHITE);
+                                bigView.setInt(R.id.notibig_artist, "setTextColor",
+                                        Color.parseColor("#40FFFFFF"));
+                                bigView.setInt(R.id.notibig_album, "setTextColor",
+                                        Color.parseColor("#40FFFFFF"));
+
+                                bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
+                                        color[0]);
+                                break;
+                            case DULL: // If it's dull
+                                // The icons need to be dark
+                                // Setup the BigView Static Contents
+                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
+                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
+                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
+
+                                if (mediaManager.mMediaPlayer.isPlaying()) {
+                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
+                                } else {
+                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
+                                }
+
+                                bigView.setInt(R.id.notibig_title, "setTextColor",
+                                        Color.BLACK);
+                                bigView.setInt(R.id.notibig_artist, "setTextColor",
+                                        Color.parseColor("#40000000"));
+                                bigView.setInt(R.id.notibig_album, "setTextColor",
+                                        Color.parseColor("#40000000"));
+
+                                bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
+                                        color[0]);
+                                break;
+                            default: // Includes SwatchEnum.NULL
+                                // Setup the BigView Static Contents
+                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
+                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
+                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
+
+                                bigView.setInt(R.id.notibig_title, "setTextColor",
+                                        Color.BLACK);
+                                bigView.setInt(R.id.notibig_artist, "setTextColor",
+                                        Color.GRAY);
+                                bigView.setInt(R.id.notibig_album, "setTextColor",
+                                        Color.GRAY);
+
+                                if (mediaManager.mMediaPlayer.isPlaying()) {
+                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
+                                } else {
+                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
+                                }
+
+                                bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
+                                        Color.WHITE);
+                                break;
+                        }
 
                         mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
 
