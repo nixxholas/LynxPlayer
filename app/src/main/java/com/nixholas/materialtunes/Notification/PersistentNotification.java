@@ -46,7 +46,6 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
     private static final String NOTIF_PLAYPAUSE = "NOTI_PLAYPAUSE";
     private static final String NOTIF_NEXT = "NOTI_NEXT";
     private static final String NOTIF_DISMISS = "NOTI_DISMISS";
-    private static final String NOTIF_LAUNCH = "NOTI_LAUNCH";
 
     // Action Integers
     private static final int NOTI_PREV = 1;
@@ -125,8 +124,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 getPendingSelfIntent(mContext, NOTIF_NEXT));
         bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
                 getPendingSelfIntent(mContext, NOTIF_DISMISS));
-//        bigView.setOnClickPendingIntent(R.id.notibig_layout,
-//                getPendingSelfIntent(mContext, NOTIF_LAUNCH));
+        // http://stackoverflow.com/questions/9214715/notifcation-launches-multiple-instances-of-activities
         bigView.setOnClickPendingIntent(R.id.notibig_layout,
                 PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
                                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
@@ -175,6 +173,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 getPendingSelfIntent(mContext, NOTIF_NEXT));
         bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
                 getPendingSelfIntent(mContext, NOTIF_DISMISS));
+        // http://stackoverflow.com/questions/9214715/notifcation-launches-multiple-instances-of-activities
         bigView.setOnClickPendingIntent(R.id.notibig_layout,
                 PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
                                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
@@ -469,8 +468,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 getPendingSelfIntent(mContext, NOTIF_NEXT));
         bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
                 getPendingSelfIntent(mContext, NOTIF_DISMISS));
-        // bigView.setOnClickPendingIntent(R.id.notibig_layout,
-        //       getPendingSelfIntent(mContext, NOTIF_LAUNCH));
+        // http://stackoverflow.com/questions/9214715/notifcation-launches-multiple-instances-of-activities
         bigView.setOnClickPendingIntent(R.id.notibig_layout,
                 PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
@@ -527,24 +525,11 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 mNotificationManager.cancel(255);
                 //mediaManager.mMediaPlayer.release();
                 mediaManager.purgeMediaplayer();
-
-
+                
                 // Kill the whole app to give the user all the processing space we took
                 // http://stackoverflow.com/questions/3105673/how-to-kill-an-application-with-all-its-activities
                 //android.os.Process.killProcess(android.os.Process.myPid());
                 break;
-
-            case NOTIF_LAUNCH:
-                //Intent mainIntent = new Intent(context, MainActivity.class);
-                // mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                // http://stackoverflow.com/questions/5029354/how-can-i-programmatically-open-close-notifications-in-android
-                //Intent closeIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-
-                // mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // http://stackoverflow.com/questions/3689581/calling-startactivity-from-outside-of-an-activity
-                // context.sendBroadcast(closeIntent);
-                // mContext.startActivity(mainIntent);
-                break;
-
             default:
                 break;
         }
