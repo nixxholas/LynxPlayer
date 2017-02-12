@@ -1,4 +1,4 @@
-package com.nixholas.materialtunes.Media.Adapters;
+package com.nixholas.materialtunes.Fragments.Adapters;
 
 import android.app.Activity;
 import android.content.Context;

@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nixholas.materialtunes.Media.Adapters.PlaylistAdapter;
+import com.nixholas.materialtunes.Fragments.Adapters.PlaylistAdapter;
 import com.nixholas.materialtunes.R;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;

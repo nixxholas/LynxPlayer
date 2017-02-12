@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.nixholas.materialtunes.Media.Adapters.TopPlayedAdapter;
+import com.nixholas.materialtunes.Fragments.Adapters.TopPlayedAdapter;
 import com.nixholas.materialtunes.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 

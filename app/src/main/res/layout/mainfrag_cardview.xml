@@ -90,7 +90,7 @@
 
     </RelativeLayout>
 
-    <View
+    <!--<View
         android:id="@+id/mainfrag_songview_separator"
         android:layout_marginLeft="105dp"
         android:layout_marginRight="15dp"
@@ -98,6 +98,6 @@
         android:layout_marginBottom="2dp"
         android:layout_width="match_parent"
         android:layout_height="12dp"
-        android:background="#80696969"/>
+        android:background="#80696969"/>-->
 
     </LinearLayout>

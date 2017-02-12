@@ -8,8 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nixholas.materialtunes.Media.Adapters.SongAdapter;
+import com.nixholas.materialtunes.Fragments.Adapters.SongAdapter;
 import com.nixholas.materialtunes.R;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 
@@ -48,6 +49,7 @@ public class SongFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.main_RecyclerView);
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
 
         /**
          * User Interface Initialization
