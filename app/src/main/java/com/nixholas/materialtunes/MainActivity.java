@@ -37,6 +37,7 @@ import com.nixholas.materialtunes.Notification.PersistentNotification;
 import com.nixholas.materialtunes.UI.CustomSlidingUpLayout;
 import com.nixholas.materialtunes.UI.SlidingBarUpdater;
 import com.nixholas.materialtunes.UI.ButtonHelper;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
@@ -270,8 +271,9 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+        SmartTabLayout tabLayout = (SmartTabLayout) findViewById(R.id.tabs);
+        tabLayout.setViewPager(mViewPager);
+        //tabLayout.setupWithViewPager(mViewPager);
 
         slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
