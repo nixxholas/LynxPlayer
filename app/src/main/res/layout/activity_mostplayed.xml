@@ -12,7 +12,7 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/mostplayed_toolbar"
-            android:title="Most Played"
+            android:subtitle="Most Played"
             android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"

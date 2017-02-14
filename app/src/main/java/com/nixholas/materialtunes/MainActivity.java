@@ -182,8 +182,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mediaControls_Shuffle = (ImageButton) findViewById(R.id.media_controls_shuffle);
-        if (preferenceHelper.getShuffle()) {
-            mediaControls_Shuffle.setAlpha(1f);
+        if (preferenceHelper.getShuffle()) { //
+            buttonHelper.unGreyOut(mediaControls_Shuffle);
+            //mediaControls_Shuffle.setAlpha(1f);
         } else {
             buttonHelper.greyOut(mediaControls_Shuffle);
         }
@@ -198,12 +199,18 @@ public class MainActivity extends AppCompatActivity {
 
         switch (preferenceHelper.getRepeat()) {
             case 0: // Repeat None
+                mediaManager.setRepeatState(MediaManager.RepeatState.NOREPEAT);
+                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_48dp);
                 buttonHelper.greyOut(mediaControls_Repeat);
                 break;
             case 1: // Repeat All
                 // Don't have to greyout
+                mediaManager.setRepeatState(MediaManager.RepeatState.REPEATALL);
+                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_48dp);
+                buttonHelper.unGreyOut(mediaControls_Repeat);
                 break;
             case 2: // Repeat One Only
+                mediaManager.setRepeatState(MediaManager.RepeatState.REPEATONE);
                 mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_48dp);
                 break;
         }
@@ -518,12 +525,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void mediaControlsOnClickShuffle(View v) {
-        if (preferenceHelper.getShuffle()) {
-            preferenceHelper.setShuffle(false);
-            buttonHelper.greyOut(mediaControls_Shuffle);
-        } else {
-            preferenceHelper.setShuffle(true);
-            buttonHelper.unGreyOut(mediaControls_Shuffle);
+        if (preferenceHelper.getShuffle()) { // SharedPreferences says Shuffle is true,
+            preferenceHelper.setShuffle(false); // Set the shuffle to false
+            buttonHelper.greyOut(mediaControls_Shuffle); // Grey out the shuffle button
+        } else { // Else SharedPreference says Shuffle is false or is not initialized
+            preferenceHelper.setShuffle(true); //  Set the shuffle to true
+            buttonHelper.unGreyOut(mediaControls_Shuffle); // Ungrey out the shuffle
         }
     }
 
