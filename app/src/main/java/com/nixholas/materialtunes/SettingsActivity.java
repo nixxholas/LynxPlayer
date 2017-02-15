@@ -23,6 +23,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     // Option References
     public static final String AMOLED_PREF = "amoled_pref";
+    public static final String PRIMARY_COLOR_PREF = "primary_color_pref";
+    public static final String SECONDARY_COLOR_PREF = "secondary_color_pref";
+    public static final String ALBUM_GRID_COLS_PREF = "album_grid_cols_pref";
+    public static final String GAPLESS_PLAYBACK_PREF = "gapless_playback_pref";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
