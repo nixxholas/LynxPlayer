@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -33,6 +34,8 @@ import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
+import org.w3c.dom.Text;
+
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,16 +54,16 @@ import static com.nixholas.materialtunes.Utils.AlbumService.getAlbumArtUri;
  */
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
     // Protected Entities
-    @BindView(R.id.slide_button) ImageButton slideButton;
-    @BindView(R.id.slide_albumart) ImageView slideAlbumArt;
-    @BindView(R.id.slide_songtitle) TextView slideSongTitle;
-    @BindView(R.id.slide_songartist) TextView slideSongArtist;
+    ImageButton slideButton;
+    ImageView slideAlbumArt;
+    TextView slideSongTitle;
+    TextView slideSongArtist;
     //@BindView(R.id.slided_layout) LinearLayout slidedLinearLayout;
 
     // Expanded Sliding Up Bar Entities
-    @BindView(R.id.slided_image) ImageView slidedAlbumArt;
+    ImageView slidedAlbumArt;
 
-    @BindView(R.id.media_controls_playpause) ImageButton mediaControls_PlayPause;
+    ImageButton mediaControls_PlayPause;
 
     private ArrayList<Song> mDataset;
     private Context context;
@@ -172,6 +175,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
         // ButterKnife Properly
         //http://stackoverflow.com/questions/37771222/android-butterknife-unable-to-bind-views-into-viewholder
         ButterKnife.bind(this, (Activity) context);
+
+        slideButton = (ImageButton) v.findViewById(R.id.slide_button);
+        slideAlbumArt = (ImageView) v.findViewById(R.id.slide_albumart);
+        slideSongTitle = (TextView) v.findViewById(R.id.slide_songtitle);
+        slideSongArtist = (TextView) v.findViewById(R.id.slide_songartist);
+        slidedAlbumArt = (ImageView) v.findViewById(R.id.slided_image);
+        mediaControls_PlayPause = (ImageButton) v.findViewById(R.id.media_controls_playpause);
 
         return vh;
     }
