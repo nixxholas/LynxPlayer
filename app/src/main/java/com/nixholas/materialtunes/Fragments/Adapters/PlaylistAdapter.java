@@ -35,18 +35,6 @@ import static com.nixholas.materialtunes.Media.Entities.Utils.PlaylistUtil.remov
  */
 
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
-    // Protected Entities
-    ImageButton slideButton;
-    ImageView slideAlbumArt;
-    TextView slideSongTitle;
-    TextView slideSongArtist;
-    //@BindView(R.id.slided_layout) LinearLayout slidedLinearLayout;
-
-    // Expanded Sliding Up Bar Entities
-    ImageView slidedAlbumArt;
-
-    ImageButton mediaControls_PlayPause;
-
     private ArrayList<Playlist> mDataset;
     private Context context;
 
@@ -149,18 +137,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         PlaylistAdapter.ViewHolder vh = new PlaylistAdapter.ViewHolder(v);
 
         context = parent.getContext();
-
-        // ButterKnife Properly
-        //http://stackoverflow.com/questions/37771222/android-butterknife-unable-to-bind-views-into-viewholder
-        //ButterKnife.bind(this, (Activity) context);
-
-        slideButton = (ImageButton) v.findViewById(R.id.slide_button);
-        slideAlbumArt = (ImageView) v.findViewById(R.id.slide_albumart);
-        slideSongTitle = (TextView) v.findViewById(R.id.slide_songtitle);
-        slideSongArtist = (TextView) v.findViewById(R.id.slide_songartist);
-
-        slidedAlbumArt = (ImageView) v.findViewById(R.id.slided_image);
-        mediaControls_PlayPause = (ImageButton) v.findViewById(R.id.media_controls_playpause);
 
         return vh;
     }

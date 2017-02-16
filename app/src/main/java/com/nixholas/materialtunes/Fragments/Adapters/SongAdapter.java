@@ -60,12 +60,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
         //this String will be shown in a bubble for specified position
         return mDataset.get(position).getTitle().substring(0, 1);
     }
-/*
-    @Override
-    public String getSectionTitle(int position) {
-        //this String will be shown in a bubble for specified position
-        return mDataset.get(position).getTitle().substring(0, 1);
-    }*/
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
