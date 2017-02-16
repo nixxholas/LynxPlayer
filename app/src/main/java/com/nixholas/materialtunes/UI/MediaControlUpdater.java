@@ -33,11 +33,6 @@ import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
 public class MediaControlUpdater {
 
     public static void mediaControlsOnClickPlayPause() {
-        // Animation animTransform = AnimationUtils
-        //     .loadAnimation(getInstance(), R.anim.fadeout);
-        RotateAnimation ranim = (RotateAnimation) AnimationUtils
-                .loadAnimation(getInstance(), R.anim.rotate);
-
         if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
             // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
             if (mediaManager.mediaPlayerIsPaused) { // If the current song is paused,

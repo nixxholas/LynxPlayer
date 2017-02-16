@@ -20,6 +20,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -139,6 +142,10 @@ public class MainActivity extends AppCompatActivity {
 
         slidingUpPanelLayout.setDragView(findViewById(R.id.dragView));
 
+        // Prepare the button animator
+        // http://stackoverflow.com/questions/7564372/animating-imagebutton-in-android
+        Animation rAnim = AnimationUtils.loadAnimation(this, R.anim.rotate);
+
         // Sliding Up Bar
         slideAlbumArt = (ImageView) findViewById(R.id.slide_albumart);
         slideSongArtist = (TextView) findViewById(R.id.slide_songartist);
@@ -149,6 +156,9 @@ public class MainActivity extends AppCompatActivity {
         slidingSeekBar = (SeekBar) findViewById(R.id.slide_seekbar);
         slidingSeekBar.getThumb().mutate().setAlpha(0);
 
+        // Sliding Up Bar element animation binding
+        slideButton.setAnimation(rAnim);
+
         // Expanded View of Sliding Up Bar
         slidedAlbumArt = (ImageView) findViewById(R.id.slided_image);
         slidedSeekBar = (SeekBar) findViewById(R.id.slided_seekbar);
@@ -157,9 +167,6 @@ public class MainActivity extends AppCompatActivity {
         slided_SongTitle = (TextView) findViewById(R.id.slided_title);
         slided_SongArtist = (TextView) findViewById(R.id.slided_artist);
         slidedCloseButton = (ImageButton) findViewById(R.id.slided_close);
-
-        //slidingSeekBar.getIndeterminateDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
-        //slidedSeekBar.getIndeterminateDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
 
         slidedCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
                 mediaControlsOnClickPlayPause();
             }
         });
+        mediaControls_PlayPause.setAnimation(rAnim);
 
         mediaControls_Previous = (ImageButton) findViewById(R.id.media_controls_previous);
         mediaControls_Previous.setOnClickListener(new View.OnClickListener() {

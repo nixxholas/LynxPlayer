@@ -375,6 +375,7 @@ public class MediaManager extends Service {
 
                     slided_SongTitle.setText(getCurrent().getTitle());
                     slided_SongArtist.setText(getCurrent().getArtistName());
+                    preferenceHelper.setCurrentSongId(getCurrent().getId());
 
                     // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android
                     //Log.e("MaxDuration", getCurrent().getDuration() + "");

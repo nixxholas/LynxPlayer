@@ -10,7 +10,11 @@ import android.preference.PreferenceManager;
  */
 
 public class PreferenceHelper {
+    // Default Preferences
     public static final String INTRO_DONE = "intro_done";
+    public static final String CURRENT_SONG = "current_song";
+
+    // Theming Preferences
     public static final String DARK_MODE = "dark_mode";
 
     // Playback Preferences
@@ -23,6 +27,17 @@ public class PreferenceHelper {
     public PreferenceHelper(Context mContext) {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
+
+    public void setCurrentSongId(long _id) {
+        // http://stackoverflow.com/questions/16194567/android-sharedpreferences-how-to-save-a-simple-int-variable
+        mPreferenceEditor = mPreferences.edit();
+        mPreferenceEditor.putLong(CURRENT_SONG, _id);
+
+        // http://stackoverflow.com/questions/17916873/how-to-save-and-fetch-integer-value-in-shared-preference-in-android
+        mPreferenceEditor.commit(); // We need to commit..
+    }
+
+    public long getCurrentSongId() { return mPreferences.getLong(CURRENT_SONG, 0); }
 
     private void writeBoolean(final String key, final boolean value) {
         new AsyncTask<Void, Void, Void>() {
