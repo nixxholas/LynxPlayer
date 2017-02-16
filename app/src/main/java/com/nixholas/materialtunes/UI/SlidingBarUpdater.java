@@ -11,15 +11,14 @@ import com.bumptech.glide.request.target.Target;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
-import com.nixholas.materialtunes.UI.Button.ButtonHelper;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_Shuffle;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Maximum;
+import static com.nixholas.materialtunes.MainActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.slideAlbumArt;
 import static com.nixholas.materialtunes.MainActivity.slideButton;
 import static com.nixholas.materialtunes.MainActivity.slideSongArtist;
@@ -37,7 +36,6 @@ import static com.nixholas.materialtunes.MainActivity.slidingSeekBar;
 
 public class SlidingBarUpdater {
     public static void updateSlideBar(MainActivity mainActivity) {
-        ButtonHelper buttonHelper = new ButtonHelper();
         Song currentSong = mediaManager.getCurrent();
 
         // Update the images first
@@ -117,11 +115,7 @@ public class SlidingBarUpdater {
         ));
 
         // Let's update the UI elements related to shuffling
-        if (preferenceHelper.getShuffle()) {
-            buttonHelper.greyOut(mediaControls_Shuffle);
-        } else {
-            buttonHelper.unGreyOut(mediaControls_Shuffle);
-        }
+        mediaControls_Shuffle.setEnabledUI(preferenceHelper.getShuffle());
 
     }
 }

@@ -36,11 +36,10 @@ import com.nixholas.materialtunes.Notification.PersistentNotification;
 import com.nixholas.materialtunes.UI.Button.CustomImageButton;
 import com.nixholas.materialtunes.UI.CustomSlidingUpLayout;
 import com.nixholas.materialtunes.UI.SlidingBarUpdater;
-import com.nixholas.materialtunes.UI.Button.ButtonHelper;
+import com.nixholas.materialtunes.Utils.PreferenceHelper;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPrevious;
@@ -53,9 +52,6 @@ import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnC
  *
  */
 public class MainActivity extends AppCompatActivity {
-    // Protected Entities
-    ButtonHelper buttonHelper = new ButtonHelper();
-
     // Sliding Up Bar
     public static ImageView slideAlbumArt;
     public static TextView slideSongArtist;
@@ -83,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     // Publicly Accessible Entities
     public static MediaManager mediaManager;
     public static DataAdapter mDataAdapter;
+    public static PreferenceHelper preferenceHelper;
 
     // Fragment Entities
     private AlbumFragment albumFragment;
@@ -112,6 +109,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        preferenceHelper = new PreferenceHelper(getApplicationContext());
+
+        if (!preferenceHelper.getIntroDone()) {
+            startActivity(new Intent(this, IntroActivity.class));
+            // http://stackoverflow.com/questions/8282569/oncreate-flow-continues-after-finish
+            finish();
+            return;
+        }
+
         // Request for proper permissions first
         // https://developer.android.com/training/permissions/requesting.html
         ActivityCompat.requestPermissions(this,

@@ -32,13 +32,13 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import static com.nixholas.materialtunes.IntroActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Maximum;
 import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Progress;
 import static com.nixholas.materialtunes.MainActivity.persistentNotif;
+import static com.nixholas.materialtunes.MainActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.slideButton;
 import static com.nixholas.materialtunes.MainActivity.slidedSeekBar;
 import static com.nixholas.materialtunes.MainActivity.slided_SongArtist;
