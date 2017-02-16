@@ -5,6 +5,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v7.graphics.Palette;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
@@ -12,6 +15,7 @@ import com.bumptech.glide.request.target.Target;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 
+import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.persistentNotif;
@@ -29,6 +33,11 @@ import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
 public class MediaControlUpdater {
 
     public static void mediaControlsOnClickPlayPause() {
+        // Animation animTransform = AnimationUtils
+        //     .loadAnimation(getInstance(), R.anim.fadeout);
+        RotateAnimation ranim = (RotateAnimation) AnimationUtils
+                .loadAnimation(getInstance(), R.anim.rotate);
+
         if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
             // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
             if (mediaManager.mediaPlayerIsPaused) { // If the current song is paused,
