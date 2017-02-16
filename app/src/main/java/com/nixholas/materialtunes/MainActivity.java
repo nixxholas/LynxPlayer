@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     public static ImageButton mediaControls_Previous;
     public static ImageButton mediaControls_Next;
     public static CustomImageButton mediaControls_Shuffle;
-    public static ImageButton mediaControls_Repeat;
+    public static CustomImageButton mediaControls_Repeat;
     public static ImageButton slidedCloseButton;
     public static TextView mediaSeekText_Progress;
     public static TextView mediaSeekText_Maximum;
@@ -187,38 +187,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mediaControls_Shuffle = (CustomImageButton) findViewById(R.id.media_controls_shuffle);
-        Log.d("MainActivity", "getShuffle(): " + preferenceHelper.getShuffle());
+        //Log.d("MainActivity", "getShuffle(): " + preferenceHelper.getShuffle());
         mediaControls_Shuffle.setEnabledUI(preferenceHelper.getShuffle());
-        /*if (preferenceHelper.getShuffle()) { //
-            //mediaControls_Shuffle.setAlpha(1f);
-        } else {
-            buttonHelper.greyOut(mediaControls_Shuffle);
-        }*/
 
-        mediaControls_Repeat = (ImageButton) findViewById(R.id.media_controls_repeat);
-        /*mediaControls_Repeat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mediaControlsOnClickRepeat();
-            }
-        });*/
+        mediaControls_Repeat = (CustomImageButton) findViewById(R.id.media_controls_repeat);
 
         switch (preferenceHelper.getRepeat()) {
             case 0: // Repeat None
                 mediaManager.setRepeatState(MediaManager.RepeatState.NOREPEAT);
                 mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
-                buttonHelper.greyOut(mediaControls_Repeat);
+                mediaControls_Repeat.setEnabledUI(false);
                 break;
             case 1: // Repeat All
                 // Don't have to greyout
                 mediaManager.setRepeatState(MediaManager.RepeatState.REPEATALL);
                 mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
-                buttonHelper.unGreyOut(mediaControls_Repeat);
+                mediaControls_Repeat.setEnabledUI(true);
                 break;
             case 2: // Repeat One Only
                 mediaManager.setRepeatState(MediaManager.RepeatState.REPEATONE);
                 mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_24dp);
-                buttonHelper.unGreyOut(mediaControls_Repeat);
+                mediaControls_Repeat.setEnabledUI(true);
                 break;
             default:
                 Log.d("MainActivity", "-> repeat: Something bad happened");
@@ -459,33 +448,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void mediaControlsOnClickRepeat() {
+        Log.d("MainActivity", "mediaControlsOnClickRepeat -> getRepeat(): " + preferenceHelper.getRepeat());
         switch (preferenceHelper.getRepeat()) {
             case 0:
                 mediaManager.mMediaPlayer.setLooping(false);
                 mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
+                mediaControls_Repeat.setEnabledUI(true);
 
                 // Next is repeat all..
                 mediaManager.setRepeatState(MediaManager.RepeatState.REPEATALL);
                 //Log.e("getmPlaybackState()", "Repeat All");
-                buttonHelper.unGreyOut(mediaControls_Repeat);
                 preferenceHelper.setRepeat(1);
                 break;
             case 1:
                 mediaManager.mMediaPlayer.setLooping(true);
+                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_24dp);
+                mediaControls_Repeat.setEnabledUI(true);
 
                 // Next is repeat one only..
                 //http://stackoverflow.com/questions/9461270/media-player-looping-android
-                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_24dp);
                 mediaManager.setRepeatState(MediaManager.RepeatState.REPEATONE);
                 preferenceHelper.setRepeat(2);
                 break;
             case 2:
                 mediaManager.mMediaPlayer.setLooping(false);
                 mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
+                mediaControls_Repeat.setEnabledUI(false);
 
                 // Next is repeat nothing..
                 mediaManager.setRepeatState(MediaManager.RepeatState.NOREPEAT);
-                buttonHelper.greyOut(mediaControls_Repeat);
                 preferenceHelper.setRepeat(0);
                 break;
             default:

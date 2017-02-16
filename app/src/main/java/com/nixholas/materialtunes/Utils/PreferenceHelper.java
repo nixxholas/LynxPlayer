@@ -73,6 +73,9 @@ public class PreferenceHelper {
         // http://stackoverflow.com/questions/16194567/android-sharedpreferences-how-to-save-a-simple-int-variable
         mPreferenceEditor = mPreferences.edit();
         mPreferenceEditor.putInt(REPEAT, value);
+
+        // http://stackoverflow.com/questions/17916873/how-to-save-and-fetch-integer-value-in-shared-preference-in-android
+        mPreferenceEditor.commit(); // We need to commit..
     }
 
     public final int getRepeat() { return mPreferences.getInt(REPEAT, 0); }
