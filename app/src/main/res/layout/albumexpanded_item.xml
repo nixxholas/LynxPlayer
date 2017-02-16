@@ -51,7 +51,6 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/albumsfragitem_options"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"

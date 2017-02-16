@@ -1,11 +1,9 @@
 package com.nixholas.materialtunes.Fragments.Adapters;
 
-import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -20,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,8 +30,6 @@ import com.nixholas.materialtunes.Fragments.Dialogs.Playlist.AddToPlaylistDialog
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
-
-import org.w3c.dom.Text;
 
 import java.io.FileDescriptor;
 import java.io.IOException;

@@ -40,7 +40,6 @@
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/noti_playpause"
             android:layout_toStartOf="@+id/noti_dismiss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

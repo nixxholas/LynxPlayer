@@ -32,7 +32,6 @@
                             android:layout_height="match_parent">
 
                                 <com.nixholas.materialtunes.UI.Text.SemiBoldTextView
-                                    android:id="@+id/mostplayedcard_title"
                                     android:text="Most Played"
                                     android:textSize="36dp"
                                     android:ellipsize="end"
@@ -43,7 +42,6 @@
                         </LinearLayout>
 
                         <ImageView
-                            android:id="@+id/mostplayedcard_options"
                             android:clickable="true"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:layout_width="wrap_content"

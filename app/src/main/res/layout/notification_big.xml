@@ -14,7 +14,6 @@
         android:layout_centerVertical="true" />
 
     <LinearLayout
-        android:id="@+id/notibig_textlayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"

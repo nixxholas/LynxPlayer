@@ -4,13 +4,13 @@
     tools:context="com.nixholas.materialtunes.MainActivity">
 
     <!-- http://stackoverflow.com/questions/26889976/should-use-androidshowasaction-when-not-using-the-appcompat-library -->
-    <item android:id="@+id/topbar_playnow"
+    <item
         android:title="@string/playnow_title"
         android:icon="@drawable/ic_subscriptions_white_24dp"
         app:showAsAction="always"/>
 
     <!-- http://stackoverflow.com/questions/26889976/should-use-androidshowasaction-when-not-using-the-appcompat-library -->
-    <item android:id="@+id/topbar_equalizer"
+    <item
         android:title="@string/equalizer_title"
         android:icon="@drawable/ic_equalizer_white_24dp"
         app:showAsAction="always"/>
