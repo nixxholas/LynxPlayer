@@ -476,7 +476,8 @@ public class MediaManager extends Service {
 
                 try {
                     if (repeatState == RepeatState.REPEATALL) {
-                        // Since it's repeat all, naturally it mimics an onClick Next..
+                        // Since it's repeat all, naturally it mimics an onClick Next
+                        // so that we can reuse code instead
                         mediaControlsOnClickNext(MainActivity.getInstance().getCurrentFocus());
                     } else if (repeatState == RepeatState.NOREPEAT) {
                         /**
@@ -495,7 +496,15 @@ public class MediaManager extends Service {
                         // Update the UI
                         slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                         mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
-                    } // No need to perform an else for REPEATONE
+                    } else {
+                        //Since it's repeat one, let's replay it again.
+
+                        // Make sure it's stopped
+                        mMediaPlayer.stop();
+
+                        // Then play it again
+                        mediaPlayer.prepare();
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
