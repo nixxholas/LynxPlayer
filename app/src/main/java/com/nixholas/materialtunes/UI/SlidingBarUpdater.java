@@ -1,7 +1,6 @@
 package com.nixholas.materialtunes.UI;
 
 import android.content.ContentUris;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v7.graphics.Palette;
@@ -12,6 +11,7 @@ import com.bumptech.glide.request.target.Target;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
+import com.nixholas.materialtunes.UI.Button.ButtonHelper;
 
 import java.util.concurrent.TimeUnit;
 

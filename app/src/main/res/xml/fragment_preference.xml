@@ -13,7 +13,6 @@
         <ListPreference
             android:title="@string/pref_theme_title">
 
-
         </ListPreference>
 
     </PreferenceCategory>

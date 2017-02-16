@@ -33,9 +33,10 @@ import com.nixholas.materialtunes.Fragments.SongFragment;
 import com.nixholas.materialtunes.Fragments.Adapters.DataAdapter;
 import com.nixholas.materialtunes.Media.MediaManager;
 import com.nixholas.materialtunes.Notification.PersistentNotification;
+import com.nixholas.materialtunes.UI.Button.CustomImageButton;
 import com.nixholas.materialtunes.UI.CustomSlidingUpLayout;
 import com.nixholas.materialtunes.UI.SlidingBarUpdater;
-import com.nixholas.materialtunes.UI.ButtonHelper;
+import com.nixholas.materialtunes.UI.Button.ButtonHelper;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     public static ImageButton mediaControls_PlayPause;
     public static ImageButton mediaControls_Previous;
     public static ImageButton mediaControls_Next;
-    public static ImageButton mediaControls_Shuffle;
+    public static CustomImageButton mediaControls_Shuffle;
     public static ImageButton mediaControls_Repeat;
     public static ImageButton slidedCloseButton;
     public static TextView mediaSeekText_Progress;
@@ -122,6 +123,10 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mediaManager = new MediaManager(this);
+        mediaManager.initializeMediaDB(this);
+        finalMain = this;
 
         slidedRelativeLayout = (RelativeLayout) findViewById(R.id.slided_layout);
         slidingUpPanelLayout = (CustomSlidingUpLayout) findViewById(R.id.sliding_layout);
@@ -181,54 +186,43 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mediaControls_Shuffle = (ImageButton) findViewById(R.id.media_controls_shuffle);
-        if (preferenceHelper.getShuffle()) { //
-            buttonHelper.unGreyOut(mediaControls_Shuffle);
+        mediaControls_Shuffle = (CustomImageButton) findViewById(R.id.media_controls_shuffle);
+        Log.d("MainActivity", "getShuffle(): " + preferenceHelper.getShuffle());
+        mediaControls_Shuffle.setEnabledUI(preferenceHelper.getShuffle());
+        /*if (preferenceHelper.getShuffle()) { //
             //mediaControls_Shuffle.setAlpha(1f);
         } else {
             buttonHelper.greyOut(mediaControls_Shuffle);
-        }
+        }*/
 
         mediaControls_Repeat = (ImageButton) findViewById(R.id.media_controls_repeat);
-        mediaControls_Repeat.setOnClickListener(new View.OnClickListener() {
+        /*mediaControls_Repeat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mediaControlsOnClickRepeat();
             }
-        });
+        });*/
 
         switch (preferenceHelper.getRepeat()) {
             case 0: // Repeat None
                 mediaManager.setRepeatState(MediaManager.RepeatState.NOREPEAT);
-                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_48dp);
+                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
                 buttonHelper.greyOut(mediaControls_Repeat);
                 break;
             case 1: // Repeat All
                 // Don't have to greyout
                 mediaManager.setRepeatState(MediaManager.RepeatState.REPEATALL);
-                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_48dp);
+                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
                 buttonHelper.unGreyOut(mediaControls_Repeat);
                 break;
             case 2: // Repeat One Only
                 mediaManager.setRepeatState(MediaManager.RepeatState.REPEATONE);
-                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_48dp);
+                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_24dp);
+                buttonHelper.unGreyOut(mediaControls_Repeat);
                 break;
+            default:
+                Log.d("MainActivity", "-> repeat: Something bad happened");
         }
-
-
-        // Setup the MediaManager and hide the sliding bar if the MediaManager is null.
-        //        if (mediaManager == null) {
-        //            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
-        //            mediaManager = new MediaManager(this);
-        //            finalMain = this;
-        //        } else {
-        //            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        //            SlidingBarUpdater.updateSlideBar(MainActivity.this);
-        //        }
-
-        mediaManager = new MediaManager(this);
-        mediaManager.initializeMediaDB(this);
-        finalMain = this;
 
         // Setup the notifications
         Handler mHandler = new Handler();
@@ -448,6 +442,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void clickRepeat(View view) { mediaControlsOnClickRepeat(); }
+
+    public void clickShuffle(View view) { mediaControlsOnClickShuffle(); }
+
     public void clickPrevious(View view) {
         mediaControlsOnClickPlayPause();
     }
@@ -460,9 +458,10 @@ public class MainActivity extends AppCompatActivity {
         mediaControlsOnClickNext(view);
     }
 
-    public void mediaControlsOnClickRepeat () {
+    public void mediaControlsOnClickRepeat() {
         switch (preferenceHelper.getRepeat()) {
             case 0:
+                mediaManager.mMediaPlayer.setLooping(false);
                 mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
 
                 // Next is repeat all..
@@ -491,47 +490,25 @@ public class MainActivity extends AppCompatActivity {
                 break;
             default:
                 // Something bad happened lol
+                Log.d("mControlsOnClickRepeat", "Something bad happened");
                 break;
         }
-
-//        if (mediaManager.getRepeatState() == MediaManager.RepeatState.NOREPEAT) {
-//            mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
-//
-//            // Next is repeat all..
-//            mediaManager.setRepeatState(MediaManager.RepeatState.REPEATALL);
-//            //Log.e("getmPlaybackState()", "Repeat All");
-//            buttonHelper.unGreyOut(mediaControls_Repeat);
-//            preferenceHelper.setRepeat(1);
-//
-//        } else if (mediaManager.getRepeatState() == MediaManager.RepeatState.REPEATALL) {
-//            mediaManager.mMediaPlayer.setLooping(true);
-//
-//            // Next is repeat one only..
-//            //http://stackoverflow.com/questions/9461270/media-player-looping-android
-//            mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_24dp);
-//            mediaManager.setRepeatState(MediaManager.RepeatState.REPEATONE);
-//            preferenceHelper.setRepeat(2);
-//
-//        } else {
-//            mediaManager.mMediaPlayer.setLooping(false);
-//            mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
-//
-//            // Next is repeat nothing..
-//            mediaManager.setRepeatState(MediaManager.RepeatState.NOREPEAT);
-//            buttonHelper.greyOut(mediaControls_Repeat);
-//            preferenceHelper.setRepeat(0);
-//
-//        }
     }
 
-    public void mediaControlsOnClickShuffle(View v) {
-        if (preferenceHelper.getShuffle()) { // SharedPreferences says Shuffle is true,
+    public void mediaControlsOnClickShuffle() {
+        boolean result = !preferenceHelper.getShuffle();
+
+        Log.d("MainActivity", "mediaControlsOnClickShuffle, bool result: " + result);
+
+        mediaControls_Shuffle.setEnabledUI(result);
+        preferenceHelper.setShuffle(result);
+        /*if (preferenceHelper.getShuffle()) { // SharedPreferences says Shuffle is true,
             preferenceHelper.setShuffle(false); // Set the shuffle to false
             buttonHelper.greyOut(mediaControls_Shuffle); // Grey out the shuffle button
         } else { // Else SharedPreference says Shuffle is false or is not initialized
             preferenceHelper.setShuffle(true); //  Set the shuffle to true
             buttonHelper.unGreyOut(mediaControls_Shuffle); // Ungrey out the shuffle
-        }
+        }*/
     }
 
     @Override

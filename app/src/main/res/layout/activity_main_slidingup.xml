@@ -95,7 +95,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal">
 
-            <ImageButton
+            <com.nixholas.materialtunes.UI.Button.CustomImageButton
                 android:id="@+id/media_controls_shuffle"
                 android:src="@drawable/ic_shuffle_white_24dp"
                 android:scaleType="center"
@@ -103,7 +103,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:onClick="mediaControlsOnClickShuffle"/>
+                android:onClick="clickShuffle"/>
 
             <!-- Separator Views allow proper dynamic flow for different device sizes. -->
             <View
@@ -166,6 +166,7 @@
                 android:layout_height="36dp"
                 android:src="@drawable/ic_repeat_white_24dp"
                 android:scaleType="center"
+                android:onClick="clickRepeat"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
     </LinearLayout>

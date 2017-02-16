@@ -40,11 +40,14 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static com.nixholas.materialtunes.MainActivity.getInstance;
+import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
+import static com.nixholas.materialtunes.MainActivity.slideAlbumArt;
+import static com.nixholas.materialtunes.MainActivity.slideButton;
+import static com.nixholas.materialtunes.MainActivity.slideSongArtist;
+import static com.nixholas.materialtunes.MainActivity.slideSongTitle;
+import static com.nixholas.materialtunes.MainActivity.slidedAlbumArt;
 import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
 import static com.nixholas.materialtunes.Media.Entities.Utils.SongUtil.removeSong;
 import static com.nixholas.materialtunes.Utils.AlbumService.getAlbumArtUri;
@@ -53,18 +56,6 @@ import static com.nixholas.materialtunes.Utils.AlbumService.getAlbumArtUri;
  * Created by nixho on 03-Nov-16.
  */
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
-    // Protected Entities
-    ImageButton slideButton;
-    ImageView slideAlbumArt;
-    TextView slideSongTitle;
-    TextView slideSongArtist;
-    //@BindView(R.id.slided_layout) LinearLayout slidedLinearLayout;
-
-    // Expanded Sliding Up Bar Entities
-    ImageView slidedAlbumArt;
-
-    ImageButton mediaControls_PlayPause;
-
     private ArrayList<Song> mDataset;
     private Context context;
 
@@ -174,15 +165,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
 
         // ButterKnife Properly
         //http://stackoverflow.com/questions/37771222/android-butterknife-unable-to-bind-views-into-viewholder
-        ButterKnife.bind(this, (Activity) context);
-
-        slideButton = (ImageButton) v.findViewById(R.id.slide_button);
-        slideAlbumArt = (ImageView) v.findViewById(R.id.slide_albumart);
-        slideSongTitle = (TextView) v.findViewById(R.id.slide_songtitle);
-        slideSongArtist = (TextView) v.findViewById(R.id.slide_songartist);
-        slidedAlbumArt = (ImageView) v.findViewById(R.id.slided_image);
-        mediaControls_PlayPause = (ImageButton) v.findViewById(R.id.media_controls_playpause);
-
+        //ButterKnife.bind(this, (Activity) context);
         return vh;
     }
 

@@ -28,9 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static com.nixholas.materialtunes.Media.Entities.Utils.PlaylistUtil.removePlaylist;
 
 /**
