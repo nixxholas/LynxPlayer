@@ -23,10 +23,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".IntroActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
 
         <!-- android:configChanges
         http://stackoverflow.com/questions/34455170/actionbaractivity-content-gets-reset-when-orientation-changed-drawerlayout-->
@@ -39,12 +35,13 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER"/>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.MUSIC_PLAYER" />
-                <category android:name="android.intent.category.APP_MUSIC" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="audio/*" />
+                <!--<action android:name="android.intent.action.MUSIC_PLAYER" />-->
+                <!--<category android:name="android.intent.category.APP_MUSIC" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<data android:mimeType="audio/*" />-->
             </intent-filter>
+        </activity>
+        <activity android:name=".IntroActivity">
         </activity>
         <activity
             android:name=".SettingsActivity"

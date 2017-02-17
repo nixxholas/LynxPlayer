@@ -112,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
         preferenceHelper = new PreferenceHelper(getApplicationContext());
 
         if (!preferenceHelper.getIntroDone()) {
@@ -129,9 +132,6 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 2); // Writing
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         mediaManager = new MediaManager(this);
         mediaManager.initializeMediaDB(this);
@@ -257,6 +257,13 @@ public class MainActivity extends AppCompatActivity {
                 // app-defined int constant. The callback method gets the
                 // result of the request.
             }
+        }
+
+        while (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Do nothing
+            // This prevent any exception from happening.
         }
         mDataAdapter.run();
 
