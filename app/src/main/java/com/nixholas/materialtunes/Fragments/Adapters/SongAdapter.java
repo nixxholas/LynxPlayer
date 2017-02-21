@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -146,7 +145,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
                                                      int viewType) {
         // create a new view
         final View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.mainfrag_cardview, parent, false);
+                .inflate(R.layout.songadapter_item, parent, false);
 
         // set the view's size, margins, paddings and layout parameters'
         ViewHolder vh = new ViewHolder(v);

@@ -71,7 +71,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     public AlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Create a new view
         final View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.albumfrag_cardview, parent, false);
+                .inflate(R.layout.albumadapter_item, parent, false);
 
         // Set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
