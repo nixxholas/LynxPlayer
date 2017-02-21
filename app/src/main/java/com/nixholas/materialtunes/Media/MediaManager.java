@@ -25,6 +25,7 @@ import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.RemoteControlReceiver;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -102,11 +103,11 @@ public class MediaManager extends Service {
      *
      * http://stackoverflow.com/questions/616484/how-to-use-concurrentlinkedqueue
      */
-    public volatile LinkedList<Song> managerQueue = new LinkedList<>(); // We need a queue for the mediaplayer
-    public ArrayList<Song> songFiles = new ArrayList<>();
-    public ArrayList<Album> albumFiles = new ArrayList<>();
-    public ArrayList<Playlist> playLists = new ArrayList<>();
-    public ArrayList<Song> topPlayed = new ArrayList<>();
+    private LinkedList<Song> managerQueue = new LinkedList<>(); // We need a queue for the mediaplayer
+    protected ArrayList<Song> songFiles = new ArrayList<>();
+    protected ArrayList<Album> albumFiles = new ArrayList<>();
+    protected ArrayList<Playlist> playLists = new ArrayList<>();
+    protected ArrayList<Song> topPlayed = new ArrayList<>();
 
     // Playlist Helper
     public PlaylistUtil playlistUtil = new PlaylistUtil();
@@ -526,6 +527,26 @@ public class MediaManager extends Service {
         final String strMin = placeZeroIfNeeded(min);
         final String strSec = placeZeroIfNeeded(sec);
         return String.format("%s:%s",strMin,strSec);
+    }
+
+    public LinkedList<Song> getManagerQueue() {
+        return managerQueue;
+    }
+
+    public ArrayList<Song> getSongFiles() {
+        return songFiles;
+    }
+
+    public ArrayList<Album> getAlbumFiles() {
+        return albumFiles;
+    }
+
+    public ArrayList<Playlist> getPlayLists() {
+        return playLists;
+    }
+
+    public ArrayList<Song> getTopPlayed() {
+        return topPlayed;
     }
 
     private String placeZeroIfNeeded(long number) {

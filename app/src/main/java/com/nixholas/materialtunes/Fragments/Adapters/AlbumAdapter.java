@@ -93,7 +93,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
             @Override
             public void onClick(View view) {
                 // Clear the queue first
-                mediaManager.managerQueue.clear();
+                mediaManager.getManagerQueue().clear();
 
                 // Get the URI of the selected song
                 Uri audioUri = Uri.parse("file://" + currentSong.getDataPath());
@@ -101,15 +101,15 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                 // Let's check if the user is repeating or not
                 if (preferenceHelper.getRepeat() == 1) {
                     // Since its repeating all, we add the whole album to the queue
-                    mediaManager.managerQueue.addAll(mDataset);
+                    mediaManager.getManagerQueue().addAll(mDataset);
                 } else {
                     // Since its not repeating all, just play the selected song
-                    mediaManager.managerQueue.add(currentSong);
+                    mediaManager.getManagerQueue().add(currentSong);
                 }
 
                 // Update the currentlyPlayingIndex for mediaManager
                 //Log.d("LOG Song Index: ", mediaManager.managerQueue.indexOf(currentSong) + "");
-                mediaManager.currentlyPlayingIndex = mediaManager.managerQueue.indexOf(currentSong);
+                mediaManager.currentlyPlayingIndex = mediaManager.getManagerQueue().indexOf(currentSong);
 
             try {
                 Uri albumArtUri = getAlbumArtUri(currentSong.getAlbumId());

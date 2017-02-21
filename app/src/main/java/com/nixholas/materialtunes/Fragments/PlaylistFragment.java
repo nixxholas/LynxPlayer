@@ -60,7 +60,7 @@ public class PlaylistFragment extends Fragment {
         // use a linear layout manager
         recyclerView.setLayoutManager(rVLayoutManager);
 
-        rVAdapter = new PlaylistAdapter(mediaManager.playLists);
+        rVAdapter = new PlaylistAdapter(mediaManager.getPlayLists());
         recyclerView.setAdapter(rVAdapter);
 
         mostPlayedCardView.setOnClickListener(new View.OnClickListener() {

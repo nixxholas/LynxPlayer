@@ -208,11 +208,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
                     Uri audioUri = Uri.parse("file://" + currentSong.getDataPath());
 
                     // Add all the remaining songs to the queue and clear it as well
-                    mediaManager.managerQueue.clear();
+                    mediaManager.getManagerQueue().clear();
                     mediaManager.putAllOnQueue(currentSong);
 
                     //Log.d("LOG Song Index: ", mediaManager.managerQueue.indexOf(currentSong) + "");
-                    mediaManager.currentlyPlayingIndex = mediaManager.managerQueue.indexOf(currentSong);
+                    mediaManager.currentlyPlayingIndex = mediaManager.getManagerQueue().indexOf(currentSong);
 
                     /*Uri sArtworkUri = Uri
                             .parse("content://media/external/audio/albumart");

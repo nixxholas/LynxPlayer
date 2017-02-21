@@ -48,7 +48,7 @@ public class DataAdapter implements Runnable {
     }
 
     private void loadSongData(ContentResolver cr) {
-        mediaManager.songFiles.clear(); // Make sure we reset it first before we re-initialize to look for new audio files
+        mediaManager.getSongFiles().clear(); // Make sure we reset it first before we re-initialize to look for new audio files
 
         /**
          * Media Data Initialization Phase
@@ -83,7 +83,7 @@ public class DataAdapter implements Runnable {
                     //Log.e("Music Album Name", songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
                     //Log.e("Music Duration", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION)));
 
-                    mediaManager.songFiles.add(new Song(
+                    mediaManager.getSongFiles().add(new Song(
                             songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.DATA)),
                             songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media._ID)),
                             songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
@@ -102,7 +102,7 @@ public class DataAdapter implements Runnable {
     }
 
     private void loadAlbumData(ContentResolver cr) {
-        mediaManager.albumFiles.clear(); // Make sure we reset it first before we re-initialize to look for new albums
+        mediaManager.getAlbumFiles().clear(); // Make sure we reset it first before we re-initialize to look for new albums
 
         /**
          * Media Data Initialization Phase
@@ -142,7 +142,7 @@ public class DataAdapter implements Runnable {
                     if (mediaManager.findDuplicateAlbum(newAlbum)) {
                         // Do nothing
                     } else {
-                        mediaManager.albumFiles.add(newAlbum);
+                        mediaManager.getAlbumFiles().add(newAlbum);
                     }
                 }
             }
@@ -153,7 +153,7 @@ public class DataAdapter implements Runnable {
     }
 
     private void loadPlaylistData(ContentResolver cr) {
-        mediaManager.playLists.clear(); // Make sure we reset it first before we re-initialize to look for new playlists
+        mediaManager.getPlayLists().clear(); // Make sure we reset it first before we re-initialize to look for new playlists
 
         /**
          * Media Data Initialization Phase
@@ -183,7 +183,7 @@ public class DataAdapter implements Runnable {
                             playlistCur.getString(1),
                             playlistCur.getString(2));
 
-                    mediaManager.playLists.add(newPlaylist);
+                    mediaManager.getPlayLists().add(newPlaylist);
                 }
             }
 
