@@ -54,6 +54,12 @@ public class MediaControlUpdater {
 
     public static void mediaControlsOnClickPrevious(View v) {
         try {
+            if (mediaManager.mMediaPlayer.getDuration() > 5) {
+                // Since it is playing inwards already, we'll restart it again.
+                mediaManager.mMediaPlayer.seekTo(0);
+                return; // Exit the method
+            }
+
             final Song prevSong = mediaManager.getPrevious();
 
             Uri audioUri = Uri.parse("file://" + prevSong.getDataPath());
