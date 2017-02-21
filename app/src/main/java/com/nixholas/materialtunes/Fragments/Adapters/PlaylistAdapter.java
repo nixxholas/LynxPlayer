@@ -1,7 +1,6 @@
 package com.nixholas.materialtunes.Fragments.Adapters;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -15,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -131,7 +129,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
                                                          int viewType) {
         // create a new view
         final View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_cardview, parent, false);
+                .inflate(R.layout.song_item, parent, false);
 
         // set the view's size, margins, paddings and layout parameters'
         PlaylistAdapter.ViewHolder vh = new PlaylistAdapter.ViewHolder(v);

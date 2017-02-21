@@ -1,10 +1,9 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainfrag_layout"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_height="85dp"
     android:layout_width="match_parent"
-    android:paddingBottom="2dp"
     android:focusable="true"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground">
@@ -12,40 +11,30 @@
     <!-- A CardView that contains a TextView -->
     <!--http://stackoverflow.com/questions/26997109/setting-elevation-in-xml-on-appcompat-cardview-on-android-5-0-->
     <!--http://stackoverflow.com/questions/26961147/touch-feedback-with-recyclerview-and-cardview-->
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:stateListAnimator="@anim/lift_on_touch"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="80dp">
 
         <!--
             Using Horizontal Layout to properly align the views
         http://stackoverflow.com/questions/10829835/right-align-button-in-horizontal-linearlayout -->
-        <RelativeLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-
+    <RelativeLayout
+        android:id="@+id/mainfrag_relone"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
                 <ImageView
                     android:id="@+id/card_image"
-                    android:layout_gravity="start"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp" />
+                    android:layout_width="85dp"
+                    android:layout_height="85dp" />
 
                 <!-- http://stackoverflow.com/questions/35157145/aligning-text-view-below-text-view-in-card-view-->
                 <LinearLayout
+                    android:id="@+id/card_text_layout"
+                    android:layout_toEndOf="@id/card_image"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:layout_marginLeft="@dimen/fab_margin"
+                    android:paddingRight="48dp"
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
-
+    
                     <TextView
                         android:id="@+id/card_title"
                         android:textStyle="bold"
@@ -61,22 +50,28 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/card_options"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical|end"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="@dimen/appbar_padding_top"
-                android:layout_marginRight="@dimen/appbar_padding_top"
-                android:src="@drawable/ic_more_vert_black_24dp"
-                tools:ignore="RtlHardcoded" />
+    <RelativeLayout
+        android:id="@+id/mainfrag_reltwo"
+        android:layout_alignParentEnd="true"
+        android:layout_width="48dp"
+        android:layout_height="match_parent">
 
-        </RelativeLayout >
+                <ImageView
+                    android:id="@+id/card_options"
+                    android:layout_alignParentEnd="true"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:layout_marginLeft="@dimen/appbar_padding_top"
+                    android:layout_marginRight="@dimen/appbar_padding_top"
+                    android:src="@drawable/ic_more_vert_black_24dp"
+                    tools:ignore="RtlHardcoded" />
+
+    </RelativeLayout>
 
        <!-- <View
             android:layout_alignParentEnd="true"
@@ -86,8 +81,6 @@
             android:paddingBottom="12sp"
             android:layout_height="2dp"
             android:background="#696969" />-->
-
-    </RelativeLayout>
 
     <!--<View
         android:id="@+id/mainfrag_songview_separator"
@@ -99,4 +92,4 @@
         android:layout_height="12dp"
         android:background="#80696969"/>-->
 
-    </LinearLayout>
+    </RelativeLayout>

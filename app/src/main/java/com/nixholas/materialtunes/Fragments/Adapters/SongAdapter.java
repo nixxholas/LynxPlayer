@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,7 +73,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
         ImageView songArt;
         ImageView overflowButton;
         Palette viewPalette;
-        LinearLayout layout;
+        RelativeLayout layout;
 
         public ViewHolder(View v) {
             super(v);
@@ -80,7 +81,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
             this.title = (TextView) v.findViewById(R.id.card_title);
             this.artistName = (TextView) v.findViewById(R.id.card_artist);
             this.songArt = (ImageView) v.findViewById(R.id.card_image);
-            this.layout = (LinearLayout) v.findViewById(R.id.mainfrag_layout);
+            this.layout = (RelativeLayout) v.findViewById(R.id.mainfrag_layout);
             this.overflowButton = (ImageView) v.findViewById(R.id.card_options);
             final Context mContext = v.getContext();
 
