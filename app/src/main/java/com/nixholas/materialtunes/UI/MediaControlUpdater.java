@@ -4,6 +4,7 @@ import android.content.ContentUris;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v7.graphics.Palette;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -25,6 +26,8 @@ import static com.nixholas.materialtunes.MainActivity.slideSongArtist;
 import static com.nixholas.materialtunes.MainActivity.slideSongTitle;
 import static com.nixholas.materialtunes.MainActivity.slidedAlbumArt;
 import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
+import static com.nixholas.materialtunes.MainActivity.slided_SongArtist;
+import static com.nixholas.materialtunes.MainActivity.slided_SongTitle;
 
 /**
  * Created by nixho on 22-Nov-16.
@@ -54,7 +57,9 @@ public class MediaControlUpdater {
 
     public static void mediaControlsOnClickPrevious(View v) {
         try {
-            if (mediaManager.mMediaPlayer.getDuration() > 5) {
+            if (mediaManager.mMediaPlayer.getCurrentPosition() > 3000) {
+                Log.d("onClickPrevious", "Current Position is > 3000");
+
                 // Since it is playing inwards already, we'll restart it again.
                 mediaManager.mMediaPlayer.seekTo(0);
                 return; // Exit the method
@@ -81,7 +86,9 @@ public class MediaControlUpdater {
                 slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
                 slideSongTitle.setText(prevSong.getTitle());
+                slided_SongTitle.setText(prevSong.getTitle());
                 slideSongArtist.setText(prevSong.getArtistName());
+                slided_SongArtist.setText(prevSong.getArtistName());
                 // http://stackoverflow.com/questions/40452192/performing-album-art-checks-on-an-audio-file
                 Glide.with(v.getContext())
                         .load(albumArtUri)
@@ -195,7 +202,9 @@ public class MediaControlUpdater {
                 slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
                 slideSongTitle.setText(nextSong.getTitle());
+                slided_SongTitle.setText(nextSong.getTitle());
                 slideSongArtist.setText(nextSong.getArtistName());
+                slided_SongArtist.setText(nextSong.getArtistName());
                 Glide.with(v.getContext())
                         .load(albumArtUri)
                         .asBitmap()

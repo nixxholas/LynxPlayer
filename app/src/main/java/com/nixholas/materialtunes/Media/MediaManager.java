@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
 import static com.nixholas.materialtunes.MainActivity.getInstance;
@@ -79,7 +80,7 @@ public class MediaManager extends Service {
     public RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
     private Random shufflerRandomizer;
     private PlaybackState mPlaybackState;
-    public int currentlyPlayingIndex;
+    public int currentlyPlayingIndex; // This is binded with the managerQueue, so that we'll know what is up.
 
     // MediaManager Resources
     /**
@@ -104,6 +105,7 @@ public class MediaManager extends Service {
      * http://stackoverflow.com/questions/616484/how-to-use-concurrentlinkedqueue
      */
     private LinkedList<Song> managerQueue = new LinkedList<>(); // We need a queue for the mediaplayer
+    private Stack<Song> historyStack = new Stack<>();
     protected ArrayList<Song> songFiles = new ArrayList<>();
     protected ArrayList<Album> albumFiles = new ArrayList<>();
     protected ArrayList<Playlist> playLists = new ArrayList<>();
@@ -178,175 +180,6 @@ public class MediaManager extends Service {
         mPlaybackState = new PlaybackState.Builder()
                 .setState(PlaybackState.STATE_NONE, 0, 1.0f)
                 .build();
-//        mMediaSession = new MediaSession(mainActivity, "mSession");
-//
-//        mMediaSession.setCallback(new MediaSession.Callback() {
-//            @Override
-//            public void onCommand(String command, Bundle args, ResultReceiver cb) {
-//                super.onCommand(command, args, cb);
-//            }
-//
-//            @Override
-//            public boolean onMediaButtonEvent(Intent mediaButtonIntent) {
-//                return super.onMediaButtonEvent(mediaButtonIntent);
-//            }
-//
-//            @Override
-//            public void onPrepare() {
-//                super.onPrepare();
-//            }
-//
-//            @Override
-//            public void onPrepareFromMediaId(String mediaId, Bundle extras) {
-//                super.onPrepareFromMediaId(mediaId, extras);
-//            }
-//
-//            @Override
-//            public void onPrepareFromSearch(String query, Bundle extras) {
-//                Log.e("onPlayFromSearch", "Running");
-//                Uri uri = extras.getParcelable("PARAM_TRACK_URI");
-//                onPlayFromUri(uri, null);
-//            }
-//
-//            @Override
-//            public void onPrepareFromUri(Uri uri, Bundle extras) {
-//                super.onPrepareFromUri(uri, extras);
-//            }
-//
-//            @Override
-//            public void onPlay() {
-//                Log.e("onPlay", "Running");
-//                switch (mPlaybackState.getState()) {
-//                    case PlaybackState.STATE_PAUSED:
-//                        mMediaPlayer.start();
-//                        mPlaybackState = new PlaybackState.Builder()
-//                                .setState(PlaybackState.STATE_PLAYING, 0, 1.0f)
-//                                .build();
-//                        mMediaSession.setPlaybackState(mPlaybackState);
-//                        persistentNotif.updateNotification();
-//                        break;
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onPlayFromSearch(String query, Bundle extras) {
-//                super.onPlayFromSearch(query, extras);
-//            }
-//
-//            @Override
-//            public void onPlayFromMediaId(String mediaId, Bundle extras) {
-//                super.onPlayFromMediaId(mediaId, extras);
-//            }
-//
-//            @Override
-//            public void onPlayFromUri(Uri uri, Bundle extras) {
-//                try {
-//                    Log.e("onPlayFromUri", "Running");
-//
-//                    switch (mPlaybackState.getState()) {
-//                        case PlaybackState.STATE_PLAYING:
-//                        case PlaybackState.STATE_PAUSED:
-//                            mMediaPlayer.reset();
-//                            mMediaPlayer.setDataSource(MediaManager.this, uri);
-//                            mMediaPlayer.prepare();
-//                            mPlaybackState = new PlaybackState.Builder()
-//                                    .setState(PlaybackState.STATE_CONNECTING, 0, 1.0f)
-//                                    .build();
-//                            mMediaSession.setPlaybackState(mPlaybackState);
-//                            break;
-//                        case PlaybackState.STATE_NONE:
-//                            mMediaPlayer.setDataSource(MediaManager.this, uri);
-//                            mMediaPlayer.prepare();
-//                            mPlaybackState = new PlaybackState.Builder()
-//                                    .setState(PlaybackState.STATE_CONNECTING, 0, 1.0f)
-//                                    .build();
-//                            mMediaSession.setPlaybackState(mPlaybackState);
-//                            break;
-//
-//                    }
-//                } catch (IOException e) {
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onSkipToQueueItem(long id) {
-//                super.onSkipToQueueItem(id);
-//            }
-//
-//            @Override
-//            public void onPause() {
-//                Log.e("onPause", "Running");
-//                switch (mPlaybackState.getState()) {
-//                    case PlaybackState.STATE_PLAYING:
-//                        mMediaPlayer.pause();
-//                        mPlaybackState = new PlaybackState.Builder()
-//                                .setState(PlaybackState.STATE_PAUSED, 0, 1.0f)
-//                                .build();
-//                        mMediaSession.setPlaybackState(mPlaybackState);
-//                        persistentNotif.updateNotification();
-//                        break;
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onSkipToNext() {
-//                super.onSkipToNext();
-//            }
-//
-//            @Override
-//            public void onSkipToPrevious() {
-//                super.onSkipToPrevious();
-//            }
-//
-//            @Override
-//            public void onFastForward() {
-//                Log.e("onFastForward", "Running");
-//                switch (mPlaybackState.getState()) {
-//                    case PlaybackState.STATE_PLAYING:
-//                        mMediaPlayer.seekTo(mMediaPlayer.getCurrentPosition() + 10000);
-//                        break;
-//                }
-//            }
-//
-//            @Override
-//            public void onRewind() {
-//                Log.e("onRewind", "Running");
-//                switch (mPlaybackState.getState()) {
-//                    case PlaybackState.STATE_PLAYING:
-//                        mMediaPlayer.seekTo(mMediaPlayer.getCurrentPosition() - 10000);
-//                        break;
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onStop() {
-//                super.onStop();
-//            }
-//
-//            @Override
-//            public void onSeekTo(long pos) {
-//                super.onSeekTo(pos);
-//            }
-//
-//            @Override
-//            public void onSetRating(Rating rating) {
-//                super.onSetRating(rating);
-//            }
-//
-//            @Override
-//            public void onCustomAction(String action, Bundle extras) {
-//                super.onCustomAction(action, extras);
-//            }
-//        });
-//
-//        mMediaSession.setActive(true);
-//        mMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS |
-//                MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
-//        mMediaSession.setPlaybackState(mPlaybackState);
 
         /**
          * Some management methods for the MediaPlayer Object
@@ -480,6 +313,10 @@ public class MediaManager extends Service {
                     if (repeatState == RepeatState.REPEATALL) {
                         // Since it's repeat all, naturally it mimics an onClick Next
                         // so that we can reuse code instead
+
+                        // Add the completed song to the history first
+                        historyStack.add(getCurrent());
+
                         mediaControlsOnClickNext(MainActivity.getInstance().getCurrentFocus());
                     } else if (repeatState == RepeatState.NOREPEAT) {
                         /**
@@ -549,6 +386,10 @@ public class MediaManager extends Service {
         return topPlayed;
     }
 
+    public Stack<Song> getHistoryStack() {
+        return historyStack;
+    }
+
     private String placeZeroIfNeeded(long number) {
         return (number >=10)? Long.toString(number):String.format("0%s",Long.toString(number));
     }
@@ -578,6 +419,9 @@ public class MediaManager extends Service {
     public Song getNext() {
         Log.d("getNext()", "Running getNext()");
 
+        // Make sure to add the current song to the history stack first
+        historyStack.push(getCurrent());
+
         if (preferenceHelper.getShuffle()) {
             int newSong = currentlyPlayingIndex;
             if (managerQueue.size() > 1) { // Don't let a Deadlock happen
@@ -597,23 +441,32 @@ public class MediaManager extends Service {
     }
 
     public Song getPrevious() {
-        if (preferenceHelper.getShuffle()) {
-            int newSong = currentlyPlayingIndex;
-            if (managerQueue.size() > 1) { // Don't let a Deadlock happen
-                while (newSong == currentlyPlayingIndex) {
-                    newSong = shufflerRandomizer.nextInt(managerQueue.size());
-                }
-            }
-            currentlyPlayingIndex = newSong;
-        } else {
-            if (currentlyPlayingIndex == 0) {
-                currentlyPlayingIndex = managerQueue.size();
-            } else {
-                currentlyPlayingIndex--;
-            }
+        //        if (preferenceHelper.getShuffle()) {
+        //            int newSong = currentlyPlayingIndex;
+        //            if (managerQueue.size() > 1) { // Don't let a Deadlock happen
+        //                while (newSong == currentlyPlayingIndex) {
+        //                    newSong = shufflerRandomizer.nextInt(managerQueue.size());
+        //                }
+        //            }
+        //            currentlyPlayingIndex = newSong;
+        //        } else {
+        //            if (currentlyPlayingIndex == 0) {
+        //                currentlyPlayingIndex = managerQueue.size();
+        //            } else {
+        //                currentlyPlayingIndex--;
+        //            }
+        //        }
+
+        // Let's use the history stack now.
+        Log.d("historyStack", "isEmpty -> " + historyStack.isEmpty());
+
+        if (!historyStack.isEmpty()) {
+            return historyStack.pop();
+        } else { // Return the current song since there isn't any history.
+            return getCurrent();
         }
 
-        return managerQueue.get(currentlyPlayingIndex);
+        //return managerQueue.get(currentlyPlayingIndex);
     }
 
     /**
