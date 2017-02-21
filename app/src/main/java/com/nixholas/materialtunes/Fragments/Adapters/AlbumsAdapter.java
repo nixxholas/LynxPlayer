@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -51,11 +52,11 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         TextView title, artistName;
         ImageView albumArt;
         Palette.Swatch swatch, mutedSwatch;
-        CardView currentAlbumCard;
+        RelativeLayout currentAlbumCard;
 
         public ViewHolder(View v) {
             super(v);
-            this.currentAlbumCard = (CardView) v.findViewById(R.id.album_cardview);
+            this.currentAlbumCard = (RelativeLayout) v.findViewById(R.id.album_layout);
             this.albumArt = (ImageView) v.findViewById(R.id.album_thumbnail);
             this.title = (TextView) v.findViewById(R.id.album_cardtitle);
             this.artistName = (TextView) v.findViewById(R.id.album_cardartist);
