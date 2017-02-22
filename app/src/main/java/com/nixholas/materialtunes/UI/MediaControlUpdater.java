@@ -66,6 +66,7 @@ public class MediaControlUpdater {
             }
 
             final Song prevSong = mediaManager.getPrevious();
+            mediaManager.setCurrent(prevSong);
 
             Uri audioUri = Uri.parse("file://" + prevSong.getDataPath());
 

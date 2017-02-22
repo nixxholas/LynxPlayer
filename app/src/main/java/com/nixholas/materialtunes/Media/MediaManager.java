@@ -416,6 +416,10 @@ public class MediaManager extends Service {
         }
     }
 
+    public void setCurrent(Song song) {
+        currentlyPlayingIndex = managerQueue.indexOf(song);
+    }
+
     public Song getNext() {
         Log.d("getNext()", "Running getNext()");
 

@@ -188,7 +188,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
             public void onClick(View view) {
                 // Debugging Only
                 //Log.e("CardOnClick", "Clicked");
-                Log.d("OnClick", "CardView");
+                Log.d("OnClick", "Song View Item");
 
                 // Animations
                 //view.animate().scaleX()
