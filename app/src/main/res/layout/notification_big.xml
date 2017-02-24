@@ -3,99 +3,115 @@
     android:id="@+id/notibig_layout"
     android:layout_width="match_parent"
     android:layout_height="128dp"
+    android:padding="@dimen/bignotification_padding"
     android:orientation="vertical">
 
     <ImageView
         android:id="@+id/notibig_albumart"
-        android:layout_margin="8dp"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true" />
 
-    <LinearLayout
+    <RelativeLayout
+        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_toEndOf="@+id/notibig_albumart"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@+id/notibig_albumart">
 
-        <!--http://stackoverflow.com/questions/9527288/any-way-to-remove-the-grey-background-from-imagebuttons-->
-        <TextView
-            android:id="@+id/notibig_title"
-            android:textColor="#000000"
-            android:textSize="@dimen/album_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:ellipsize="end" />
-
-        <TextView
-            android:id="@+id/notibig_artist"
-            android:textColor="#000000"
-            android:textSize="@dimen/songs_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:ellipsize="end" />
-
-        <TextView
-            android:id="@+id/notibig_album"
-            android:textColor="#000000"
-            android:textSize="@dimen/songs_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:ellipsize="end" />
-
-        <LinearLayout
+        <RelativeLayout
             android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:layout_marginTop="12dp"
-            android:weightSum="3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <!--http://stackoverflow.com/questions/5406092/android-how-to-make-a-view-grow-to-fill-available-space-->
-            <ImageButton
-                android:id="@+id/notibig_previous"
-                android:background="?android:selectableItemBackground"
-                android:layout_weight="1"
+            <LinearLayout
+                android:id="@+id/notibig_textlayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"/>
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:paddingRight="26sp"
+                android:orientation="vertical">
 
+                <!--http://stackoverflow.com/questions/9527288/any-way-to-remove-the-grey-background-from-imagebuttons-->
+                <TextView
+                    android:id="@+id/notibig_title"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/album_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <TextView
+                    android:id="@+id/notibig_artist"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/songs_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <TextView
+                    android:id="@+id/notibig_album"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/songs_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+            </LinearLayout>
+
+            <!--http://stackoverflow.com/questions/4931071/android-and-setting-alpha-for-image-view-alpha-->
             <ImageButton
-                android:id="@+id/notibig_playpause"
-                android:layout_marginLeft="@dimen/notibig_button_margin"
-                android:layout_marginRight="@dimen/notibig_button_margin"
+                android:id="@+id/notibig_dismiss"
                 android:background="?android:selectableItemBackground"
-                android:layout_weight="1"
+                android:src="@drawable/ic_close_black_24dp"
+                android:alpha="0.5"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:weightSum="3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
 
-            <ImageButton
-                android:id="@+id/notibig_next"
-                android:background="?android:selectableItemBackground"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"/>
+                <!--http://stackoverflow.com/questions/5406092/android-how-to-make-a-view-grow-to-fill-available-space-->
+                <ImageButton
+                    android:id="@+id/notibig_previous"
+                    android:background="?android:selectableItemBackground"
+                    android:layout_weight="1"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:layout_gravity="start"/>
 
-        </LinearLayout>
+                <ImageButton
+                    android:id="@+id/notibig_playpause"
+                    android:layout_marginLeft="@dimen/notibig_button_margin"
+                    android:layout_marginRight="@dimen/notibig_button_margin"
+                    android:background="?android:selectableItemBackground"
+                    android:layout_weight="1"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"/>
 
-    </LinearLayout>
+                <ImageButton
+                    android:id="@+id/notibig_next"
+                    android:background="?android:selectableItemBackground"
+                    android:layout_weight="1"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:layout_gravity="end"/>
 
-    <!--http://stackoverflow.com/questions/4931071/android-and-setting-alpha-for-image-view-alpha-->
-    <ImageButton
-        android:id="@+id/notibig_dismiss"
-        android:background="?android:selectableItemBackground"
-        android:src="@drawable/ic_close_black_24dp"
-        android:alpha="0.5"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_alignParentEnd="true" />
+            </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

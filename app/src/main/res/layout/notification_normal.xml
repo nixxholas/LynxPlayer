@@ -1,54 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:id="@+id/noti_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="64dp"
+    android:orientation="horizontal"
+    android:padding="@dimen/notification_padding">
 
         <ImageView
             android:id="@+id/noti_albumart"
-            android:layout_alignParentStart="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"/>
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="-8sp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"/>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
+            android:id="@+id/noti_textlayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
+            android:layout_toRightOf="@id/noti_albumart"
             android:paddingLeft="@dimen/notification_info_container_padding_left"
-            android:paddingBottom="@dimen/notification_info_container_padding_bottom">
+            android:paddingRight="128sp">
 
                 <TextView
                     android:id="@+id/noti_title"
                     android:textColor="#000000"
+                    android:textSize="@dimen/album_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_toEndOf="@+id/noti_albumart" />
+                    android:maxLines="1"
+                    android:ellipsize="end" />
 
                 <TextView
                     android:id="@+id/noti_artist"
                     android:textColor="#000000"
+                    android:textSize="@dimen/notification_artist_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/noti_title"
-                    android:layout_marginStart="16dp"
-                    android:layout_toEndOf="@+id/noti_albumart" />
+                    android:maxLines="1"
+                    android:ellipsize="end" />
 
         </LinearLayout>
 
         <ImageButton
-            android:layout_toStartOf="@+id/noti_dismiss"
+            android:id="@+id/noti_previous"
+            android:background="?android:selectableItemBackground"
+            android:layout_toStartOf="@+id/noti_playpause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <ImageButton
-            android:id="@+id/noti_dismiss"
+            android:id="@+id/noti_playpause"
+            android:background="?android:selectableItemBackground"
+            android:layout_toStartOf="@+id/noti_next"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:id="@+id/noti_next"
+            android:background="?android:selectableItemBackground"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
 </RelativeLayout>

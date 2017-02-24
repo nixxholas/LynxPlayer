@@ -17,14 +17,20 @@
     <dimen name="card_margin">2dp</dimen>
     <dimen name="card_album_radius">0dp</dimen>
     <dimen name="album_title_padding">10dp</dimen>
-    <dimen name="album_title">15dp</dimen>
+    <dimen name="album_title">15sp</dimen>
     <dimen name="songs_count_padding_bottom">5dp</dimen>
-    <dimen name="songs_count">12dp</dimen>
+    <dimen name="songs_count">12sp</dimen>
 
     <!-- Notification Dimensions -->
-    <dimen name="notibig_button_margin">48dp</dimen>
-    <dimen name="notification_info_container_padding_left">8dp</dimen>
-    <dimen name="notification_info_container_padding_bottom">4dp</dimen>
+    <dimen name="notification_padding">8sp</dimen>
+    <dimen name="notification_artist_text">13sp</dimen>
+    <dimen name="bignotification_padding">8sp</dimen>
+    <dimen name="noti_albumart_padding">16sp</dimen>
+    <dimen name="notibig_button_margin">36dp</dimen>
+    <dimen name="notification_info_container_padding_left">0sp</dimen>
+    <dimen name="notification_info_container_padding_bottom">4sp</dimen>
+    <dimen name="notificationbig_info_container_padding_left">8dp</dimen>
+    <dimen name="notificationbig_info_container_padding_bottom">4dp</dimen>
 
     <!-- Parallax Dimensions -->
 </resources>
