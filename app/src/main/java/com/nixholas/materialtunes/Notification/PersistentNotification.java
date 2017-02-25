@@ -118,8 +118,8 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
         bigView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_big);
 
         // Setup the normalView Static Contents
-        normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_36dp);
-        normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_36dp);
+        normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_48dp);
+        normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_48dp);
 
         // Setup the BigView Static Contents
         bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
@@ -236,10 +236,10 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
             if (mediaManager.mMediaPlayer.isPlaying()) {
                 bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
-                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_36dp);
+                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_48dp);
             } else {
                 bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
-                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_36dp);
+                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_48dp);
             }
 
             // Debugging Album Art
@@ -255,7 +255,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
             final Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
 
             // Has Album Art Logic
-
+            // http://stackoverflow.com/questions/23357706/how-to-check-which-current-image-resource-is-attached-to-imageview-in-android-xm
             final boolean hasAlbumArt = !(slidedAlbumArt.getDrawable().getConstantState() ==
                     mContext.getResources().getDrawable(R.drawable.untitled_album,
                                                         mContext.getTheme()).getConstantState());
@@ -377,17 +377,17 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
                         if (isColorDark(albColor)) {
                             //Setup the BigView Static Contents
-                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_white_36dp);
-                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_white_36dp);
+                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_white_48dp);
+                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_white_48dp);
                             bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_white_36dp);
                             bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_white_36dp);
                             bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_white_36dp);
 
                                 if (mediaManager.mMediaPlayer.isPlaying()) {
-                                    normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_white_36dp);
+                                    normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_white_48dp);
                                     bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_white_36dp);
                                 } else {
-                                    normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_white_36dp);
+                                    normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_white_48dp);
                                     bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_white_36dp);
                                 }
 
@@ -403,17 +403,17 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                         Color.WHITE);
                         } else {
                             //Setup the BigView Static Contents
-                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_36dp);
-                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_36dp);
+                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_48dp);
+                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_48dp);
                             bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
                             bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
                             bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
 
                             if (mediaManager.mMediaPlayer.isPlaying()) {
-                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_36dp);
+                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_48dp);
                                 bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
                             } else {
-                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_36dp);
+                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_48dp);
                                 bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
                             }
 
