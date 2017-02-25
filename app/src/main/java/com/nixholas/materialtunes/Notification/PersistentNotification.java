@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.StreamBitmapDecoder;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.nixholas.materialtunes.MainActivity;
@@ -26,9 +28,12 @@ import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.SwatchEnum;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
+import static com.nixholas.materialtunes.MainActivity.slidedAlbumArt;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPrevious;
@@ -249,67 +254,44 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                     .parse("content://media/external/audio/albumart");
             final Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
 
+            // Has Album Art Logic
+
+            final boolean hasAlbumArt = !(slidedAlbumArt.getDrawable().getConstantState() ==
+                    mContext.getResources().getDrawable(R.drawable.untitled_album,
+                                                        mContext.getTheme()).getConstantState());
+
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     try {
-                        final Bitmap albumBitmap = Glide.with(mContext)
-                                .load(albumArtUri)
-                                .asBitmap()
-                                .placeholder(R.drawable.untitled_album)
-                                .error(R.drawable.untitled_album)
-                                .fitCenter()
-                                .into(400, 400)
-                                .get();
+                        Bitmap albumBitmap;
+
+                        if (hasAlbumArt) {
+                            albumBitmap = Glide.with(mContext)
+                                    .load(albumArtUri)
+                                    .asBitmap()
+                                    .placeholder(R.drawable.untitled_album)
+                                    .imageDecoder(new StreamBitmapDecoder(mContext))
+                                    .error(R.drawable.untitled_album)
+                                    .fitCenter()
+                                    .into(400, 400)
+                                    .get();
+                        } else {
+                            albumBitmap = Glide.with(mContext)
+                                    .load(R.drawable.untitled_album)
+                                    .asBitmap()
+                                    .into(400,400)
+                                    .get();
+                        }
 
                         final int albColor = Palette.from(albumBitmap)
                                 .generate()
                                 .getVibrantColor(Color.parseColor("#403f4d"));
 
                         // http://stackoverflow.com/questions/27394016/how-does-one-use-glide-to-download-an-image-into-a-bitmap
-                        normalView.setImageViewBitmap(R.id.noti_albumart,
-                                Glide.with(mContext)
-                                        .load(albumArtUri)
-                                        .asBitmap()
-                                        .placeholder(R.drawable.untitled_album)
-                                        .listener(new RequestListener<Uri, Bitmap>() {
-                                            @Override
-                                            public boolean onException(Exception e, Uri model, Target<Bitmap> target, boolean isFirstResource) {
-                                                // important to return false so the error placeholder can be placed
-                                                return false;
-                                            }
+                        normalView.setImageViewBitmap(R.id.noti_albumart, albumBitmap);
 
-                                            @Override
-                                            public boolean onResourceReady(Bitmap resource, Uri model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                                return false;
-                                            }
-                                        })
-                                        .error(R.drawable.untitled_album)
-                                        .fitCenter()
-                                        .into(56, 56)
-                                        .get());
-
-                        bigView.setImageViewBitmap(R.id.notibig_albumart,
-                                Glide.with(mContext)
-                                        .load(albumArtUri)
-                                        .asBitmap()
-                                        .placeholder(R.drawable.untitled_album)
-                                        .listener(new RequestListener<Uri, Bitmap>() {
-                                            @Override
-                                            public boolean onException(Exception e, Uri model, Target<Bitmap> target, boolean isFirstResource) {
-                                                // important to return false so the error placeholder can be placed
-                                                return false;
-                                            }
-
-                                            @Override
-                                            public boolean onResourceReady(Bitmap resource, Uri model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                                return false;
-                                            }
-                                        })
-                                        .error(R.drawable.untitled_album)
-                                        .fitCenter()
-                                        .into(400, 400)
-                                        .get());
+                        bigView.setImageViewBitmap(R.id.notibig_albumart, albumBitmap);
 
                         //Log.d("Color[0]", color[0] + "");
 
