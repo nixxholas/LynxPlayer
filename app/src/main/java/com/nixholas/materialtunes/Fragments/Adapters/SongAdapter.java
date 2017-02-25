@@ -152,9 +152,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
 
         context = parent.getContext();
 
-        // ButterKnife Properly
-        //http://stackoverflow.com/questions/37771222/android-butterknife-unable-to-bind-views-into-viewholder
-        //ButterKnife.bind(this, (Activity) context);
         return vh;
     }
 
@@ -189,13 +186,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
                 // Debugging Only
                 //Log.e("CardOnClick", "Clicked");
                 Log.d("OnClick", "Song View Item");
-
-                // Animations
-                //view.animate().scaleX()
-
-                // Since it's not enlarged yet
-                //view.getRootView().animate().scaleX(1.2f);
-                //view.getRootView().animate().scaleY(1.2f);
 
                 try {
                     //Log.e("LOG ", currentSong.getDataPath());

@@ -18,6 +18,8 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
@@ -30,6 +32,7 @@ import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPrevious;
+import static com.nixholas.materialtunes.Utils.TextColorHelper.isColorDark;
 
 /**
  * The Generic Notification Object for MaterialTunes.
@@ -73,7 +76,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
     private final Context mContext = MainActivity.getInstance();
     private NotificationManager mNotificationManager;
     private Notification mNotification;
-    private SwatchEnum backgroundSwatchEnum = SwatchEnum.NULL; // Initialize with null first
+    //private SwatchEnum backgroundSwatchEnum = SwatchEnum.NULL; // Initialize with null first
 
     // NormalView Widgets
 
@@ -207,6 +210,8 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
             // Debugging Works
             //Log.e("FilePath", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
             //Log.e("Current Context", MainActivity.getInstance().getPackageName());
+            Log.d("PersistentNotifiation", "updateNotification()");
+
             mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
             final Song currentSong = mediaManager.getCurrent();
 
@@ -238,25 +243,48 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
             // Album Art
             // http://stackoverflow.com/questions/7817551/how-to-check-file-exist-or-not-and-if-not-create-a-new-file-in-sdcard-in-async-t
             //if (filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId())) {
-                // Setup the albumArt first
-                Uri sArtworkUri = Uri
-                        .parse("content://media/external/audio/albumart");
-                Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
+
+            // Setup the albumArt first
+            Uri sArtworkUri = Uri
+                    .parse("content://media/external/audio/albumart");
+            final Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
 
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                    Uri sArtworkUri = Uri
-                            .parse("content://media/external/audio/albumart");
-                    Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
-
                     try {
+                        final Bitmap albumBitmap = Glide.with(mContext)
+                                .load(albumArtUri)
+                                .asBitmap()
+                                .placeholder(R.drawable.untitled_album)
+                                .error(R.drawable.untitled_album)
+                                .fitCenter()
+                                .into(400, 400)
+                                .get();
+
+                        final int albColor = Palette.from(albumBitmap)
+                                .generate()
+                                .getVibrantColor(Color.parseColor("#403f4d"));
+
                         // http://stackoverflow.com/questions/27394016/how-does-one-use-glide-to-download-an-image-into-a-bitmap
                         normalView.setImageViewBitmap(R.id.noti_albumart,
                                 Glide.with(mContext)
                                         .load(albumArtUri)
                                         .asBitmap()
                                         .placeholder(R.drawable.untitled_album)
+                                        .listener(new RequestListener<Uri, Bitmap>() {
+                                            @Override
+                                            public boolean onException(Exception e, Uri model, Target<Bitmap> target, boolean isFirstResource) {
+                                                // important to return false so the error placeholder can be placed
+                                                return false;
+                                            }
+
+                                            @Override
+                                            public boolean onResourceReady(Bitmap resource, Uri model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                                return false;
+                                            }
+                                        })
+                                        .error(R.drawable.untitled_album)
                                         .fitCenter()
                                         .into(56, 56)
                                         .get());
@@ -266,19 +294,24 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                         .load(albumArtUri)
                                         .asBitmap()
                                         .placeholder(R.drawable.untitled_album)
+                                        .listener(new RequestListener<Uri, Bitmap>() {
+                                            @Override
+                                            public boolean onException(Exception e, Uri model, Target<Bitmap> target, boolean isFirstResource) {
+                                                // important to return false so the error placeholder can be placed
+                                                return false;
+                                            }
+
+                                            @Override
+                                            public boolean onResourceReady(Bitmap resource, Uri model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                                return false;
+                                            }
+                                        })
+                                        .error(R.drawable.untitled_album)
                                         .fitCenter()
                                         .into(400, 400)
                                         .get());
 
                         //Log.d("Color[0]", color[0] + "");
-
-                        Bitmap albumBitmap = Glide.with(mContext)
-                                .load(albumArtUri)
-                                .asBitmap()
-                                .placeholder(R.drawable.untitled_album)
-                                .fitCenter()
-                                .into(400, 400)
-                                .get();
 
                         // http://stackoverflow.com/questions/27209596/media-style-notification-not-working-after-update-to-android-5-0
                         if (mediaManager.mMediaPlayer.isPlaying()) {
@@ -309,7 +342,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                     .setSmallIcon(R.drawable.ic_app_icon)
                                     // Set the color for the notification
                                     // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
-                                    .setColor(Palette.from(albumBitmap).generate().getVibrantColor(Color.parseColor("#403f4d")))
+                                    .setColor(albColor)
                                     // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
                                     .setShowWhen(false) // Removes the timestamp for the notification
                                     .setContentTitle(currentSong.getTitle())
@@ -343,7 +376,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                     .setSmallIcon(R.drawable.ic_app_icon)
                                     // Set the color for the notification
                                     // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
-                                    .setColor(Palette.from(albumBitmap).generate().getVibrantColor(Color.parseColor("#403f4d")))
+                                    .setColor(albColor)
                                     // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
                                     .setShowWhen(false) // Removes the timestamp for the notification
                                     .setContentTitle(currentSong.getTitle())
@@ -354,77 +387,119 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                         /**
                          * Now we'll need to set the colors appropriately
                          */
+                        // Set the layout backgrounds first
+                        normalView.setInt(R.id.noti_layout, "setBackgroundColor",
+                                albColor);
+                        bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
+                                albColor);
 
-                        switch (backgroundSwatchEnum) {
-                            case VIBRANT: // If it's vibrant
-                                // The icons need to be bright
-                                // Setup the BigView Static Contents
-                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_white_36dp);
-                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_white_36dp);
-                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_white_36dp);
+                        if (isColorDark(albColor)) {
+                            //Setup the BigView Static Contents
+                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_white_36dp);
+                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_white_36dp);
+                            bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_white_36dp);
+                            bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_white_36dp);
+                            bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_white_36dp);
 
                                 if (mediaManager.mMediaPlayer.isPlaying()) {
+                                    normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_white_36dp);
                                     bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_white_36dp);
                                 } else {
+                                    normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_white_36dp);
                                     bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_white_36dp);
                                 }
 
+                                normalView.setInt(R.id.noti_title, "setTextColor",
+                                        Color.WHITE);
+                                normalView.setInt(R.id.noti_artist, "setTextColor",
+                                        Color.WHITE);
                                 bigView.setInt(R.id.notibig_title, "setTextColor",
                                         Color.WHITE);
                                 bigView.setInt(R.id.notibig_artist, "setTextColor",
-                                        Color.parseColor("#40FFFFFF"));
-                                bigView.setInt(R.id.notibig_album, "setTextColor",
-                                        Color.parseColor("#40FFFFFF"));
-
-                                bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
-                                        Palette.from(albumBitmap).generate().getVibrantColor(Color.parseColor("#403f4d")));
-                                break;
-                            case DULL: // If it's dull
-                                // The icons need to be dark
-                                // Setup the BigView Static Contents
-                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
-                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
-                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
-
-                                if (mediaManager.mMediaPlayer.isPlaying()) {
-                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
-                                } else {
-                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
-                                }
-
-                                bigView.setInt(R.id.notibig_title, "setTextColor",
-                                        Color.BLACK);
-                                bigView.setInt(R.id.notibig_artist, "setTextColor",
-                                        Color.parseColor("#40000000"));
-                                bigView.setInt(R.id.notibig_album, "setTextColor",
-                                        Color.parseColor("#40000000"));
-
-                                bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
-                                        Palette.from(albumBitmap).generate().getVibrantColor(Color.parseColor("#403f4d")));
-                                break;
-                            default: // Includes SwatchEnum.NULL
-                                // Setup the BigView Static Contents
-                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
-                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
-                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
-
-                                bigView.setInt(R.id.notibig_title, "setTextColor",
-                                        Color.BLACK);
-                                bigView.setInt(R.id.notibig_artist, "setTextColor",
-                                        Color.GRAY);
-                                bigView.setInt(R.id.notibig_album, "setTextColor",
-                                        Color.GRAY);
-
-                                if (mediaManager.mMediaPlayer.isPlaying()) {
-                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
-                                } else {
-                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
-                                }
-
-                                bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
                                         Color.WHITE);
-                                break;
+                                bigView.setInt(R.id.notibig_album, "setTextColor",
+                                        Color.WHITE);
+                        } else {
+                            //Setup the BigView Static Contents
+                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_36dp);
+                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_36dp);
+                            bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
+                            bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
+                            bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
+
+                            if (mediaManager.mMediaPlayer.isPlaying()) {
+                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_36dp);
+                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
+                            } else {
+                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_36dp);
+                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
+                            }
+
+                            normalView.setInt(R.id.noti_title, "setTextColor",
+                                    Color.BLACK);
+                            normalView.setInt(R.id.noti_artist, "setTextColor",
+                                    Color.BLACK);
+                            bigView.setInt(R.id.notibig_title, "setTextColor",
+                                    Color.BLACK);
+                            bigView.setInt(R.id.notibig_artist, "setTextColor",
+                                    Color.BLACK);
+                            bigView.setInt(R.id.notibig_album, "setTextColor",
+                                    Color.BLACK);
                         }
+
+//                        switch (backgroundSwatchEnum) {
+//                            case VIBRANT: // If it's vibrant
+//                                // The icons need to be bright
+//
+//                                bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
+//                                        Palette.from(albumBitmap).generate().getVibrantColor(Color.parseColor("#403f4d")));
+//                                break;
+//                            case DULL: // If it's dull
+//                                // The icons need to be dark
+//                                // Setup the BigView Static Contents
+//                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
+//                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
+//                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
+//
+//                                if (mediaManager.mMediaPlayer.isPlaying()) {
+//                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
+//                                } else {
+//                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
+//                                }
+//
+//                                bigView.setInt(R.id.notibig_title, "setTextColor",
+//                                        Color.BLACK);
+//                                bigView.setInt(R.id.notibig_artist, "setTextColor",
+//                                        Color.parseColor("#40000000"));
+//                                bigView.setInt(R.id.notibig_album, "setTextColor",
+//                                        Color.parseColor("#40000000"));
+//
+//                                bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
+//                                        Palette.from(albumBitmap).generate().getVibrantColor(Color.parseColor("#403f4d")));
+//                                break;
+//                            default: // Includes SwatchEnum.NULL
+//                                // Setup the BigView Static Contents
+//                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
+//                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
+//                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
+//
+//                                bigView.setInt(R.id.notibig_title, "setTextColor",
+//                                        Color.BLACK);
+//                                bigView.setInt(R.id.notibig_artist, "setTextColor",
+//                                        Color.GRAY);
+//                                bigView.setInt(R.id.notibig_album, "setTextColor",
+//                                        Color.GRAY);
+//
+//                                if (mediaManager.mMediaPlayer.isPlaying()) {
+//                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
+//                                } else {
+//                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
+//                                }
+//
+//                                bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
+//                                        Color.WHITE);
+//                                break;
+//                        }
 
                         mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
 
