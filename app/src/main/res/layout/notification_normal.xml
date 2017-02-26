@@ -10,7 +10,6 @@
         <ImageView
             android:id="@+id/noti_albumart"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="-8sp"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_centerVertical="true"/>
@@ -48,24 +47,24 @@
             android:id="@+id/noti_previous"
             android:background="?android:selectableItemBackground"
             android:layout_toStartOf="@+id/noti_playpause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:scaleType="center" />
 
         <ImageButton
             android:id="@+id/noti_playpause"
             android:background="?android:selectableItemBackground"
             android:layout_toStartOf="@+id/noti_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:scaleType="center" />
 
         <ImageButton
             android:id="@+id/noti_next"
             android:background="?android:selectableItemBackground"
             android:layout_alignParentEnd="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:scaleType="center" />
 
 </RelativeLayout>

@@ -27,7 +27,7 @@
     <dimen name="bignotification_padding">8sp</dimen>
     <dimen name="noti_albumart_padding">16sp</dimen>
     <dimen name="notibig_button_margin">36dp</dimen>
-    <dimen name="notification_info_container_padding_left">0sp</dimen>
+    <dimen name="notification_info_container_padding_left">8sp</dimen>
     <dimen name="notification_info_container_padding_bottom">4sp</dimen>
     <dimen name="notificationbig_info_container_padding_left">8dp</dimen>
     <dimen name="notificationbig_info_container_padding_bottom">4dp</dimen>
