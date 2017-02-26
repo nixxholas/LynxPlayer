@@ -36,7 +36,6 @@ import java.util.concurrent.TimeUnit;
 
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
-import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Maximum;
 import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Progress;
 import static com.nixholas.materialtunes.MainActivity.persistentNotif;
@@ -171,7 +170,7 @@ public class MediaManager extends Service {
         };
 
         TelephonyManager mgr = (TelephonyManager) mainActivity.getSystemService(TELEPHONY_SERVICE);
-        if(mgr != null) {
+        if (mgr != null) {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
 
@@ -445,22 +444,6 @@ public class MediaManager extends Service {
     }
 
     public Song getPrevious() {
-        //        if (preferenceHelper.getShuffle()) {
-        //            int newSong = currentlyPlayingIndex;
-        //            if (managerQueue.size() > 1) { // Don't let a Deadlock happen
-        //                while (newSong == currentlyPlayingIndex) {
-        //                    newSong = shufflerRandomizer.nextInt(managerQueue.size());
-        //                }
-        //            }
-        //            currentlyPlayingIndex = newSong;
-        //        } else {
-        //            if (currentlyPlayingIndex == 0) {
-        //                currentlyPlayingIndex = managerQueue.size();
-        //            } else {
-        //                currentlyPlayingIndex--;
-        //            }
-        //        }
-
         // Let's use the history stack now.
         Log.d("historyStack", "isEmpty -> " + historyStack.isEmpty());
 
@@ -469,8 +452,6 @@ public class MediaManager extends Service {
         } else { // Return the current song since there isn't any history.
             return getCurrent();
         }
-
-        //return managerQueue.get(currentlyPlayingIndex);
     }
 
     /**

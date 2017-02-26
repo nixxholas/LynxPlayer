@@ -82,7 +82,8 @@
                 android:layout_gravity="center"
                 android:weightSum="3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-6sp">
 
                 <!--http://stackoverflow.com/questions/5406092/android-how-to-make-a-view-grow-to-fill-available-space-->
                 <ImageButton

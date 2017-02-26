@@ -19,7 +19,8 @@
         android:id="@+id/mainfrag_relone"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
-                <ImageView
+
+        <ImageView
                     android:id="@+id/card_image"
                     android:layout_width="85dp"
                     android:layout_height="85dp" />
@@ -35,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
 
-                    <TextView
+                    <com.nixholas.materialtunes.UI.Text.SemiBoldTextView
                         android:id="@+id/card_title"
                         android:textStyle="bold"
                         android:ellipsize="end"
@@ -43,7 +44,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
-                    <TextView
+                    <com.nixholas.materialtunes.UI.Text.RegularTextView
                         android:id="@+id/card_artist"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />

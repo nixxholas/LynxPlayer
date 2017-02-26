@@ -58,7 +58,7 @@
                 app:stl_dividerColor="#4D000000"
                 app:stl_dividerThickness="1dp"
                 app:stl_defaultTabBackground="?attr/selectableItemBackground"
-                app:stl_defaultTabTextAllCaps="true"
+                app:stl_defaultTabTextAllCaps="false"
                 app:stl_defaultTabTextColor="#FCFFFFFF"
                 app:stl_defaultTabTextSize="14sp"
                 app:stl_defaultTabTextHorizontalPadding="16dp"

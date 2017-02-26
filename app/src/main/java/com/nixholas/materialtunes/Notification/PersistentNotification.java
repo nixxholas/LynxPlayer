@@ -256,9 +256,10 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
             // Has Album Art Logic
             // http://stackoverflow.com/questions/23357706/how-to-check-which-current-image-resource-is-attached-to-imageview-in-android-xm
-            final boolean hasAlbumArt = !(slidedAlbumArt.getDrawable().getConstantState() ==
-                    mContext.getResources().getDrawable(R.drawable.untitled_album,
-                                                        mContext.getTheme()).getConstantState());
+            final boolean hasAlbumArt = !(java.util.Objects.equals(
+                    slidedAlbumArt.getDrawable().getConstantState(),
+                    mContext.getResources().getDrawable(R.drawable.untitled_album, mContext.getTheme())
+                            .getConstantState()));
 
             new AsyncTask<Void, Void, Void>() {
                 @Override

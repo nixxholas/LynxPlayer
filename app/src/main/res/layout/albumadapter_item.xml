@@ -25,7 +25,7 @@
                 android:scaleType="centerInside"
                 android:transitionName="@string/transition_album_image"/>
 
-            <TextView
+            <com.nixholas.materialtunes.UI.Text.SemiBoldTextView
                 android:id="@+id/album_cardtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                 android:maxLines="1"
                 android:ellipsize="end" />
 
-            <TextView
+            <com.nixholas.materialtunes.UI.Text.RegularTextView
                 android:id="@+id/album_cardartist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

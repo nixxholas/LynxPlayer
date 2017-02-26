@@ -12,7 +12,8 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="-8sp"
             android:layout_width="56dp"
-            android:layout_height="56dp"/>
+            android:layout_height="56dp"
+            android:layout_centerVertical="true"/>
 
         <LinearLayout
             android:id="@+id/noti_textlayout"
@@ -48,20 +49,23 @@
             android:background="?android:selectableItemBackground"
             android:layout_toStartOf="@+id/noti_playpause"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:scaleType="center" />
 
         <ImageButton
             android:id="@+id/noti_playpause"
             android:background="?android:selectableItemBackground"
             android:layout_toStartOf="@+id/noti_next"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:scaleType="center" />
 
         <ImageButton
             android:id="@+id/noti_next"
             android:background="?android:selectableItemBackground"
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:scaleType="center" />
 
 </RelativeLayout>
