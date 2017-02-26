@@ -37,6 +37,7 @@ import static com.nixholas.materialtunes.MainActivity.slidedAlbumArt;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPrevious;
+import static com.nixholas.materialtunes.Utils.AlbumService.getAlbumArt;
 import static com.nixholas.materialtunes.Utils.TextColorHelper.isColorDark;
 
 /**
@@ -256,10 +257,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
             // Has Album Art Logic
             // http://stackoverflow.com/questions/23357706/how-to-check-which-current-image-resource-is-attached-to-imageview-in-android-xm
-            final boolean hasAlbumArt = !(java.util.Objects.equals(
-                    slidedAlbumArt.getDrawable().getConstantState(),
-                    mContext.getResources().getDrawable(R.drawable.untitled_album, mContext.getTheme())
-                            .getConstantState()));
+            final boolean hasAlbumArt = getAlbumArt(mContext, currentSong.getAlbumId()) != null;
 
             new AsyncTask<Void, Void, Void>() {
                 @Override
@@ -272,7 +270,6 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                     .load(albumArtUri)
                                     .asBitmap()
                                     .placeholder(R.drawable.untitled_album)
-                                    .imageDecoder(new StreamBitmapDecoder(mContext))
                                     .error(R.drawable.untitled_album)
                                     .fitCenter()
                                     .into(400, 400)
