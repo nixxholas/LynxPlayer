@@ -43,6 +43,7 @@
 
         </LinearLayout>
 
+        <!--http://stackoverflow.com/questions/660629/android-imagebutton-cant-get-image-in-the-center-->
         <ImageButton
             android:id="@+id/noti_previous"
             android:background="?android:selectableItemBackground"

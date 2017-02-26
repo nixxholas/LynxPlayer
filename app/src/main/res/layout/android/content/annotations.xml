@@ -1,0 +1,6 @@
+<root>
+  <item
+      name='android.content.SharedPreferences.Editor android.content.SharedPreferences.Editor putInt(java.lang.String, int)'>
+    <annotation name='android.support.annotation.Nullable' />
+  </item>
+</root>

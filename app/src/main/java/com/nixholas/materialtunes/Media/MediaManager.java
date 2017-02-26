@@ -25,7 +25,6 @@ import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.RemoteControlReceiver;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -145,6 +144,9 @@ public class MediaManager extends Service {
 
         // Instantiate the MediaPlayer Object
         mMediaPlayer = new MediaPlayer();
+
+        // Retrieve the Last Played Object
+        setCurrent(preferenceHelper.getLastPlayedSong());
 
         /**
          * Temporary fix for AOBException for getCurrent
@@ -577,5 +579,9 @@ public class MediaManager extends Service {
                 mMediaPlayer.reset();
             }
         }
+    }
+
+    public void setAsLastPlayed(Song currentSong) {
+
     }
 }

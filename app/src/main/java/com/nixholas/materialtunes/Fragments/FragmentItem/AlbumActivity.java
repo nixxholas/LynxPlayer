@@ -22,7 +22,7 @@ import com.nixholas.materialtunes.Fragments.Adapters.AlbumAdapter;
 import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmap;
 import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmapTranscoder;
-import com.nixholas.materialtunes.Utils.TextColorHelper;
+import com.nixholas.materialtunes.Utils.Color.TextColorHelper;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.File;

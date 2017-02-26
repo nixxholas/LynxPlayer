@@ -22,6 +22,7 @@ public class AlbumService {
         return ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), albumID);
     }
 
+    // http://stackoverflow.com/questions/1954434/cover-art-on-android
     public static Bitmap getAlbumArt(Context context, Long album_id)
     {
         Bitmap bm = null;

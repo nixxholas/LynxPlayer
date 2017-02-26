@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
@@ -19,26 +18,19 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.StreamBitmapDecoder;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
-import com.nixholas.materialtunes.Utils.SwatchEnum;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
-import static com.nixholas.materialtunes.MainActivity.slidedAlbumArt;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPrevious;
 import static com.nixholas.materialtunes.Utils.AlbumService.getAlbumArt;
-import static com.nixholas.materialtunes.Utils.TextColorHelper.isColorDark;
+import static com.nixholas.materialtunes.Utils.Color.TextColorHelper.isColorDark;
 
 /**
  * The Generic Notification Object for MaterialTunes.

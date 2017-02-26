@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.graphics.Palette;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,7 @@ import com.nixholas.materialtunes.Media.Entities.Album;
 import com.nixholas.materialtunes.R;
 import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmap;
 import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmapTranscoder;
-import com.nixholas.materialtunes.Utils.TextColorHelper;
+import com.nixholas.materialtunes.Utils.Color.TextColorHelper;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.File;
