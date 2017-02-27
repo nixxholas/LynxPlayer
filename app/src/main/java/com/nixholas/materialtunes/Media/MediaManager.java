@@ -280,14 +280,14 @@ public class MediaManager extends Service {
                                         ));
 
                                         //repeat yourself that again in 100 miliseconds
-                                        mainHandler.postDelayed(this, 100);
+                                        mainHandler.postDelayed(this, 500);
 
                                     }
 
                                 } else {
                                     // Don't update if it's not playing..
                                     //repeat yourself that again in 100 miliseconds
-                                    mainHandler.postDelayed(this, 100);
+                                    mainHandler.postDelayed(this, 500);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

@@ -193,7 +193,7 @@ public class MediaControlUpdater {
             if (mediaManager.mMediaPlayer.isPlaying() || !mediaManager.mediaPlayerIsPaused) {
                 mediaManager.mMediaPlayer.stop();
                 mediaManager.mMediaPlayer.reset();
-                mediaManager.mMediaPlayer.setDataSource(v.getContext(), audioUri);
+                mediaManager.mMediaPlayer.setDataSource(getInstance().getApplicationContext(), audioUri);
                 mediaManager.mMediaPlayer.prepareAsync();
                 mediaManager.mediaPlayerIsPaused = false;
 

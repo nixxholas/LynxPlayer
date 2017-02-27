@@ -74,6 +74,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
     private final Context mContext = MainActivity.getInstance();
     private NotificationManager mNotificationManager;
     private Notification mNotification;
+    private NotificationCompat.Builder mBuilder;
     //private SwatchEnum backgroundSwatchEnum = SwatchEnum.NULL; // Initialize with null first
 
     // NormalView Widgets
@@ -197,18 +198,38 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
     }
 
     private void makeNotification(Context context) {
-        mNotification = new Notification.Builder(context)
-                .setSmallIcon(R.drawable.ic_app_icon) // It is a requirement to have a default small icon for notifications
-                .setContentTitle("MaterialTunes")
-                .build();
+        Log.d("PersistentNotification", "makeNotification()");
+
+        mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(mContext)
+                // Show controls on lock screen even when user hides sensitive content.
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setSmallIcon(R.drawable.untitled_album)
+                .setOngoing(true)
+                // Add media control buttons that invoke intents in your media service
+                .addAction(R.drawable.ic_skip_previous_black_36dp, "Previous", prevPendingIntent) // #0
+                .addAction(R.drawable.ic_pause_black_36dp, "Pause", pausePendingIntent)  // #1
+                .addAction(R.drawable.ic_skip_next_black_36dp, "Next", nextPendingIntent)     // #2
+                .addAction(R.drawable.ic_close_black_24dp, "Close", dismissPendingIntent) // #3
+                // Apply the media style template
+                // .setStyle(new NotificationCompat.MediaStyle()
+                // .setShowCancelButton(true)
+                // .setCancelButtonIntent(dismissPendingIntent)
+                // .setShowActionsInCompactView(1 /* #1: pause button */, 2, 3)
+                // .setMediaSession(mediaManager.getMediaSessionToken()))
+                .setCustomContentView(normalView)
+                .setCustomBigContentView(bigView)
+                .setShowWhen(false); // Removes the timestamp for the notification
     }
 
+    /**
+     * http://stackoverflow.com/questions/22789588/how-to-update-notification-with-remoteviews
+     */
     public void updateNotification() {
         try {
             // Debugging Works
             //Log.e("FilePath", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
             //Log.e("Current Context", MainActivity.getInstance().getPackageName());
-            Log.d("PersistentNotifiation", "updateNotification()");
+            Log.d("PersistentNotifiation", "buildNotification()");
 
             mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
             final Song currentSong = mediaManager.getCurrent();
@@ -289,68 +310,30 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                         if (mediaManager.mMediaPlayer.isPlaying()) {
                             // Creating a Notifcation
                             // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
-                            mNotification = new NotificationCompat.Builder(mContext)
-                                    // Show controls on lock screen even when user hides sensitive content.
-                                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                                    .setSmallIcon(R.drawable.untitled_album)
-                                    .setOngoing(true)
-                                    // Add media control buttons that invoke intents in your media service
-                                    .addAction(R.drawable.ic_skip_previous_black_36dp, "Previous", prevPendingIntent) // #0
-                                    .addAction(R.drawable.ic_pause_black_36dp, "Pause", pausePendingIntent)  // #1
-                                    .addAction(R.drawable.ic_skip_next_black_36dp, "Next", nextPendingIntent)     // #2
-                                    .addAction(R.drawable.ic_close_black_24dp, "Close", dismissPendingIntent) // #3
-                                    // Apply the media style template
-                                    // .setStyle(new NotificationCompat.MediaStyle()
-                                    // .setShowCancelButton(true)
-                                    // .setCancelButtonIntent(dismissPendingIntent)
-                                    // .setShowActionsInCompactView(1 /* #1: pause button */, 2, 3)
-                                    // .setMediaSession(mediaManager.getMediaSessionToken()))
-                                    .setCustomContentView(normalView)
-                                    .setCustomBigContentView(bigView)
+                            mBuilder
                                     // Converting albumArtUri to a Bitmap directly
                                     // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                                     //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
                                     .setLargeIcon(albumBitmap)
-                                    .setSmallIcon(R.drawable.ic_app_icon)
                                     // Set the color for the notification
                                     // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
                                     .setColor(albColor)
                                     // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
-                                    .setShowWhen(false) // Removes the timestamp for the notification
                                     .setContentTitle(currentSong.getTitle())
                                     .setContentText(currentSong.getArtistName())
                                     .build();
                         } else {
                             // Creating a Notifcation
                             // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
-                            mNotification = new NotificationCompat.Builder(mContext)
-                                    // Show controls on lock screen even when user hides sensitive content.
-                                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                                    .setSmallIcon(R.drawable.untitled_album)
-                                    .setOngoing(true)
-                                    // Add media control buttons that invoke intents in your media service
-                                    .addAction(R.drawable.ic_skip_previous_black_36dp, "Previous", prevPendingIntent) // #0
-                                    .addAction(R.drawable.ic_play_arrow_black_36dp, "Play", pausePendingIntent)  // #1
-                                    .addAction(R.drawable.ic_skip_next_black_36dp, "Next", nextPendingIntent)     // #2
-                                    .addAction(R.drawable.ic_close_black_36dp, "Close", dismissPendingIntent) // #3
-                                    // Apply the media style template
-//                                    .setStyle(new NotificationCompat.MediaStyle()
-//                                            .setShowCancelButton(true)
-//                                            .setCancelButtonIntent(dismissPendingIntent)
-//                                            .setShowActionsInCompactView(1 /* #1: pause button */, 2, 3)
-//                                            .setMediaSession(mediaManager.getMediaSessionToken()))
-                                    .setCustomContentView(normalView)
-                                    .setCustomBigContentView(bigView)
+                            mBuilder
                                     // Converting albumArtUri to a Bitmap directly
                                     // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                                     //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
                                     .setLargeIcon(albumBitmap)
-                                    .setSmallIcon(R.drawable.ic_app_icon)
                                     // Set the color for the notification
                                     // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
                                     .setColor(albColor)
                                     // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
-                                    .setShowWhen(false) // Removes the timestamp for the notification
                                     .setContentTitle(currentSong.getTitle())
                                     .setContentText(currentSong.getArtistName())
                                     .build();
@@ -419,60 +402,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                     Color.BLACK);
                         }
 
-//                        switch (backgroundSwatchEnum) {
-//                            case VIBRANT: // If it's vibrant
-//                                // The icons need to be bright
-//
-//                                bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
-//                                        Palette.from(albumBitmap).generate().getVibrantColor(Color.parseColor("#403f4d")));
-//                                break;
-//                            case DULL: // If it's dull
-//                                // The icons need to be dark
-//                                // Setup the BigView Static Contents
-//                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
-//                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
-//                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
-//
-//                                if (mediaManager.mMediaPlayer.isPlaying()) {
-//                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
-//                                } else {
-//                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
-//                                }
-//
-//                                bigView.setInt(R.id.notibig_title, "setTextColor",
-//                                        Color.BLACK);
-//                                bigView.setInt(R.id.notibig_artist, "setTextColor",
-//                                        Color.parseColor("#40000000"));
-//                                bigView.setInt(R.id.notibig_album, "setTextColor",
-//                                        Color.parseColor("#40000000"));
-//
-//                                bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
-//                                        Palette.from(albumBitmap).generate().getVibrantColor(Color.parseColor("#403f4d")));
-//                                break;
-//                            default: // Includes SwatchEnum.NULL
-//                                // Setup the BigView Static Contents
-//                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
-//                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
-//                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
-//
-//                                bigView.setInt(R.id.notibig_title, "setTextColor",
-//                                        Color.BLACK);
-//                                bigView.setInt(R.id.notibig_artist, "setTextColor",
-//                                        Color.GRAY);
-//                                bigView.setInt(R.id.notibig_album, "setTextColor",
-//                                        Color.GRAY);
-//
-//                                if (mediaManager.mMediaPlayer.isPlaying()) {
-//                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
-//                                } else {
-//                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
-//                                }
-//
-//                                bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
-//                                        Color.WHITE);
-//                                break;
-//                        }
-
+                        mNotification = mBuilder.build();
                         mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
 
                         mNotificationManager.notify(NOTIFICATION_ID, mNotification); // Notify the app to notify the system
