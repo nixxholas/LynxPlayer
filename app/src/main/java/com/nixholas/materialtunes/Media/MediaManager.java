@@ -3,13 +3,17 @@ package com.nixholas.materialtunes.Media;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.media.MediaMetadataCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -68,7 +72,7 @@ public class MediaManager extends Service {
     // Main Objects for MediaManager
     public AudioManager audioManager;
     // MediaSession allows interaction with media controllers, volume keys, media buttons, and transport controls
-    //public MediaSession mMediaSession;
+    public MediaSession mSession;
     public MediaPlayer mMediaPlayer;
     public RemoteControlReceiver remoteControlReceiver;
     private MediaDB mediaDB;
@@ -620,4 +624,23 @@ public class MediaManager extends Service {
             }
         }
     }
+
+    /**
+     * Method updateMetaData()
+     *
+     * This method allows us to update the metadata relevant with the song object and bind it with
+     * mSession so that external controls and services can utilize it to control mMediaPlayer
+     * easily.
+     */
+//    private void updateMetaData() {
+//        Bitmap albumArt = BitmapFactory.decodeResource(getResources(),
+//                R.drawable.image);
+//        // Update the current metadata
+//        mSession.setMetadata(new MediaMetadataCompat.Builder()
+//                .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt)
+//                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, activeAudio.getArtist())
+//                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, activeAudio.getAlbum())
+//                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, activeAudio.getTitle())
+//                .build());
+//    }
 }
