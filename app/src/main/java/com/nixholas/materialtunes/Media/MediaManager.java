@@ -124,6 +124,11 @@ public class MediaManager extends Service {
 //        return mMediaSession.getSessionToken();
 //    }
 
+    /**
+     * Creating an enum for the repeat state validation is more efficient than utilizing the
+     * shared preferences integer because the number of calls required may potentially result in
+     * an increased level of code inefficiency.
+     */
     public enum RepeatState {
         NOREPEAT,
         REPEATONE,
@@ -189,17 +194,11 @@ public class MediaManager extends Service {
          */
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
+            public void onPrepared(final MediaPlayer mediaPlayer) {
                     // Check to make sure it's not hidden
                     if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.HIDDEN) {
                         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                     }
-
-                    mediaPlayer.start();
-                    mPlaybackState = new PlaybackState.Builder()
-                            .setState(PlaybackState.STATE_PLAYING, 0, 1.0f)
-                            .build();
-                    //mMediaSession.setPlaybackState(mPlaybackState);
 
                     // Get a handler that can be used to post to the main thread
                     // http://stackoverflow.com/questions/11123621/running-code-in-main-thread-from-another-thread
@@ -256,35 +255,42 @@ public class MediaManager extends Service {
                                 slidedSeekBar.setProgress(mCurrentPosition);
                             }
                             mainHandler.postDelayed(this, 1000);*/
+                            Log.d("mainHandler", "mediaPlayerIsPaused: " + mediaPlayerIsPaused);
 
-                                if (mMediaPlayer != null) {
-                                    // http://stackoverflow.com/questions/35027321/seek-bar-and-media-player-and-a-time-of-a-track
-                                    //set seekbar progress
-                                    slidingSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
-                                    slidedSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+                                if (!mediaPlayerIsPaused) {
 
-                                    long currentPosition = mMediaPlayer.getCurrentPosition();
-                                    // Set current time
-                                    //mediaSeekText_Progress.setText(mMediaPlayer.getCurrentPosition() + "");
-                                    //mediaSeekText_Progress.setText(msecondsToString(mMediaPlayer.getCurrentPosition()));
-                                    mediaSeekText_Progress.setText(String.format(Locale.ENGLISH, "%02d:%02d",
-                                            TimeUnit.MILLISECONDS.toMinutes(currentPosition),
-                                            TimeUnit.MILLISECONDS.toSeconds(currentPosition) -
-                                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(currentPosition))
-                                    ));
+                                    if (mMediaPlayer != null) {
+                                        // http://stackoverflow.com/questions/35027321/seek-bar-and-media-player-and-a-time-of-a-track
+                                        //set seekbar progress
+                                        slidingSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+                                        slidedSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
 
+                                        long currentPosition = mMediaPlayer.getCurrentPosition();
+                                        // Set current time
+                                        //mediaSeekText_Progress.setText(mMediaPlayer.getCurrentPosition() + "");
+                                        //mediaSeekText_Progress.setText(msecondsToString(mMediaPlayer.getCurrentPosition()));
+                                        mediaSeekText_Progress.setText(String.format(Locale.ENGLISH, "%02d:%02d",
+                                                TimeUnit.MILLISECONDS.toMinutes(currentPosition),
+                                                TimeUnit.MILLISECONDS.toSeconds(currentPosition) -
+                                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(currentPosition))
+                                        ));
+
+                                        //repeat yourself that again in 100 miliseconds
+                                        mainHandler.postDelayed(this, 100);
+
+                                    }
+
+                                } else {
+                                    // Don't update if it's not playing..
                                     //repeat yourself that again in 100 miliseconds
                                     mainHandler.postDelayed(this, 100);
                                 }
-
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
                     };
                     mainHandler.post(progressRunnable);
-
-                persistentNotif.updateNotification();
 
                 // Finally, bump the counter in the SQLite table
 
@@ -300,8 +306,15 @@ public class MediaManager extends Service {
                     Log.d("mediaDBCheck", "This song exists in the DB");
                     mediaDB.incrementMediaCount(getCurrent());
                 }
-
                 updateTopPlayed(); // finally, update the top played list
+
+                persistentNotif.updateNotification();
+
+                mediaPlayer.start();
+                setmPlaybackState(new PlaybackState.Builder()
+                        .setState(PlaybackState.STATE_PLAYING,
+                                mMediaPlayer.getCurrentPosition(), 1.0f)
+                        .build());
             }
         });
 
@@ -404,21 +417,48 @@ public class MediaManager extends Service {
         return mPlaybackState;
     }
 
-    //    public Song getCurrent() {
-    //        return songFiles.get(currentlyPlayingIndex);
-    //    }
+    public void setmPlaybackState(PlaybackState state) { mPlaybackState = state; }
 
     public Song getCurrent() {
-        // If the MediaManager has already been playing
-        if (!managerQueue.isEmpty()) {
-            return managerQueue.get(currentlyPlayingIndex);
-        } else {
-            return songFiles.get(currentlyPlayingIndex);
+        try {
+            // If the MediaManager has already been playing
+            if (!managerQueue.isEmpty() && currentlyPlayingIndex >= 0
+                    && currentlyPlayingIndex < managerQueue.size()) {
+
+                return managerQueue.get(currentlyPlayingIndex);
+            } else { // If we fail to find it, let's fix it
+                // This happens most of the time when the player just started
+                mMediaPlayer.reset();
+
+                // Retrieve the current song from shared preferences
+                Song newCurrentSong = preferenceHelper.getLastPlayedSong();
+
+                mMediaPlayer.setDataSource(newCurrentSong.getDataPath());
+                mMediaPlayer.prepare();
+                mMediaPlayer.pause();
+                mediaPlayerIsPaused = true;
+
+                // Add it to the queue
+                managerQueue.add(newCurrentSong);
+
+                // Set the currentlyPlayingIndex to the newCurrentSong's Index
+                currentlyPlayingIndex = managerQueue.indexOf(newCurrentSong);
+
+                // Make sure we perform repeat and shuffle checks
+
+
+                // Return in
+                return newCurrentSong;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
         }
     }
 
     public void setCurrent(Song song) {
         currentlyPlayingIndex = managerQueue.indexOf(song);
+        preferenceHelper.setLastPlayedSong(song);
     }
 
     public Song getNext() {
@@ -579,9 +619,5 @@ public class MediaManager extends Service {
                 mMediaPlayer.reset();
             }
         }
-    }
-
-    public void setAsLastPlayed(Song currentSong) {
-
     }
 }

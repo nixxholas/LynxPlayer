@@ -328,6 +328,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
                                         }
                                     })
                                     .into(slidedAlbumArt);
+
                         }
 
                     } catch (IOException e) {

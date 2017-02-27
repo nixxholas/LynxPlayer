@@ -18,6 +18,7 @@ import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_Shuffle;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Maximum;
+import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Progress;
 import static com.nixholas.materialtunes.MainActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.slideAlbumArt;
 import static com.nixholas.materialtunes.MainActivity.slideButton;
@@ -105,6 +106,11 @@ public class SlidingBarUpdater {
         slidingSeekBar.setMax(songDuration);
         slidedSeekBar.setMax(songDuration);
 
+        mediaSeekText_Progress.setText((String.format("%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(0),
+                TimeUnit.MILLISECONDS.toSeconds(0) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(0))
+        )));
         // Retrieve the length of the song and set it into the Maximum Text View
         //mediaSeekText_Maximum.setText(getCurrent().getDuration() + "");
         // http://stackoverflow.com/questions/625433/how-to-convert-milliseconds-to-x-mins-x-seconds-in-java

@@ -44,7 +44,8 @@ public class CustomImageButton extends ImageButton {
      * @param enabled
      * The boolean of getShuffle() from sharedPreferences
      */
-    public void setEnabledUI(boolean enabled) {
+    public void
+    setEnabledUI(boolean enabled) {
         Log.d("CustomImageButton", "setEnabledUI, bool enabled: " + enabled);
 
         Drawable background = getBackground();
