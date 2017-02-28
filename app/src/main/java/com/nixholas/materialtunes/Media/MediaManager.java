@@ -1,6 +1,8 @@
 package com.nixholas.materialtunes.Media;
 
+import android.app.ActivityManager;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -34,6 +36,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Stack;
@@ -254,13 +257,6 @@ public class MediaManager extends Service {
                         @Override
                         public void run() {
                             try {
-                            /*if (mediaManager.mMediaPlayer != null) {
-                                //Log.d("ProgRunnable", "Running"); // Debugging Purposes only
-                                int mCurrentPosition = mediaManager.mMediaPlayer.getCurrentPosition() / 1000;
-                                slidingSeekBar.setProgress(mCurrentPosition);
-                                slidedSeekBar.setProgress(mCurrentPosition);
-                            }
-                            mainHandler.postDelayed(this, 1000);*/
                             Log.d("mainHandler", "mediaPlayerIsPaused: " + mediaPlayerIsPaused);
 
                                 if (!mediaPlayerIsPaused && mMediaPlayer != null) {
@@ -273,6 +269,7 @@ public class MediaManager extends Service {
                                         // Set current time
                                         //mediaSeekText_Progress.setText(mMediaPlayer.getCurrentPosition() + "");
                                         //mediaSeekText_Progress.setText(msecondsToString(mMediaPlayer.getCurrentPosition()));
+                                        // http://stackoverflow.com/questions/13444546/android-adt-21-0-warning-implicitly-using-the-default-locale
                                         mediaSeekText_Progress.setText(String.format(Locale.ENGLISH, "%02d:%02d",
                                                 TimeUnit.MILLISECONDS.toMinutes(currentPosition),
                                                 TimeUnit.MILLISECONDS.toSeconds(currentPosition) -

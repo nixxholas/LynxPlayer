@@ -50,7 +50,8 @@ import static com.nixholas.materialtunes.Utils.AlbumService.getAlbumArtUri;
 /**
  * Created by nixho on 03-Nov-16.
  */
-public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
+public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
+        implements FastScrollRecyclerView.SectionedAdapter {
     private ArrayList<Song> mDataset;
     private Context context;
 
@@ -64,7 +65,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         /* each data item is just a string in this case */
         protected View v;
         Song song;
@@ -74,9 +75,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
         Palette viewPalette;
         RelativeLayout layout;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
-            //ButterKnife.bind(this, v);
             this.title = (TextView) v.findViewById(R.id.card_title);
             this.artistName = (TextView) v.findViewById(R.id.card_artist);
             this.songArt = (ImageView) v.findViewById(R.id.card_image);
@@ -118,6 +118,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
                         new AsyncTask<Void, Void, Void>() {
                             @Override
                             protected Void doInBackground(Void... params) {
+                                mDataset.remove(song);
                                 removeSong(song.getId());
                                 return null;
                             }
@@ -162,7 +163,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> im
         // - replace the contents of the view with that element
         final Song currentSong = mDataset.get(position);
         holder.song = currentSong;
-        final int currentPosition = position;
 
         holder.title.setText(currentSong.getTitle());
         holder.artistName.setText(currentSong.getArtistName());
