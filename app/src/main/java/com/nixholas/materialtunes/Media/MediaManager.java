@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
+import android.media.MediaMetadata;
 import android.media.MediaPlayer;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
@@ -26,6 +27,7 @@ import com.nixholas.materialtunes.Media.Entities.Playlist;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.Media.Entities.Utils.PlaylistUtil;
 import com.nixholas.materialtunes.R;
+import com.nixholas.materialtunes.Utils.AlbumService;
 import com.nixholas.materialtunes.Utils.RemoteControlReceiver;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -261,9 +263,7 @@ public class MediaManager extends Service {
                             mainHandler.postDelayed(this, 1000);*/
                             Log.d("mainHandler", "mediaPlayerIsPaused: " + mediaPlayerIsPaused);
 
-                                if (!mediaPlayerIsPaused) {
-
-                                    if (mMediaPlayer != null) {
+                                if (!mediaPlayerIsPaused && mMediaPlayer != null) {
                                         // http://stackoverflow.com/questions/35027321/seek-bar-and-media-player-and-a-time-of-a-track
                                         //set seekbar progress
                                         slidingSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
@@ -281,9 +281,6 @@ public class MediaManager extends Service {
 
                                         //repeat yourself that again in 100 miliseconds
                                         mainHandler.postDelayed(this, 500);
-
-                                    }
-
                                 } else {
                                     // Don't update if it's not playing..
                                     //repeat yourself that again in 100 miliseconds
@@ -510,9 +507,7 @@ public class MediaManager extends Service {
         managerQueue.add(currentSong);
 
         for (Song s : songFiles) {
-            if (s.getId() == currentSong.getId()) {
-                // Do nothing
-            } else {
+            if (s.getId() != currentSong.getId()) {
                 // Add the song to the queue
                 managerQueue.add(s);
             }
@@ -632,15 +627,15 @@ public class MediaManager extends Service {
      * mSession so that external controls and services can utilize it to control mMediaPlayer
      * easily.
      */
-//    private void updateMetaData() {
-//        Bitmap albumArt = BitmapFactory.decodeResource(getResources(),
-//                R.drawable.image);
-//        // Update the current metadata
-//        mSession.setMetadata(new MediaMetadataCompat.Builder()
-//                .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt)
-//                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, activeAudio.getArtist())
-//                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, activeAudio.getAlbum())
-//                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, activeAudio.getTitle())
-//                .build());
-//    }
+    private void updateMetaData() {
+        Bitmap albumArt = AlbumService.getAlbumArt(getApplicationContext(),
+                getCurrent().getAlbumId());
+        // Update the current metadata
+        mSession.setMetadata(new MediaMetadata.Builder()
+                .putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, albumArt)
+                .putString(MediaMetadata.METADATA_KEY_ARTIST, getCurrent().getArtistName())
+                .putString(MediaMetadata.METADATA_KEY_ALBUM, getCurrent().getAlbumName())
+                .putString(MediaMetadata.METADATA_KEY_TITLE, getCurrent().getTitle())
+                .build());
+    }
 }

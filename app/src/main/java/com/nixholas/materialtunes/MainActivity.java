@@ -125,12 +125,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Request for proper permissions first
         // https://developer.android.com/training/permissions/requesting.html
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                1); // Reading
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                2); // Writing
+        //        ActivityCompat.requestPermissions(this,
+        //                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+        //                1); // Reading
+        //        ActivityCompat.requestPermissions(this,
+        //                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+        //                2); // Writing
 
         mediaManager = new MediaManager(this);
         mediaManager.initializeMediaDB(this);
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup the notifications
         Handler mHandler = new Handler();
         //Context appContext = getBaseContext().getApplicationContext();
-        mHandler.post(persistentNotif = new PersistentNotification(MainActivity.this));
+        mHandler.post(persistentNotif = new PersistentNotification(getApplicationContext()));
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
