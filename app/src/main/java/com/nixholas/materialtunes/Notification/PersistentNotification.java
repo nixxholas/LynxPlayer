@@ -112,8 +112,8 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
         bigView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_big);
 
         // Setup the normalView Static Contents
-        normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_48dp);
-        normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_48dp);
+        normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_36dp);
+        normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_36dp);
 
         // Setup the BigView Static Contents
         bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
@@ -249,11 +249,11 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
             bigView.setTextViewText(R.id.notibig_album, currentSong.getAlbumName());
 
             if (mediaManager.mMediaPlayer.isPlaying()) {
-                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_48dp);
-                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_48dp);
+                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
+                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_36dp);
             } else {
-                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_48dp);
-                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_48dp);
+                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_24dp);
+                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_24dp);
             }
 
             // Debugging Album Art
@@ -386,8 +386,8 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                 normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_36dp);
                                 bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
                             } else {
-                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_36dp);
-                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_36dp);
+                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_24dp);
+                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_24dp);
                             }
 
                             normalView.setInt(R.id.noti_title, "setTextColor",

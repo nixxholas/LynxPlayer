@@ -90,6 +90,7 @@
                     android:id="@+id/notibig_previous"
                     android:background="?android:selectableItemBackground"
                     android:layout_weight="1"
+                    android:padding="18sp"
                     android:layout_width="54dp"
                     android:layout_height="54dp"
                     android:layout_gravity="start"/>
@@ -100,6 +101,7 @@
                     android:layout_marginRight="@dimen/notibig_button_margin"
                     android:background="?android:selectableItemBackground"
                     android:layout_weight="1"
+                    android:padding="18sp"
                     android:layout_width="54dp"
                     android:layout_height="54dp"/>
 
@@ -107,6 +109,7 @@
                     android:id="@+id/notibig_next"
                     android:background="?android:selectableItemBackground"
                     android:layout_weight="1"
+                    android:padding="18sp"
                     android:layout_width="54dp"
                     android:layout_height="54dp"
                     android:layout_gravity="end"/>
