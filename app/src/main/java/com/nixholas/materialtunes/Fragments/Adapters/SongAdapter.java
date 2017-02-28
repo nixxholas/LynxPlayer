@@ -118,7 +118,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
                         new AsyncTask<Void, Void, Void>() {
                             @Override
                             protected Void doInBackground(Void... params) {
-                                mDataset.remove(song);
                                 removeSong(song.getId());
                                 return null;
                             }
@@ -367,9 +366,16 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
         return bm;
     }
 
+    public void removeItem(Song item) {
+        int position = mDataset.indexOf(item);
+        if (position != -1) {
+            mDataset.remove(item);
+            notifyItemRemoved(position);
+        }
+    }
+
     public void removeAt(int position) {
         mDataset.remove(position);
         notifyItemRemoved(position);
-        notifyItemRangeChanged(position, mDataset.size());
     }
 }

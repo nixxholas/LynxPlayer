@@ -20,7 +20,7 @@ public class SongUtil {
         String where = MediaStore.Audio.Media._ID + "=?";
         String[] whereVal = {selectSong + ""};
         resolver.delete(uri, where, whereVal);
-        mDataAdapter.updateSongData();
+        //mDataAdapter.updateSongData();
         //Log.d("PlaylistUtil", "removePlaylist");
     }
 
