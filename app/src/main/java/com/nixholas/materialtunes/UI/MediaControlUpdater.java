@@ -206,7 +206,7 @@ public class MediaControlUpdater {
                 slided_SongTitle.setText(nextSong.getTitle());
                 slideSongArtist.setText(nextSong.getArtistName());
                 slided_SongArtist.setText(nextSong.getArtistName());
-                Glide.with(v.getContext())
+                Glide.with(getInstance().getApplicationContext())
                         .load(albumArtUri)
                         .asBitmap()
                         .placeholder(R.drawable.untitled_album)

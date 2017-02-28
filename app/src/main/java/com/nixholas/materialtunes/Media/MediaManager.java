@@ -280,11 +280,11 @@ public class MediaManager extends Service {
                                         ));
 
                                         //repeat yourself that again in 100 miliseconds
-                                        mainHandler.postDelayed(this, 500);
+                                        mainHandler.postDelayed(this, 1000);
                                 } else {
                                     // Don't update if it's not playing..
                                     //repeat yourself that again in 100 miliseconds
-                                    mainHandler.postDelayed(this, 500);
+                                    mainHandler.postDelayed(this, 1000);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -434,22 +434,32 @@ public class MediaManager extends Service {
                 // Retrieve the current song from shared preferences
                 Song newCurrentSong = preferenceHelper.getLastPlayedSong();
 
-                mMediaPlayer.setDataSource(newCurrentSong.getDataPath());
-                mMediaPlayer.prepare();
-                mMediaPlayer.pause();
-                mediaPlayerIsPaused = true;
+                if (newCurrentSong != null) {
+                    mMediaPlayer.setDataSource(newCurrentSong.getDataPath());
+                    mMediaPlayer.prepare();
+                    mMediaPlayer.pause();
+                    mediaPlayerIsPaused = true;
 
-                // Add it to the queue
-                managerQueue.add(newCurrentSong);
+                    // Add it to the queue
+                    managerQueue.add(newCurrentSong);
 
-                // Set the currentlyPlayingIndex to the newCurrentSong's Index
-                currentlyPlayingIndex = managerQueue.indexOf(newCurrentSong);
+                    // Set the currentlyPlayingIndex to the newCurrentSong's Index
+                    currentlyPlayingIndex = managerQueue.indexOf(newCurrentSong);
 
-                // Make sure we perform repeat and shuffle checks
+                    // Make sure we perform repeat and shuffle checks
 
 
-                // Return in
-                return newCurrentSong;
+                    // Return in
+                    return newCurrentSong;
+                } else {
+                    // Since the user does not have a last played song yet, we'll give him the first
+                    // song he has.
+                    if (!songFiles.isEmpty()) {
+                        return songFiles.get(0);
+                    }
+
+                    return null; // Return null if there still isn't anything.
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
