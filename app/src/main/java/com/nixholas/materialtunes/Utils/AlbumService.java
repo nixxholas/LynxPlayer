@@ -8,15 +8,10 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 
-import com.nixholas.materialtunes.R;
-
-import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-
-import static com.nixholas.materialtunes.MainActivity.getInstance;
 
 /**
  * Created by nixholas on 12/1/17.
@@ -38,13 +33,6 @@ public class AlbumService {
 
             Uri uri = ContentUris.withAppendedId(sArtworkUri, album_id);
 
-            // Prevent FileNotFoundException
-            // http://stackoverflow.com/questions/16237950/android-check-if-file-exists-without-creating-a-new-one
-            if (!new File("content://media/external/audio/albumart/" + album_id).exists()) {
-                return BitmapFactory.decodeResource(getInstance().getResources()
-                        , R.drawable.untitled_album);
-            }
-
             ParcelFileDescriptor pfd = context.getContentResolver()
                     .openFileDescriptor(uri, "r");
 
@@ -55,8 +43,6 @@ public class AlbumService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return BitmapFactory.decodeResource(getInstance().getResources()
-                    , R.drawable.untitled_album);
         }
 
         return bm;

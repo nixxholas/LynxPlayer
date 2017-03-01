@@ -52,7 +52,7 @@ public class MediaControlUpdater {
                     mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
                 }
 
-                persistentNotif.run(); // Update the notification
+                persistentNotif.updateNotification();
             }
         }
     }
@@ -68,7 +68,7 @@ public class MediaControlUpdater {
             }
 
             final Song prevSong = mediaManager.getPrevious();
-            mediaManager.setCurrent(mediaManager.getSongFiles().indexOf(prevSong));
+            mediaManager.setCurrent(prevSong);
 
             Uri audioUri = Uri.parse("file://" + prevSong.getDataPath());
 
@@ -80,7 +80,7 @@ public class MediaControlUpdater {
                 mediaManager.mMediaPlayer.stop();
                 mediaManager.mMediaPlayer.reset();
                 mediaManager.mMediaPlayer.setDataSource(v.getContext(), audioUri);
-                mediaManager.mMediaPlayer.prepare();
+                mediaManager.mMediaPlayer.prepareAsync();
                 mediaManager.mediaPlayerIsPaused = false;
 
                 /**
@@ -163,7 +163,7 @@ public class MediaControlUpdater {
                         })
                         .into(slidedAlbumArt);
 
-                persistentNotif.run(); // Update the notification
+                persistentNotif.updateNotification();
             }
 
         } catch (Exception e) {
@@ -188,7 +188,7 @@ public class MediaControlUpdater {
             final Song nextSong = mediaManager.getNext();
 
             // Set the next song as the current song
-            mediaManager.setCurrent(mediaManager.getSongFiles().indexOf(nextSong));
+            mediaManager.setCurrent(nextSong);
 
             Uri audioUri = Uri.parse("file://" + nextSong.getDataPath());
 
@@ -200,7 +200,7 @@ public class MediaControlUpdater {
                 mediaManager.mMediaPlayer.stop();
                 mediaManager.mMediaPlayer.reset();
                 mediaManager.mMediaPlayer.setDataSource(getInstance().getApplicationContext(), audioUri);
-                mediaManager.mMediaPlayer.prepare();
+                mediaManager.mMediaPlayer.prepareAsync();
                 mediaManager.mediaPlayerIsPaused = false;
 
                 /**
@@ -278,7 +278,7 @@ public class MediaControlUpdater {
                         })
                         .into(slidedAlbumArt);
 
-                persistentNotif.run(); // Update the notification
+                persistentNotif.updateNotification();
             }
         } catch (Exception e) {
             e.printStackTrace();
