@@ -34,10 +34,12 @@ import com.nixholas.materialtunes.Utils.RemoteControlReceiver;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
@@ -73,6 +75,9 @@ public class MediaManager extends Service {
     public static final String ACTION_NEXT = "action_next";
     public static final String ACTION_PREVIOUS = "action_previous";
     public static final String ACTION_STOP = "action_stop";
+
+    // Static Variables for Data Sets
+    private static int HISTORY_LIMIT = 1000;
 
     // Main Objects for MediaManager
     public AudioManager audioManager;
@@ -111,8 +116,8 @@ public class MediaManager extends Service {
      *
      * http://stackoverflow.com/questions/616484/how-to-use-concurrentlinkedqueue
      */
-    private LinkedList<Song> managerQueue = new LinkedList<>(); // We need a queue for the mediaplayer
-    private Stack<Song> historyStack = new Stack<>();
+    private static LinkedList<Integer> mUpcoming = new LinkedList<>();
+    private static LinkedList<Integer> mHistory = new LinkedList<>();
     protected ArrayList<Song> songFiles = new ArrayList<>();
     protected ArrayList<Album> albumFiles = new ArrayList<>();
     protected ArrayList<Playlist> playLists = new ArrayList<>();
@@ -327,14 +332,14 @@ public class MediaManager extends Service {
                         // so that we can reuse code instead
 
                         // Add the completed song to the history first
-                        historyStack.add(getCurrent());
+                        mHistory.add(currentlyPlayingIndex);
 
                         mediaControlsOnClickNext(MainActivity.getInstance().getCurrentFocus());
                     } else if (repeatState == RepeatState.NOREPEAT) {
                         /**
                          * Under The Hood changes
                          */
-                        Song currentSong = managerQueue.get(currentlyPlayingIndex); // Get the current song that just ended
+                        Song currentSong = songFiles.get(currentlyPlayingIndex); // Get the current song that just ended
                         mMediaPlayer.reset(); // Reset the player first
                         Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
                         mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
@@ -378,9 +383,9 @@ public class MediaManager extends Service {
         return String.format("%s:%s",strMin,strSec);
     }
 
-    public LinkedList<Song> getManagerQueue() {
-        return managerQueue;
-    }
+//    public LinkedList<Song> getManagerQueue() {
+//        return managerQueue;
+//    }
 
     public ArrayList<Song> getSongFiles() {
         return songFiles;
@@ -396,10 +401,6 @@ public class MediaManager extends Service {
 
     public ArrayList<Song> getTopPlayed() {
         return topPlayed;
-    }
-
-    public Stack<Song> getHistoryStack() {
-        return historyStack;
     }
 
     private String placeZeroIfNeeded(long number) {
@@ -420,10 +421,9 @@ public class MediaManager extends Service {
     public Song getCurrent() {
         try {
             // If the MediaManager has already been playing
-            if (!managerQueue.isEmpty() && currentlyPlayingIndex >= 0
-                    && currentlyPlayingIndex < managerQueue.size()) {
+            if (!songFiles.isEmpty() && currentlyPlayingIndex >= 0) {
 
-                return managerQueue.get(currentlyPlayingIndex);
+                return songFiles.get(currentlyPlayingIndex);
             } else { // If we fail to find it, let's fix it
                 // This happens most of the time when the player just started
                 mMediaPlayer.reset();
@@ -431,17 +431,17 @@ public class MediaManager extends Service {
                 // Retrieve the current song from shared preferences
                 Song newCurrentSong = preferenceHelper.getLastPlayedSong();
 
-                if (newCurrentSong != null) {
+                if (newCurrentSong.getDataPath() != null) {
                     mMediaPlayer.setDataSource(newCurrentSong.getDataPath());
                     mMediaPlayer.prepare();
                     mMediaPlayer.pause();
                     mediaPlayerIsPaused = true;
 
                     // Add it to the queue
-                    managerQueue.add(newCurrentSong);
+                    //managerQueue.add(newCurrentSong);
 
                     // Set the currentlyPlayingIndex to the newCurrentSong's Index
-                    currentlyPlayingIndex = managerQueue.indexOf(newCurrentSong);
+                    currentlyPlayingIndex = songFiles.indexOf(newCurrentSong);
 
                     // Make sure we perform repeat and shuffle checks
 
@@ -465,7 +465,7 @@ public class MediaManager extends Service {
     }
 
     public void setCurrent(Song song) {
-        currentlyPlayingIndex = managerQueue.indexOf(song);
+        currentlyPlayingIndex = songFiles.indexOf(song);
         preferenceHelper.setLastPlayedSong(song);
     }
 
@@ -473,32 +473,40 @@ public class MediaManager extends Service {
         Log.d("getNext()", "Running getNext()");
 
         // Make sure to add the current song to the history stack first
-        historyStack.push(getCurrent());
+        mHistory.add(currentlyPlayingIndex);
 
-        if (preferenceHelper.getShuffle()) {
+        // Let's check if the user has added anything to upcoming or not
+        if (!mUpcoming.isEmpty()) {
+            // Since he/she did add something, we'll play it first
+            return songFiles.get(mUpcoming.removeFirst());
+        }
+
+        if (preferenceHelper.getShuffle()) { // If shuffle mode is on
+            // Shuffle and retrieve the song
             int newSong = currentlyPlayingIndex;
-            if (managerQueue.size() > 1) { // Don't let a Deadlock happen
+            if (songFiles.size() > 0) { // Don't let a Deadlock happen
                 while (newSong == currentlyPlayingIndex) {
-                    newSong = shufflerRandomizer.nextInt(managerQueue.size());
+                    newSong = shufflerRandomizer.nextInt(songFiles.size());
                 }
             }
             currentlyPlayingIndex = newSong;
         } else {
+            // else retrieve the next song with an increment on currentlyPlayingIndex
             currentlyPlayingIndex++;
-            if (currentlyPlayingIndex == managerQueue.size()) {
+            if (currentlyPlayingIndex == songFiles.size()) { // Make it circular
                 currentlyPlayingIndex = 0;
             }
         }
 
-        return managerQueue.get(currentlyPlayingIndex);
+        return songFiles.get(currentlyPlayingIndex);
     }
 
     public Song getPrevious() {
         // Let's use the history stack now.
-        Log.d("historyStack", "isEmpty -> " + historyStack.isEmpty());
+        Log.d("historyStack", "isEmpty -> " + mHistory.isEmpty());
 
-        if (!historyStack.isEmpty()) {
-            return historyStack.pop();
+        if (!mHistory.isEmpty()) {
+            return songFiles.get(mHistory.pop());
         } else { // Return the current song since there isn't any history.
             return getCurrent();
         }
@@ -511,12 +519,20 @@ public class MediaManager extends Service {
      */
     public void putAllOnQueue(Song currentSong) {
         // Let's first put the current song into the queue
-        managerQueue.add(currentSong);
+        songFiles.add(currentSong);
 
         for (Song s : songFiles) {
             if (s.getId() != currentSong.getId()) {
                 // Add the song to the queue
-                managerQueue.add(s);
+                mUpcoming.add(songFiles.indexOf(s));
+            }
+        }
+    }
+
+    public void putAlbumOnQueue(ArrayList<Song> songs, Song dupe) {
+        for (Song s : songs) {
+            if (s != dupe) {
+                mUpcoming.add(songFiles.indexOf(s));
             }
         }
     }
@@ -527,15 +543,6 @@ public class MediaManager extends Service {
 
     public void setRepeatState(RepeatState repeatState) {
         this.repeatState = repeatState;
-    }
-
-    public void purgeSong(long songId) {
-        for (int i = 0; i < managerQueue.size(); i++) {
-            if (managerQueue.get(i).getId() == songId) {
-                managerQueue.remove(i);
-                break;
-            }
-        }
     }
 
     public void purgeList(long playlistId) {

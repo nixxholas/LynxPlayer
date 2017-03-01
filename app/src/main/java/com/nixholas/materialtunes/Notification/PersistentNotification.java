@@ -275,86 +275,87 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                    try {
-                        Bitmap albumBitmap;
+                    synchronized (this) {
+                        try {
+                            Bitmap albumBitmap;
 
-                        if (hasAlbumArt) {
-                            albumBitmap = Glide.with(mContext)
-                                    .load(albumArtUri)
-                                    .asBitmap()
-                                    .placeholder(R.drawable.untitled_album)
-                                    .error(R.drawable.untitled_album)
-                                    .fitCenter()
-                                    .into(400, 400)
-                                    .get();
-                        } else {
-                            albumBitmap = Glide.with(mContext)
-                                    .load(R.drawable.untitled_album)
-                                    .asBitmap()
-                                    .into(400,400)
-                                    .get();
-                        }
+                            if (hasAlbumArt) {
+                                albumBitmap = Glide.with(mContext)
+                                        .load(albumArtUri)
+                                        .asBitmap()
+                                        .placeholder(R.drawable.untitled_album)
+                                        .error(R.drawable.untitled_album)
+                                        .fitCenter()
+                                        .into(400, 400)
+                                        .get();
+                            } else {
+                                albumBitmap = Glide.with(mContext)
+                                        .load(R.drawable.untitled_album)
+                                        .asBitmap()
+                                        .into(400, 400)
+                                        .get();
+                            }
 
-                        final int albColor = Palette.from(albumBitmap)
-                                .generate()
-                                .getVibrantColor(Color.parseColor("#403f4d"));
+                            final int albColor = Palette.from(albumBitmap)
+                                    .generate()
+                                    .getVibrantColor(Color.parseColor("#403f4d"));
 
-                        // http://stackoverflow.com/questions/27394016/how-does-one-use-glide-to-download-an-image-into-a-bitmap
-                        normalView.setImageViewBitmap(R.id.noti_albumart, albumBitmap);
+                            // http://stackoverflow.com/questions/27394016/how-does-one-use-glide-to-download-an-image-into-a-bitmap
+                            normalView.setImageViewBitmap(R.id.noti_albumart, albumBitmap);
 
-                        bigView.setImageViewBitmap(R.id.notibig_albumart, albumBitmap);
+                            bigView.setImageViewBitmap(R.id.notibig_albumart, albumBitmap);
 
-                        //Log.d("Color[0]", color[0] + "");
+                            //Log.d("Color[0]", color[0] + "");
 
-                        // http://stackoverflow.com/questions/27209596/media-style-notification-not-working-after-update-to-android-5-0
-                        if (mediaManager.mMediaPlayer.isPlaying()) {
-                            // Creating a Notifcation
-                            // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
-                            mBuilder
-                                    // Converting albumArtUri to a Bitmap directly
-                                    // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
-                                    //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
-                                    .setLargeIcon(albumBitmap)
-                                    // Set the color for the notification
-                                    // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
-                                    .setColor(albColor)
-                                    // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
-                                    .setContentTitle(currentSong.getTitle())
-                                    .setContentText(currentSong.getArtistName())
-                                    .build();
-                        } else {
-                            // Creating a Notifcation
-                            // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
-                            mBuilder
-                                    // Converting albumArtUri to a Bitmap directly
-                                    // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
-                                    //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
-                                    .setLargeIcon(albumBitmap)
-                                    // Set the color for the notification
-                                    // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
-                                    .setColor(albColor)
-                                    // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
-                                    .setContentTitle(currentSong.getTitle())
-                                    .setContentText(currentSong.getArtistName())
-                                    .build();
-                        }
+                            // http://stackoverflow.com/questions/27209596/media-style-notification-not-working-after-update-to-android-5-0
+                            if (mediaManager.mMediaPlayer.isPlaying()) {
+                                // Creating a Notifcation
+                                // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
+                                mBuilder
+                                        // Converting albumArtUri to a Bitmap directly
+                                        // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+                                        //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
+                                        .setLargeIcon(albumBitmap)
+                                        // Set the color for the notification
+                                        // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
+                                        .setColor(albColor)
+                                        // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
+                                        .setContentTitle(currentSong.getTitle())
+                                        .setContentText(currentSong.getArtistName())
+                                        .build();
+                            } else {
+                                // Creating a Notifcation
+                                // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
+                                mBuilder
+                                        // Converting albumArtUri to a Bitmap directly
+                                        // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+                                        //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
+                                        .setLargeIcon(albumBitmap)
+                                        // Set the color for the notification
+                                        // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
+                                        .setColor(albColor)
+                                        // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
+                                        .setContentTitle(currentSong.getTitle())
+                                        .setContentText(currentSong.getArtistName())
+                                        .build();
+                            }
 
-                        /**
-                         * Now we'll need to set the colors appropriately
-                         */
-                        // Set the layout backgrounds first
-                        normalView.setInt(R.id.noti_layout, "setBackgroundColor",
-                                albColor);
-                        bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
-                                albColor);
+                            /**
+                             * Now we'll need to set the colors appropriately
+                             */
+                            // Set the layout backgrounds first
+                            normalView.setInt(R.id.noti_layout, "setBackgroundColor",
+                                    albColor);
+                            bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
+                                    albColor);
 
-                        if (isColorDark(albColor)) {
-                            //Setup the BigView Static Contents
-                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_white_36dp);
-                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_white_36dp);
-                            bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_white_36dp);
-                            bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_white_36dp);
-                            bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_white_36dp);
+                            if (isColorDark(albColor)) {
+                                //Setup the BigView Static Contents
+                                normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_white_36dp);
+                                normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_white_36dp);
+                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_white_36dp);
+                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_white_36dp);
+                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_white_36dp);
 
                                 if (mediaManager.mMediaPlayer.isPlaying()) {
                                     normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_white_36dp);
@@ -374,43 +375,44 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                         Color.WHITE);
                                 bigView.setInt(R.id.notibig_album, "setTextColor",
                                         Color.WHITE);
-                        } else {
-                            //Setup the BigView Static Contents
-                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_36dp);
-                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_36dp);
-                            bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
-                            bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
-                            bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
-
-                            if (mediaManager.mMediaPlayer.isPlaying()) {
-                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_36dp);
-                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
                             } else {
-                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_24dp);
-                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_24dp);
+                                //Setup the BigView Static Contents
+                                normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_36dp);
+                                normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_36dp);
+                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
+                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
+                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
+
+                                if (mediaManager.mMediaPlayer.isPlaying()) {
+                                    normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_36dp);
+                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
+                                } else {
+                                    normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_24dp);
+                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_24dp);
+                                }
+
+                                normalView.setInt(R.id.noti_title, "setTextColor",
+                                        Color.BLACK);
+                                normalView.setInt(R.id.noti_artist, "setTextColor",
+                                        Color.BLACK);
+                                bigView.setInt(R.id.notibig_title, "setTextColor",
+                                        Color.BLACK);
+                                bigView.setInt(R.id.notibig_artist, "setTextColor",
+                                        Color.BLACK);
+                                bigView.setInt(R.id.notibig_album, "setTextColor",
+                                        Color.BLACK);
                             }
 
-                            normalView.setInt(R.id.noti_title, "setTextColor",
-                                    Color.BLACK);
-                            normalView.setInt(R.id.noti_artist, "setTextColor",
-                                    Color.BLACK);
-                            bigView.setInt(R.id.notibig_title, "setTextColor",
-                                    Color.BLACK);
-                            bigView.setInt(R.id.notibig_artist, "setTextColor",
-                                    Color.BLACK);
-                            bigView.setInt(R.id.notibig_album, "setTextColor",
-                                    Color.BLACK);
+                            mNotification = mBuilder.build();
+                            mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+                            mNotificationManager.notify(NOTIFICATION_ID, mNotification); // Notify the app to notify the system
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
                         }
 
-                        mNotification = mBuilder.build();
-                        mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-                        mNotificationManager.notify(NOTIFICATION_ID, mNotification); // Notify the app to notify the system
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
+                        return null;
                     }
-
-                    return null;
                 }
             }.execute();
 
