@@ -25,6 +25,7 @@ import com.nixholas.materialtunes.R;
 import java.io.File;
 import java.util.concurrent.ExecutionException;
 
+import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
@@ -71,7 +72,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
     RemoteViews bigView;
 
     private static final int NOTIFICATION_ID = 255;
-    private final Context mContext = MainActivity.getInstance();
+    private final Context mContext = getInstance();
     private NotificationManager mNotificationManager;
     private Notification mNotification;
     private NotificationCompat.Builder mBuilder;
@@ -108,8 +109,8 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
         dismissPendingIntent = PendingIntent.getBroadcast(mContext, NOTI_DISMISS
                 , dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
-        normalView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_normal);
-        bigView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_big);
+        normalView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_normal);
+        bigView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_big);
 
         // Setup the normalView Static Contents
         normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_36dp);
@@ -169,8 +170,8 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
         dismissPendingIntent = PendingIntent.getBroadcast(mContext, NOTI_DISMISS
                 , dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        normalView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_normal);
-        bigView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.notification_big);
+        normalView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_normal);
+        bigView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_big);
 
         // Setup the BigView Static Contents
         bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
@@ -268,33 +269,12 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                     .parse("content://media/external/audio/albumart");
             final Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
 
-            // Has Album Art Logic
-            // http://stackoverflow.com/questions/23357706/how-to-check-which-current-image-resource-is-attached-to-imageview-in-android-xm
-            final boolean hasAlbumArt = getAlbumArt(mContext, currentSong.getAlbumId()) != null;
-
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     synchronized (this) {
                         try {
-                            Bitmap albumBitmap;
-
-                            if (hasAlbumArt) {
-                                albumBitmap = Glide.with(mContext)
-                                        .load(albumArtUri)
-                                        .asBitmap()
-                                        .placeholder(R.drawable.untitled_album)
-                                        .error(R.drawable.untitled_album)
-                                        .fitCenter()
-                                        .into(400, 400)
-                                        .get();
-                            } else {
-                                albumBitmap = Glide.with(mContext)
-                                        .load(R.drawable.untitled_album)
-                                        .asBitmap()
-                                        .into(400, 400)
-                                        .get();
-                            }
+                            Bitmap albumBitmap = getAlbumArt(getInstance(), currentSong.getAlbumId());
 
                             final int albColor = Palette.from(albumBitmap)
                                     .generate()
@@ -407,7 +387,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                             mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
 
                             mNotificationManager.notify(NOTIFICATION_ID, mNotification); // Notify the app to notify the system
-                        } catch (InterruptedException | ExecutionException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -450,13 +430,13 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
             case NOTIF_NEXT:
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_NEXT + " Works");
-                mediaControlsOnClickNext(MainActivity.getInstance().getCurrentFocus());
+                mediaControlsOnClickNext(getInstance().getCurrentFocus());
                 break;
 
             case NOTIF_PREVIOUS:
                 // Debugging Purposes
                 //Log.e("onReceive:", NOTIF_PREVIOUS + " Works");
-                mediaControlsOnClickPrevious(MainActivity.getInstance().getCurrentFocus());
+                mediaControlsOnClickPrevious(getInstance().getCurrentFocus());
                 break;
 
             case NOTIF_DISMISS:

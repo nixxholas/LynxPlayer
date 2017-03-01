@@ -42,6 +42,9 @@ import java.util.Locale;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.nixholas.materialtunes.MainActivity.getInstance;
@@ -128,6 +131,21 @@ public class MediaManager extends Service {
     // Playlist Helper
     public PlaylistUtil playlistUtil = new PlaylistUtil();
 
+    // ThreadPoolExecutor
+    ThreadPoolExecutor mDecodeThreadPool;
+    /*
+     * Gets the number of available cores
+     * (not always the same as the maximum number of cores)
+     */
+    private static int NUMBER_OF_CORES =
+            Runtime.getRuntime().availableProcessors();
+    // Instantiates the queue of Runnables as a LinkedBlockingQueue
+    BlockingQueue<Runnable> mDecodeWorkQueue = new LinkedBlockingQueue<Runnable>();
+    // Sets the amount of time an idle thread waits before terminating
+    private static final int KEEP_ALIVE_TIME = 1;
+    // Sets the Time Unit to seconds
+    private static final TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
+
     public class ServiceBinder extends Binder {
         public MediaManager getService() {
             return MediaManager.this;
@@ -159,6 +177,13 @@ public class MediaManager extends Service {
 
     public MediaManager(final MainActivity mainActivity) {
         //Log.e("onCreate: MediaManager", "Working");
+        mDecodeThreadPool = new ThreadPoolExecutor(
+                NUMBER_OF_CORES,       // Initial pool size
+                NUMBER_OF_CORES,       // Max pool size
+                KEEP_ALIVE_TIME,
+                KEEP_ALIVE_TIME_UNIT,
+                mDecodeWorkQueue);
+
         audioManager = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
 
         //mediaDB = new MediaDB(mainActivity.getApplicationContext()); // Instantiate the SQLite Object
