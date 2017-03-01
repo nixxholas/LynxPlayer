@@ -123,15 +123,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // Request for proper permissions first
-        // https://developer.android.com/training/permissions/requesting.html
-        //        ActivityCompat.requestPermissions(this,
-        //                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-        //                1); // Reading
-        //        ActivityCompat.requestPermissions(this,
-        //                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-        //                2); // Writing
-
         mediaManager = new MediaManager(this);
         mediaManager.initializeMediaDB(this);
         finalMain = this;
@@ -227,9 +218,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Setup the notifications
-        Handler mHandler = new Handler();
+        //Handler mHandler = new Handler();
         //Context appContext = getBaseContext().getApplicationContext();
-        mHandler.post(persistentNotif = new PersistentNotification(getApplicationContext()));
+        //mHandler.post(persistentNotif = new PersistentNotification(getApplicationContext()));
+        persistentNotif = new PersistentNotification(getApplicationContext());
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
@@ -447,7 +439,7 @@ public class MainActivity extends AppCompatActivity {
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
             }
 
-            persistentNotif.updateNotification();
+            persistentNotif.run(); // Update the notification
         }
     }
 

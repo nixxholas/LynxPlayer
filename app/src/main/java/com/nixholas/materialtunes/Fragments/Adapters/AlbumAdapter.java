@@ -117,7 +117,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                     //mediaManager.mediaPlayer.stop();
                     mediaManager.mMediaPlayer.reset();
                     mediaManager.mMediaPlayer.setDataSource(context, audioUri);
-                    mediaManager.mMediaPlayer.prepareAsync();
+                    mediaManager.mMediaPlayer.prepare();
                     mediaManager.mediaPlayerIsPaused = false;
 
                     /**
@@ -177,7 +177,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                     // http://stackoverflow.com/questions/9008770/media-player-called-in-state-0-error-38-0
                     mediaManager.mMediaPlayer.reset();
                     mediaManager.mMediaPlayer.setDataSource(context, audioUri);
-                    mediaManager.mMediaPlayer.prepareAsync();
+                    mediaManager.mMediaPlayer.prepare();
                     mediaManager.mediaPlayerIsPaused = false;
 
                     /**
