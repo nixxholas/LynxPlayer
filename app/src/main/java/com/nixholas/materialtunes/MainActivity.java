@@ -127,12 +127,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Request for proper permissions first
         // https://developer.android.com/training/permissions/requesting.html
-        //        ActivityCompat.requestPermissions(this,
-        //                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-        //                1); // Reading
-        //        ActivityCompat.requestPermissions(this,
-        //                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-        //                2); // Writing
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        1); // Reading
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        2); // Writing
 
         mediaManager = new MediaManager(this);
         mediaManager.initializeMediaDB(this);
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             // Do nothing
-            // This prevent any exception from happening.
+            // This prevents any exception from happening.
         }
         mDataAdapter.run();
 
@@ -284,7 +284,6 @@ public class MainActivity extends AppCompatActivity {
 
         SmartTabLayout tabLayout = (SmartTabLayout) findViewById(R.id.tabs);
         tabLayout.setViewPager(mViewPager);
-        //tabLayout.setupWithViewPager(mViewPager);
 
         slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override

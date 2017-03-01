@@ -224,6 +224,9 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
     /**
      * http://stackoverflow.com/questions/22789588/how-to-update-notification-with-remoteviews
+     * 
+     * It is not proper to reuse the remoteview objects.
+     * http://stackoverflow.com/questions/7988018/custom-notification-java-lang-runtimeexception-bad-array-lengths
      */
     public void updateNotification() {
         try {
