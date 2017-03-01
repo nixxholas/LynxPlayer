@@ -49,7 +49,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         TextView title, duration;
         RelativeLayout currentLayout;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             this.currentLayout = (RelativeLayout) v.findViewById(R.id.albumsfragitem_layout);
             this.title = (TextView) v.findViewById(R.id.albumsfragitem_title);

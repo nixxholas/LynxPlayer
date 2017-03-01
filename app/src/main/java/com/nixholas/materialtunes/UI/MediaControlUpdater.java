@@ -184,7 +184,11 @@ public class MediaControlUpdater {
              */
             //View v = getInstance().getCurrentFocus().getRootView();
 
+            // Retrieve the next song
             final Song nextSong = mediaManager.getNext();
+
+            // Set the next song as the current song
+            mediaManager.setCurrent(nextSong);
 
             Uri audioUri = Uri.parse("file://" + nextSong.getDataPath());
 

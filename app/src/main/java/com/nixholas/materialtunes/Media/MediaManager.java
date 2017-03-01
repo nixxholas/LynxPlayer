@@ -51,6 +51,8 @@ import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Progress;
 import static com.nixholas.materialtunes.MainActivity.persistentNotif;
 import static com.nixholas.materialtunes.MainActivity.preferenceHelper;
 import static com.nixholas.materialtunes.MainActivity.slideButton;
+import static com.nixholas.materialtunes.MainActivity.slideSongArtist;
+import static com.nixholas.materialtunes.MainActivity.slideSongTitle;
 import static com.nixholas.materialtunes.MainActivity.slidedSeekBar;
 import static com.nixholas.materialtunes.MainActivity.slided_SongArtist;
 import static com.nixholas.materialtunes.MainActivity.slided_SongTitle;
@@ -221,6 +223,8 @@ public class MediaManager extends Service {
                     //Log.e("OnPrepared", "Working");
                     long songDuration = getCurrent().getDuration();
 
+                    slideSongTitle.setText(getCurrent().getTitle());
+                    slideSongArtist.setText(getCurrent().getArtistName());
                     slided_SongTitle.setText(getCurrent().getTitle());
                     slided_SongArtist.setText(getCurrent().getArtistName());
                     preferenceHelper.setCurrentSongId(getCurrent().getId());
@@ -422,7 +426,6 @@ public class MediaManager extends Service {
         try {
             // If the MediaManager has already been playing
             if (!songFiles.isEmpty() && currentlyPlayingIndex >= 0) {
-
                 return songFiles.get(currentlyPlayingIndex);
             } else { // If we fail to find it, let's fix it
                 // This happens most of the time when the player just started
@@ -465,7 +468,10 @@ public class MediaManager extends Service {
     }
 
     public void setCurrent(Song song) {
+        // Update the currentlyPlayingIndex
         currentlyPlayingIndex = songFiles.indexOf(song);
+
+        // Update the sharedpreferences to be in sync with the current state.
         preferenceHelper.setLastPlayedSong(song);
     }
 
@@ -478,10 +484,13 @@ public class MediaManager extends Service {
         // Let's check if the user has added anything to upcoming or not
         if (!mUpcoming.isEmpty()) {
             // Since he/she did add something, we'll play it first
+            Log.d("getNext()", "Returning upcoming song");
             return songFiles.get(mUpcoming.removeFirst());
         }
 
         if (preferenceHelper.getShuffle()) { // If shuffle mode is on
+            Log.d("getNext()", "Shuffle mode is on, running shuffle mode code");
+
             // Shuffle and retrieve the song
             int newSong = currentlyPlayingIndex;
             if (songFiles.size() > 0) { // Don't let a Deadlock happen
@@ -497,6 +506,10 @@ public class MediaManager extends Service {
                 currentlyPlayingIndex = 0;
             }
         }
+
+        // Debugging Purporses only.
+        Log.d("getNext()", "Returning Song object with currentlyPlayingIndex of "
+                + currentlyPlayingIndex);
 
         return songFiles.get(currentlyPlayingIndex);
     }
@@ -518,8 +531,7 @@ public class MediaManager extends Service {
      * @param currentSong
      */
     public void putAllOnQueue(Song currentSong) {
-        // Let's first put the current song into the queue
-        songFiles.add(currentSong);
+        Log.d("putAllOnQueue()", "Current Song: " + currentSong.getTitle());
 
         for (Song s : songFiles) {
             if (s.getId() != currentSong.getId()) {

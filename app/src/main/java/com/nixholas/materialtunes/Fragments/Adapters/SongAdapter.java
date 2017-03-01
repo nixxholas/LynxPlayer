@@ -217,7 +217,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
                             //mediaManager.mediaPlayer.stop();
                             mediaManager.mMediaPlayer.reset();
                             mediaManager.mMediaPlayer.setDataSource(context, audioUri);
-                            mediaManager.mMediaPlayer.prepareAsync();
+                            mediaManager.mMediaPlayer.prepare();
                             mediaManager.mediaPlayerIsPaused = false;
 
                             /**
@@ -225,8 +225,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
                              */
                             slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                             mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
-                            slideSongTitle.setText(currentSong.getTitle());
-                            slideSongArtist.setText(currentSong.getArtistName());
                             Glide.with(context)
                                     .load(albumArtUri)
                                     .asBitmap()
@@ -277,7 +275,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
                             // http://stackoverflow.com/questions/9008770/media-player-called-in-state-0-error-38-0
                             mediaManager.mMediaPlayer.reset();
                             mediaManager.mMediaPlayer.setDataSource(context, audioUri);
-                            mediaManager.mMediaPlayer.prepareAsync();
+                            mediaManager.mMediaPlayer.prepare();
                             mediaManager.mediaPlayerIsPaused = false;
 
                             /**
@@ -285,8 +283,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
                              */
                             slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                             mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
-                            slideSongTitle.setText(currentSong.getTitle());
-                            slideSongArtist.setText(currentSong.getArtistName());
                             Glide.with(context)
                                     .load(albumArtUri)
                                     .placeholder(R.drawable.untitled_album)
