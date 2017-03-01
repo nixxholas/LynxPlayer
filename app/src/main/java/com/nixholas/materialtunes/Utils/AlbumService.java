@@ -1,6 +1,5 @@
 package com.nixholas.materialtunes.Utils;
 
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,9 +11,6 @@ import com.nixholas.materialtunes.R;
 
 import java.io.File;
 import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 

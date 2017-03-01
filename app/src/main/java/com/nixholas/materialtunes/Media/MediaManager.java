@@ -220,14 +220,17 @@ public class MediaManager extends Service {
                     // http://stackoverflow.com/questions/11123621/running-code-in-main-thread-from-another-thread
                     final Handler mainHandler = new Handler(getInstance().getMainLooper());
 
-                    //Log.e("OnPrepared", "Working");
-                    long songDuration = getCurrent().getDuration();
+                    // Retrieve the current song
+                    Song currentlyPlaying = songFiles.get(currentlyPlayingIndex);
 
-                    slideSongTitle.setText(getCurrent().getTitle());
-                    slideSongArtist.setText(getCurrent().getArtistName());
-                    slided_SongTitle.setText(getCurrent().getTitle());
-                    slided_SongArtist.setText(getCurrent().getArtistName());
-                    preferenceHelper.setCurrentSongId(getCurrent().getId());
+                    //Log.e("OnPrepared", "Working");
+                    long songDuration = currentlyPlaying.getDuration();
+
+                    slideSongTitle.setText(currentlyPlaying.getTitle());
+                    slideSongArtist.setText(currentlyPlaying.getArtistName());
+                    slided_SongTitle.setText(currentlyPlaying.getTitle());
+                    slided_SongArtist.setText(currentlyPlaying.getArtistName());
+                    preferenceHelper.setCurrentSongId(currentlyPlaying.getId());
 
                     // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android
                     //Log.e("MaxDuration", getCurrent().getDuration() + "");
@@ -425,16 +428,20 @@ public class MediaManager extends Service {
     public Song getCurrent() {
         try {
             // If the MediaManager has already been playing
-            if (!songFiles.isEmpty() && currentlyPlayingIndex >= 0) {
+            if (!songFiles.isEmpty() && currentlyPlayingIndex >= 0
+                    && currentlyPlayingIndex <= songFiles.size()) {
                 return songFiles.get(currentlyPlayingIndex);
             } else { // If we fail to find it, let's fix it
                 // This happens most of the time when the player just started
                 mMediaPlayer.reset();
 
-                // Retrieve the current song from shared preferences
-                Song newCurrentSong = preferenceHelper.getLastPlayedSong();
+                // Retrieve the current song index from shared preferences
+                int lastPlayedSongIndex = preferenceHelper.getLastPlayedSong();
 
-                if (newCurrentSong.getDataPath() != null) {
+                if (lastPlayedSongIndex <= songFiles.size() && lastPlayedSongIndex >= 0) {
+                    // Retrieve the current song
+                    Song newCurrentSong = songFiles.get(lastPlayedSongIndex);
+
                     mMediaPlayer.setDataSource(newCurrentSong.getDataPath());
                     mMediaPlayer.prepare();
                     mMediaPlayer.pause();
@@ -467,12 +474,12 @@ public class MediaManager extends Service {
         }
     }
 
-    public void setCurrent(Song song) {
+    public void setCurrent(int index) {
         // Update the currentlyPlayingIndex
-        currentlyPlayingIndex = songFiles.indexOf(song);
+        currentlyPlayingIndex = index;
 
         // Update the sharedpreferences to be in sync with the current state.
-        preferenceHelper.setLastPlayedSong(song);
+        preferenceHelper.setLastPlayedSong(currentlyPlayingIndex);
     }
 
     public Song getNext() {

@@ -23,15 +23,8 @@ public class PreferenceHelper {
     private static final String SHUFFLE = "shuffle";
     private static final String REPEAT = "repeat";
 
-    // Last Played Song Preferences
-    private static final String LPS_DATAPATH = "lps_datapath";
-    private static final String LPS_ID = "lps_id";
-    private static final String LPS_ALBUMID = "lps_albumid";
-    private static final String LPS_ARTISTID = "lps_artistid";
-    private static final String LPS_TITLE = "lps_title";
-    private static final String LPS_ARTISTNAME = "lps_artistname";
-    private static final String LPS_ALBUMNAME = "lps_albumname";
-    private static final String LPS_DURATION = "lps_duration";
+    // Last Played Song Preference
+    private static final String LAST_PLAYED_SONG = "last_played_song";
 
     private static SharedPreferences mPreferences;
     private SharedPreferences.Editor mPreferenceEditor;
@@ -108,28 +101,13 @@ public class PreferenceHelper {
 
     public final int getRepeat() { return mPreferences.getInt(REPEAT, 0); }
 
-    public final Song getLastPlayedSong() {
-        return new Song(mPreferences.getString(LPS_DATAPATH, null),
-                        mPreferences.getLong(LPS_ID, -1),
-                        mPreferences.getLong(LPS_ALBUMID, -1),
-                        mPreferences.getLong(LPS_ARTISTID, -1),
-                        mPreferences.getString(LPS_TITLE, null),
-                        mPreferences.getString(LPS_ARTISTNAME, null),
-                        mPreferences.getString(LPS_ALBUMNAME, null),
-                        mPreferences.getInt(LPS_DURATION, 0));
+    public final int getLastPlayedSong() {
+        return mPreferences.getInt(LAST_PLAYED_SONG, 0);
     }
 
-    public void setLastPlayedSong(Song currentSong) {
+    public void setLastPlayedSong(int value) {
         mPreferenceEditor =  mPreferences.edit();
-
-        mPreferenceEditor.putString(LPS_DATAPATH, currentSong.getDataPath());
-        mPreferenceEditor.putLong(LPS_ID, currentSong.getId());
-        mPreferenceEditor.putLong(LPS_ALBUMID, currentSong.getAlbumId());
-        mPreferenceEditor.putLong(LPS_ARTISTID, currentSong.getArtistId());
-        mPreferenceEditor.putString(LPS_TITLE, currentSong.getTitle());
-        mPreferenceEditor.putString(LPS_ARTISTNAME, currentSong.getArtistName());
-        mPreferenceEditor.putString(LPS_ALBUMNAME, currentSong.getAlbumName());
-        mPreferenceEditor.putInt(LPS_DURATION, currentSong.getDuration());
+        mPreferenceEditor.putInt(LAST_PLAYED_SONG, value);
 
         mPreferenceEditor.apply();
     }
