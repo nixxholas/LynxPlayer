@@ -80,7 +80,8 @@ public class MediaControlUpdater {
                 mediaManager.mMediaPlayer.stop();
                 mediaManager.mMediaPlayer.reset();
                 mediaManager.mMediaPlayer.setDataSource(v.getContext(), audioUri);
-                mediaManager.mMediaPlayer.prepareAsync();
+                mediaManager.mMediaPlayer.prepare();
+                mediaManager.mMediaPlayer.start();
                 mediaManager.mediaPlayerIsPaused = false;
 
                 /**
@@ -200,7 +201,8 @@ public class MediaControlUpdater {
                 mediaManager.mMediaPlayer.stop();
                 mediaManager.mMediaPlayer.reset();
                 mediaManager.mMediaPlayer.setDataSource(getInstance().getApplicationContext(), audioUri);
-                mediaManager.mMediaPlayer.prepareAsync();
+                mediaManager.mMediaPlayer.prepare();
+                mediaManager.mMediaPlayer.start();
                 mediaManager.mediaPlayerIsPaused = false;
 
                 /**
