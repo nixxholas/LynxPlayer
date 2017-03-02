@@ -36,9 +36,9 @@ public class AlbumService {
 
             // Prevent FileNotFoundException
             // http://stackoverflow.com/questions/16237950/android-check-if-file-exists-without-creating-a-new-one
-            if (!new File("content://media/external/audio/albumart/" + album_id).exists()) {
+            if (!new File(uri.getPath()).exists()) {
                 BitmapFactory.Options o = new BitmapFactory.Options();
-                o.inSampleSize = 8;
+                o.inSampleSize = 4;
 
                 return BitmapFactory.decodeResource(getInstance().getResources()
                         , R.drawable.untitled_album, o);
