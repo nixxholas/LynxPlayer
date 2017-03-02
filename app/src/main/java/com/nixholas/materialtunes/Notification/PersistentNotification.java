@@ -4,12 +4,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.graphics.Palette;
@@ -17,13 +15,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import com.bumptech.glide.Glide;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 
 import java.io.File;
-import java.util.concurrent.ExecutionException;
 
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
@@ -43,7 +39,7 @@ import static com.nixholas.materialtunes.Utils.Color.TextColorHelper.isColorDark
 
 public class PersistentNotification extends BroadcastReceiver implements Runnable {
     // Notification Runnable
-    AsyncTask<Void, Void, Void> PersisNotifRunner;
+    AsyncTask<Void, Void, Void> PersisNotifyRunner;
 
     // Notification Tags
     private static final String NOTIF_PREVIOUS = "NOTI_PREVIOUS";
@@ -232,7 +228,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
      * http://stackoverflow.com/questions/7988018/custom-notification-java-lang-runtimeexception-bad-array-lengths
      */
     public void updateNotification() {
-            PersisNotifRunner = new AsyncTask<Void, Void, Void>() {
+            PersisNotifyRunner = new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     try {
