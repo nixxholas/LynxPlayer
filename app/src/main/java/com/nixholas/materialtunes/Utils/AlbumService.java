@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
 
 import com.nixholas.materialtunes.R;
 
@@ -26,6 +27,8 @@ public class AlbumService {
     // http://stackoverflow.com/questions/1954434/cover-art-on-android
     public static Bitmap getAlbumArt(Context context, Long album_id)
     {
+        Log.d("getAlbumArt()", "Running Method");
+
         Bitmap bm = null;
         try
         {
@@ -36,13 +39,17 @@ public class AlbumService {
 
             // Prevent FileNotFoundException
             // http://stackoverflow.com/questions/16237950/android-check-if-file-exists-without-creating-a-new-one
-            if (!new File(uri.getPath()).exists()) {
-                BitmapFactory.Options o = new BitmapFactory.Options();
-                o.inSampleSize = 4;
+//            if (!new File(uri.getPath()).exists()) {
+//                Log.d("getAlbumArt()", "Unable to retrieve file, obtaining untitled album instead");
+//
+//                BitmapFactory.Options o = new BitmapFactory.Options();
+//                o.inSampleSize = 4;
+//
+//                return BitmapFactory.decodeResource(getInstance().getResources()
+//                        , R.drawable.untitled_album, o);
+//            }
 
-                return BitmapFactory.decodeResource(getInstance().getResources()
-                        , R.drawable.untitled_album, o);
-            }
+            Log.d("getAlbumArt()", "Obtaining album art");
 
             ParcelFileDescriptor pfd = context.getContentResolver()
                     .openFileDescriptor(uri, "r");
@@ -53,7 +60,10 @@ public class AlbumService {
                 bm = BitmapFactory.decodeFileDescriptor(fd);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inSampleSize = 2;
+
             return BitmapFactory.decodeResource(getInstance().getResources()
                     , R.drawable.untitled_album);
         }
