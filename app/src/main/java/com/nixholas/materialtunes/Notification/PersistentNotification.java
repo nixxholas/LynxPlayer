@@ -268,14 +268,13 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
             //if (filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId())) {
 
             // Setup the albumArt first
-            Uri sArtworkUri = Uri
-                    .parse("content://media/external/audio/albumart");
-            final Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
+            //Uri sArtworkUri = Uri
+            //        .parse("content://media/external/audio/albumart");
+            //final Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
 
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                    synchronized (this) {
                         try {
                             Bitmap albumBitmap = getAlbumArt(getInstance(), currentSong.getAlbumId());
 
@@ -395,7 +394,6 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                         }
 
                         return null;
-                    }
                 }
             }.execute();
 

@@ -99,6 +99,11 @@ public class DataAdapter implements Runnable {
             songCur.close();
         }
 
+        // If the index is not proper,
+        if (!(mediaManager.currentlyPlayingIndex >= 0)) {
+            // Set it up because it means that there is a discrepancy
+            mediaManager.setupLastPlayed();
+        }
     }
 
     private void loadAlbumData(ContentResolver cr) {
@@ -189,7 +194,6 @@ public class DataAdapter implements Runnable {
 
             playlistCur.close();
         }
-
     }
 
     public void updateSongData() {

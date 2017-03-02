@@ -368,9 +368,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnCompletionListener(this);
 
-        // Retrieve the Last Played Object
-        setCurrent(preferenceHelper.getLastPlayedSong());
-
         /**
          * Temporary fix for AOBException for getCurrent
          */
@@ -404,7 +401,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         mPlaybackState = new PlaybackState.Builder()
                 .setState(PlaybackState.STATE_NONE, 0, 1.0f)
                 .build();
-
     }
 
     /**
@@ -502,6 +498,23 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
+        }
+    }
+
+    public void setupLastPlayed() {
+        // Retrieve the Last Played Object
+        setCurrent(preferenceHelper.getLastPlayedSong());
+
+        try {
+            // Set it up
+            Uri audioUri = Uri.parse("file://" + songFiles.get(currentlyPlayingIndex).getDataPath());
+
+            mMediaPlayer.reset();
+            mMediaPlayer.setDataSource(getApplicationContext(), audioUri);
+            mMediaPlayer.prepare();
+            mMediaPlayer.pause();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

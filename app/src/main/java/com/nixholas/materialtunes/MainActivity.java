@@ -134,8 +134,6 @@ public class MainActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         2); // Writing
 
-        mediaManager = new MediaManager(this);
-        mediaManager.initializeMediaDB(this);
         finalMain = this;
 
         slidedRelativeLayout = (RelativeLayout) findViewById(R.id.slided_layout);
@@ -201,33 +199,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mediaControls_Shuffle = (CustomImageButton) findViewById(R.id.media_controls_shuffle);
-        //Log.d("MainActivity", "getShuffle(): " + preferenceHelper.getShuffle());
-        mediaControls_Shuffle.setEnabledUI(preferenceHelper.getShuffle());
-
-        mediaControls_Repeat = (CustomImageButton) findViewById(R.id.media_controls_repeat);
-
-        switch (preferenceHelper.getRepeat()) {
-            case 0: // Repeat None
-                mediaManager.setRepeatState(MediaManager.RepeatState.NOREPEAT);
-                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
-                mediaControls_Repeat.setEnabledUI(false);
-                break;
-            case 1: // Repeat All
-                // Don't have to greyout
-                mediaManager.setRepeatState(MediaManager.RepeatState.REPEATALL);
-                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
-                mediaControls_Repeat.setEnabledUI(true);
-                break;
-            case 2: // Repeat One Only
-                mediaManager.setRepeatState(MediaManager.RepeatState.REPEATONE);
-                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_24dp);
-                mediaControls_Repeat.setEnabledUI(true);
-                break;
-            default:
-                Log.d("MainActivity", "-> repeat: Something bad happened");
-        }
-
         // Setup the notifications
         Handler mHandler = new Handler();
         //Context appContext = getBaseContext().getApplicationContext();
@@ -266,9 +237,40 @@ public class MainActivity extends AppCompatActivity {
             // Do nothing
             // This prevents any exception from happening.
         }
-        mDataAdapter.run();
 
+        // Finally initialize the data responsible for media playback along with the database and
+        // the MediaPlayer
+        mediaManager = new MediaManager(this);
+        mDataAdapter.run();
+        mediaManager.initializeMediaDB(this);
         mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+        mediaControls_Shuffle = (CustomImageButton) findViewById(R.id.media_controls_shuffle);
+        //Log.d("MainActivity", "getShuffle(): " + preferenceHelper.getShuffle());
+        mediaControls_Shuffle.setEnabledUI(preferenceHelper.getShuffle());
+
+        mediaControls_Repeat = (CustomImageButton) findViewById(R.id.media_controls_repeat);
+
+        switch (preferenceHelper.getRepeat()) {
+            case 0: // Repeat None
+                mediaManager.setRepeatState(MediaManager.RepeatState.NOREPEAT);
+                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
+                mediaControls_Repeat.setEnabledUI(false);
+                break;
+            case 1: // Repeat All
+                // Don't have to greyout
+                mediaManager.setRepeatState(MediaManager.RepeatState.REPEATALL);
+                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
+                mediaControls_Repeat.setEnabledUI(true);
+                break;
+            case 2: // Repeat One Only
+                mediaManager.setRepeatState(MediaManager.RepeatState.REPEATONE);
+                mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_24dp);
+                mediaControls_Repeat.setEnabledUI(true);
+                break;
+            default:
+                Log.d("MainActivity", "-> repeat: Something bad happened");
+        }
 
         slidedRelativeLayout.setAlpha(0);
 
