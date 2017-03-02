@@ -10,8 +10,8 @@ android {
         applicationId "com.nixholas.materialtunes"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 22
-        versionName '1.8.8 BETA'
+        versionCode 23
+        versionName '1.8.9 BETA'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -41,7 +41,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.2.0'
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     compile 'com.sothree.slidinguppanel:library:3.3.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.simplecityapps:recyclerview-fastscroll:1.0.11'
     compile 'com.yqritc:recyclerview-flexibledivider:1.4.0'
@@ -58,7 +57,6 @@ dependencies {
             url  'http://dl.bintray.com/gigamole/maven/'
         }
     }
-    compile 'com.github.devlight.navigationtabstrip:navigationtabstrip:1.0.4'
     testCompile 'junit:junit:4.12'
 }
 
