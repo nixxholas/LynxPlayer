@@ -62,6 +62,7 @@ import static com.nixholas.materialtunes.MainActivity.slided_SongTitle;
 import static com.nixholas.materialtunes.MainActivity.slidingSeekBar;
 import static com.nixholas.materialtunes.MainActivity.slidingUpPanelLayout;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
+import static com.nixholas.materialtunes.UI.SlidingBarUpdater.updateSlideBar;
 
 /**
  * Created by nixho on 02-Nov-16.
@@ -154,7 +155,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
      */
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        //Log.e("Completed", "Yep");
+        Log.e("onCompletion", "Running");
 
         try {
             if (repeatState == RepeatState.REPEATALL) {
@@ -191,6 +192,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
                 // Then play it again
                 mMediaPlayer.prepare();
+                mMediaPlayer.start();
             }
 
         } catch (Exception e) {
@@ -309,7 +311,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
         persistentNotif.updateNotification();
 
-        //mediaPlayer.start();
         setmPlaybackState(new PlaybackState.Builder()
                 .setState(PlaybackState.STATE_PLAYING,
                         mMediaPlayer.getCurrentPosition(), 1.0f)
@@ -361,17 +362,12 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
         audioManager = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
 
-        mediaDB = new MediaDB(mainActivity.getApplicationContext()); // Instantiate the SQLite Object
+        initializeMediaDB(mainActivity.getApplicationContext()); // Instantiate the SQLite Object
 
         // Instantiate the MediaPlayer Object
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnCompletionListener(this);
-
-        /**
-         * Temporary fix for AOBException for getCurrent
-         */
-        //this.managerQueue.addAll(songFiles);
 
         PhoneStateListener phoneStateListener = new PhoneStateListener() {
             @Override
@@ -466,7 +462,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                     Song newCurrentSong = songFiles.get(lastPlayedSongIndex);
 
                     // Set the currentlyPlayingIndex to the newCurrentSong's Index
-                    currentlyPlayingIndex = songFiles.indexOf(newCurrentSong);
+                    currentlyPlayingIndex = lastPlayedSongIndex;
 
                     // Make sure we perform repeat and shuffle checks
 
@@ -490,6 +486,8 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public void setupLastPlayed() {
+        Log.d("setupLastPlayed()", "Setting up");
+
         // Retrieve the Last Played Object
         setCurrent(preferenceHelper.getLastPlayedSong());
 
@@ -498,8 +496,13 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             Uri audioUri = Uri.parse("file://" + songFiles.get(currentlyPlayingIndex).getDataPath());
 
             mMediaPlayer.reset();
-            mMediaPlayer.setDataSource(getApplicationContext(), audioUri);
+            mMediaPlayer.setDataSource(getInstance().getApplicationContext(), audioUri);
             mMediaPlayer.prepare();
+
+            // Update the UI
+            updateSlideBar(getInstance());
+
+            mediaPlayerIsPaused = true;
             mMediaPlayer.pause();
         } catch (Exception ex) {
             ex.printStackTrace();

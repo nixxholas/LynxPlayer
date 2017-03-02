@@ -36,6 +36,8 @@ import static com.nixholas.materialtunes.MainActivity.slided_SongTitle;
 public class MediaControlUpdater {
 
     public static void mediaControlsOnClickPlayPause() {
+        Log.d("mCOnClickPlayPause", "Running method");
+
         if (mediaManager.mMediaPlayer != null) {
             if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
                 // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
@@ -58,6 +60,8 @@ public class MediaControlUpdater {
     }
 
     public static void mediaControlsOnClickPrevious(View v) {
+        Log.d("mCOnClickPrevious", "Running method");
+
         try {
             if (mediaManager.mMediaPlayer.getCurrentPosition() > 3000) {
                 Log.d("onClickPrevious", "Current Position is > 3000");
@@ -173,6 +177,8 @@ public class MediaControlUpdater {
     }
 
     public static void mediaControlsOnClickNext(View v) {
+        Log.d("mCOnClickNext", "Running method");
+
         try {
             //Log.e("onClickNext", "Working");
             //Log.e("mMediaPlayer.isPlaying", mediaManager.mMediaPlayer.isPlaying() + "");

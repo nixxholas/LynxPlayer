@@ -238,17 +238,17 @@ public class MainActivity extends AppCompatActivity {
             // This prevents any exception from happening.
         }
 
-        // Finally initialize the data responsible for media playback along with the database and
-        // the MediaPlayer
-        mediaManager = new MediaManager(this);
-        mDataAdapter.run();
-        mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
         mediaControls_Shuffle = (CustomImageButton) findViewById(R.id.media_controls_shuffle);
         //Log.d("MainActivity", "getShuffle(): " + preferenceHelper.getShuffle());
         mediaControls_Shuffle.setEnabledUI(preferenceHelper.getShuffle());
 
         mediaControls_Repeat = (CustomImageButton) findViewById(R.id.media_controls_repeat);
+
+        // Finally initialize the data responsible for media playback along with the database and
+        // the MediaPlayer
+        mediaManager = new MediaManager(this);
+        mDataAdapter.run();
+        mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         switch (preferenceHelper.getRepeat()) {
             case 0: // Repeat None

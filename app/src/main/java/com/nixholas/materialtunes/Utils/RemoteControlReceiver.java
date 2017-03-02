@@ -3,6 +3,7 @@ package com.nixholas.materialtunes.Utils;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.KeyEvent;
 
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
@@ -18,6 +19,8 @@ import static com.nixholas.materialtunes.MainActivity.mediaManager;
 public class RemoteControlReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d("onReceive()", "Running method");
+
         if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
             KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
             if (KeyEvent.KEYCODE_MEDIA_PLAY == event.getKeyCode()) {

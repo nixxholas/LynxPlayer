@@ -42,6 +42,9 @@ import static com.nixholas.materialtunes.Utils.Color.TextColorHelper.isColorDark
  */
 
 public class PersistentNotification extends BroadcastReceiver implements Runnable {
+    // Notification Runnable
+    AsyncTask<Void, Void, Void> PersisNotifRunner;
+
     // Notification Tags
     private static final String NOTIF_PREVIOUS = "NOTI_PREVIOUS";
     private static final String NOTIF_PLAYPAUSE = "NOTI_PLAYPAUSE";
@@ -229,206 +232,200 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
      * http://stackoverflow.com/questions/7988018/custom-notification-java-lang-runtimeexception-bad-array-lengths
      */
     public void updateNotification() {
-        try {
-            // Debugging Works
-            //Log.e("FilePath", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
-            //Log.e("Current Context", MainActivity.getInstance().getPackageName());
-            Log.d("PersistentNotifiation", "buildNotification()");
-
-            mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-            normalView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_normal);
-            bigView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_big);
-
-            final Song currentSong = mediaManager.getCurrent();
-
-            // Setup the normalView items
-            normalView.setTextViewText(R.id.noti_title, currentSong.getTitle());
-            normalView.setTextViewText(R.id.noti_artist, currentSong.getArtistName());
-
-            // Setup the bigView items
-            bigView.setTextViewText(R.id.notibig_title, currentSong.getTitle());
-            bigView.setTextViewText(R.id.notibig_artist, currentSong.getArtistName());
-            bigView.setTextViewText(R.id.notibig_album, currentSong.getAlbumName());
-
-            // Setup the bigView items
-            bigView.setTextViewText(R.id.notibig_title, currentSong.getTitle());
-            bigView.setTextViewText(R.id.notibig_artist, currentSong.getArtistName());
-            bigView.setTextViewText(R.id.notibig_album, currentSong.getAlbumName());
-
-            // Setup the onClicks
-            normalView.setOnClickPendingIntent(R.id.noti_playpause,
-                    getPendingSelfIntent(mContext, NOTIF_PLAYPAUSE));
-            normalView.setOnClickPendingIntent(R.id.noti_previous,
-                    getPendingSelfIntent(mContext, NOTIF_PREVIOUS));
-            normalView.setOnClickPendingIntent(R.id.noti_next,
-                    getPendingSelfIntent(mContext, NOTIF_NEXT));
-
-            bigView.setOnClickPendingIntent(R.id.notibig_playpause,
-                    getPendingSelfIntent(mContext, NOTIF_PLAYPAUSE));
-            bigView.setOnClickPendingIntent(R.id.notibig_previous,
-                    getPendingSelfIntent(mContext, NOTIF_PREVIOUS));
-            bigView.setOnClickPendingIntent(R.id.notibig_next,
-                    getPendingSelfIntent(mContext, NOTIF_NEXT));
-            bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
-                    getPendingSelfIntent(mContext, NOTIF_DISMISS));
-
-            // http://stackoverflow.com/questions/9214715/notifcation-launches-multiple-instances-of-activities
-            normalView.setOnClickPendingIntent(R.id.noti_layout,
-                    PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
-                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
-                            PendingIntent.FLAG_UPDATE_CURRENT));
-            bigView.setOnClickPendingIntent(R.id.notibig_layout,
-                    PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
-                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
-                            PendingIntent.FLAG_UPDATE_CURRENT));
-
-            // Debugging Album Art
-            //Log.e("FilePathIsValid", filePathIsValid("content://media/e0ternal/audio/albumart/" + currentSong.getAlbumId()) + "");
-
-            // Album Art
-            // http://stackoverflow.com/questions/7817551/how-to-check-file-exist-or-not-and-if-not-create-a-new-file-in-sdcard-in-async-t
-            //if (filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId())) {
-
-            // Setup the albumArt first
-            //Uri sArtworkUri = Uri
-            //        .parse("content://media/external/audio/albumart");
-            //final Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
-
-            new AsyncTask<Void, Void, Void>() {
+            PersisNotifRunner = new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                        try {
-                            Bitmap albumBitmap = getAlbumArt(getInstance(),
-                                    currentSong.getAlbumId());
+                    try {
+                        // Debugging Works
+                        //Log.e("FilePath", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
+                        //Log.e("Current Context", MainActivity.getInstance().getPackageName());
+                        Log.d("PersistentNotifiation", "updateNotification()");
 
-                            final int albColor = Palette.from(albumBitmap)
-                                    .generate()
-                                    .getVibrantColor(Color.parseColor("#403f4d"));
+                        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+                        normalView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_normal);
+                        bigView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_big);
 
-                            // http://stackoverflow.com/questions/27394016/how-does-one-use-glide-to-download-an-image-into-a-bitmap
-                            normalView.setImageViewBitmap(R.id.noti_albumart, albumBitmap);
+                        final Song currentSong = mediaManager.getCurrent();
 
-                            bigView.setImageViewBitmap(R.id.notibig_albumart, albumBitmap);
+                        // Setup the normalView items
+                        normalView.setTextViewText(R.id.noti_title, currentSong.getTitle());
+                        normalView.setTextViewText(R.id.noti_artist, currentSong.getArtistName());
 
-                            //Log.d("Color[0]", color[0] + "");
+                        // Setup the bigView items
+                        bigView.setTextViewText(R.id.notibig_title, currentSong.getTitle());
+                        bigView.setTextViewText(R.id.notibig_artist, currentSong.getArtistName());
+                        bigView.setTextViewText(R.id.notibig_album, currentSong.getAlbumName());
 
-                            // http://stackoverflow.com/questions/27209596/media-style-notification-not-working-after-update-to-android-5-0
-                            if (mediaManager.mMediaPlayer.isPlaying()) {
-                                // Creating a Notifcation
-                                // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
-                                mBuilder
-                                        .setSmallIcon(R.drawable.ic_app_icon)
-                                        .setCustomContentView(normalView)
-                                        .setCustomBigContentView(bigView)
-                                        // Converting albumArtUri to a Bitmap directly
-                                        // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
-                                        //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
-                                        .setLargeIcon(albumBitmap)
-                                        // Set the color for the notification
-                                        // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
-                                        .setColor(albColor)
-                                        // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
-                                        .setContentTitle(currentSong.getTitle())
-                                        .setContentText(currentSong.getArtistName())
-                                        .build();
-                            } else {
-                                // Creating a Notifcation
-                                // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
-                                mBuilder
-                                        .setSmallIcon(R.drawable.ic_app_icon)
-                                        .setCustomContentView(normalView)
-                                        .setCustomBigContentView(bigView)
-                                        // Converting albumArtUri to a Bitmap directly
-                                        // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
-                                        //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
-                                        .setLargeIcon(albumBitmap)
-                                        // Set the color for the notification
-                                        // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
-                                        .setColor(albColor)
-                                        // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
-                                        .setContentTitle(currentSong.getTitle())
-                                        .setContentText(currentSong.getArtistName())
-                                        .build();
-                            }
+                        // Setup the bigView items
+                        bigView.setTextViewText(R.id.notibig_title, currentSong.getTitle());
+                        bigView.setTextViewText(R.id.notibig_artist, currentSong.getArtistName());
+                        bigView.setTextViewText(R.id.notibig_album, currentSong.getAlbumName());
 
-                            /**
-                             * Now we'll need to set the colors appropriately
-                             */
-                            // Set the layout backgrounds first
-                            normalView.setInt(R.id.noti_layout, "setBackgroundColor",
-                                    albColor);
-                            bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
-                                    albColor);
+                        // Setup the onClicks
+                        normalView.setOnClickPendingIntent(R.id.noti_playpause,
+                                getPendingSelfIntent(mContext, NOTIF_PLAYPAUSE));
+                        normalView.setOnClickPendingIntent(R.id.noti_previous,
+                                getPendingSelfIntent(mContext, NOTIF_PREVIOUS));
+                        normalView.setOnClickPendingIntent(R.id.noti_next,
+                                getPendingSelfIntent(mContext, NOTIF_NEXT));
 
-                            if (isColorDark(albColor)) {
-                                //Setup the BigView Static Contents
-                                normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_white_36dp);
-                                normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_white_36dp);
-                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_white_36dp);
-                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_white_36dp);
-                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_white_36dp);
+                        bigView.setOnClickPendingIntent(R.id.notibig_playpause,
+                                getPendingSelfIntent(mContext, NOTIF_PLAYPAUSE));
+                        bigView.setOnClickPendingIntent(R.id.notibig_previous,
+                                getPendingSelfIntent(mContext, NOTIF_PREVIOUS));
+                        bigView.setOnClickPendingIntent(R.id.notibig_next,
+                                getPendingSelfIntent(mContext, NOTIF_NEXT));
+                        bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
+                                getPendingSelfIntent(mContext, NOTIF_DISMISS));
 
-                                if (mediaManager.mMediaPlayer.isPlaying()) {
-                                    normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_white_36dp);
-                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_white_36dp);
-                                } else {
-                                    normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_white_36dp);
-                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_white_36dp);
-                                }
+                        // http://stackoverflow.com/questions/9214715/notifcation-launches-multiple-instances-of-activities
+                        normalView.setOnClickPendingIntent(R.id.noti_layout,
+                                PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
+                                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                                        PendingIntent.FLAG_UPDATE_CURRENT));
+                        bigView.setOnClickPendingIntent(R.id.notibig_layout,
+                                PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
+                                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                                        PendingIntent.FLAG_UPDATE_CURRENT));
 
-                                normalView.setInt(R.id.noti_title, "setTextColor",
-                                        Color.WHITE);
-                                normalView.setInt(R.id.noti_artist, "setTextColor",
-                                        Color.WHITE);
-                                bigView.setInt(R.id.notibig_title, "setTextColor",
-                                        Color.WHITE);
-                                bigView.setInt(R.id.notibig_artist, "setTextColor",
-                                        Color.WHITE);
-                                bigView.setInt(R.id.notibig_album, "setTextColor",
-                                        Color.WHITE);
-                            } else {
-                                //Setup the BigView Static Contents
-                                normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_36dp);
-                                normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_36dp);
-                                bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
-                                bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
-                                bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
+                        // Debugging Album Art
+                        //Log.e("FilePathIsValid", filePathIsValid("content://media/e0ternal/audio/albumart/" + currentSong.getAlbumId()) + "");
 
-                                if (mediaManager.mMediaPlayer.isPlaying()) {
-                                    normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_36dp);
-                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
-                                } else {
-                                    normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_24dp);
-                                    bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_24dp);
-                                }
+                        // Album Art
+                        // http://stackoverflow.com/questions/7817551/how-to-check-file-exist-or-not-and-if-not-create-a-new-file-in-sdcard-in-async-t
+                        //if (filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId())) {
 
-                                normalView.setInt(R.id.noti_title, "setTextColor",
-                                        Color.BLACK);
-                                normalView.setInt(R.id.noti_artist, "setTextColor",
-                                        Color.BLACK);
-                                bigView.setInt(R.id.notibig_title, "setTextColor",
-                                        Color.BLACK);
-                                bigView.setInt(R.id.notibig_artist, "setTextColor",
-                                        Color.BLACK);
-                                bigView.setInt(R.id.notibig_album, "setTextColor",
-                                        Color.BLACK);
-                            }
+                        // Setup the albumArt first
+                        //Uri sArtworkUri = Uri
+                        //        .parse("content://media/external/audio/albumart");
+                        //final Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
 
-                            mNotification = mBuilder.build();
-                            mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+                        Bitmap albumBitmap = getAlbumArt(getInstance(),
+                                currentSong.getAlbumId());
 
-                            mNotificationManager.notify(NOTIFICATION_ID, mNotification); // Notify the app to notify the system
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        final int albColor = Palette.from(albumBitmap)
+                                .generate()
+                                .getVibrantColor(Color.parseColor("#403f4d"));
+
+                        // http://stackoverflow.com/questions/27394016/how-does-one-use-glide-to-download-an-image-into-a-bitmap
+                        normalView.setImageViewBitmap(R.id.noti_albumart, albumBitmap);
+
+                        bigView.setImageViewBitmap(R.id.notibig_albumart, albumBitmap);
+
+                        //Log.d("Color[0]", color[0] + "");
+
+                        // http://stackoverflow.com/questions/27209596/media-style-notification-not-working-after-update-to-android-5-0
+                        if (mediaManager.mMediaPlayer.isPlaying()) {
+                            // Creating a Notifcation
+                            // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
+                            mBuilder
+                                    .setSmallIcon(R.drawable.ic_app_icon)
+                                    .setCustomContentView(normalView)
+                                    .setCustomBigContentView(bigView)
+                                    // Converting albumArtUri to a Bitmap directly
+                                    // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+                                    //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
+                                    .setLargeIcon(albumBitmap)
+                                    // Set the color for the notification
+                                    // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
+                                    .setColor(albColor)
+                                    // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
+                                    .setContentTitle(currentSong.getTitle())
+                                    .setContentText(currentSong.getArtistName())
+                                    .build();
+                        } else {
+                            // Creating a Notifcation
+                            // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
+                            mBuilder
+                                    .setSmallIcon(R.drawable.ic_app_icon)
+                                    .setCustomContentView(normalView)
+                                    .setCustomBigContentView(bigView)
+                                    // Converting albumArtUri to a Bitmap directly
+                                    // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+                                    //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
+                                    .setLargeIcon(albumBitmap)
+                                    // Set the color for the notification
+                                    // http://stackoverflow.com/questions/1299837/cannot-refer-to-a-non-final-variable-inside-an-inner-class-defined-in-a-differen
+                                    .setColor(albColor)
+                                    // http://stackoverflow.com/questions/5757997/hide-time-in-android-notification-without-using-custom-layout
+                                    .setContentTitle(currentSong.getTitle())
+                                    .setContentText(currentSong.getArtistName())
+                                    .build();
                         }
 
-                        return null;
+                        /**
+                         * Now we'll need to set the colors appropriately
+                         */
+                        // Set the layout backgrounds first
+                        normalView.setInt(R.id.noti_layout, "setBackgroundColor",
+                                albColor);
+                        bigView.setInt(R.id.notibig_layout, "setBackgroundColor",
+                                albColor);
+
+                        if (isColorDark(albColor)) {
+                            //Setup the BigView Static Contents
+                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_white_36dp);
+                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_white_36dp);
+                            bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_white_36dp);
+                            bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_white_36dp);
+                            bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_white_36dp);
+
+                            if (mediaManager.mMediaPlayer.isPlaying()) {
+                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_white_36dp);
+                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_white_36dp);
+                            } else {
+                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_white_36dp);
+                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_white_36dp);
+                            }
+
+                            normalView.setInt(R.id.noti_title, "setTextColor",
+                                    Color.WHITE);
+                            normalView.setInt(R.id.noti_artist, "setTextColor",
+                                    Color.WHITE);
+                            bigView.setInt(R.id.notibig_title, "setTextColor",
+                                    Color.WHITE);
+                            bigView.setInt(R.id.notibig_artist, "setTextColor",
+                                    Color.WHITE);
+                            bigView.setInt(R.id.notibig_album, "setTextColor",
+                                    Color.WHITE);
+                        } else {
+                            //Setup the BigView Static Contents
+                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_36dp);
+                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_36dp);
+                            bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
+                            bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
+                            bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
+
+                            if (mediaManager.mMediaPlayer.isPlaying()) {
+                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_36dp);
+                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
+                            } else {
+                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_24dp);
+                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_24dp);
+                            }
+
+                            normalView.setInt(R.id.noti_title, "setTextColor",
+                                    Color.BLACK);
+                            normalView.setInt(R.id.noti_artist, "setTextColor",
+                                    Color.BLACK);
+                            bigView.setInt(R.id.notibig_title, "setTextColor",
+                                    Color.BLACK);
+                            bigView.setInt(R.id.notibig_artist, "setTextColor",
+                                    Color.BLACK);
+                            bigView.setInt(R.id.notibig_album, "setTextColor",
+                                    Color.BLACK);
+                        }
+
+                        mNotification = mBuilder.build();
+                        mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+                        mNotificationManager.notify(NOTIFICATION_ID, mNotification); // Notify the app to notify the system
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    return null;
                 }
             }.execute();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     private boolean filePathIsValid(String path) {
@@ -453,19 +450,19 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
         switch(intent.getAction()) {
             case NOTIF_PLAYPAUSE:
                 // Debugging Purposes
-                //Log.e("onReceive:", NOTIF_PLAYPAUSE + " Works");
+                Log.e("onReceive:", NOTIF_PLAYPAUSE + " Running");
                 mediaControlsOnClickPlayPause();
                 break;
 
             case NOTIF_NEXT:
                 // Debugging Purposes
-                //Log.e("onReceive:", NOTIF_NEXT + " Works");
+                Log.e("onReceive:", NOTIF_NEXT + " Running");
                 mediaControlsOnClickNext(getInstance().getCurrentFocus());
                 break;
 
             case NOTIF_PREVIOUS:
                 // Debugging Purposes
-                //Log.e("onReceive:", NOTIF_PREVIOUS + " Works");
+                Log.e("onReceive:", NOTIF_PREVIOUS + " Running");
                 mediaControlsOnClickPrevious(getInstance().getCurrentFocus());
                 break;
 

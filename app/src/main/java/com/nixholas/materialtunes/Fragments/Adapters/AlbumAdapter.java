@@ -117,7 +117,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                     //mediaManager.mediaPlayer.stop();
                     mediaManager.mMediaPlayer.reset();
                     mediaManager.mMediaPlayer.setDataSource(context, audioUri);
-                    mediaManager.mMediaPlayer.prepare();
+                    mediaManager.mMediaPlayer.prepareAsync();
                     mediaManager.mMediaPlayer.start();
                     mediaManager.mediaPlayerIsPaused = false;
 
