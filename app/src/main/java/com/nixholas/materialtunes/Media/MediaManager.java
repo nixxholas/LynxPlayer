@@ -123,7 +123,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
      * http://stackoverflow.com/questions/616484/how-to-use-concurrentlinkedqueue
      */
     private static LinkedList<Integer> mUpcoming = new LinkedList<>();
-    private static LinkedList<Integer> mHistory = new LinkedList<>();
+    private static Stack<Integer> mHistory = new Stack<>();
     protected ArrayList<Song> songFiles = new ArrayList<>();
     protected ArrayList<Album> albumFiles = new ArrayList<>();
     protected ArrayList<Playlist> playLists = new ArrayList<>();
