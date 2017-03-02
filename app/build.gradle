@@ -10,8 +10,8 @@ android {
         applicationId "com.nixholas.materialtunes"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 21
-        versionName '1.8.7 BETA'
+        versionCode 22
+        versionName '1.8.8 BETA'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
