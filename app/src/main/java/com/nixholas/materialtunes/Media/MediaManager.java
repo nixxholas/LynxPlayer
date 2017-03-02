@@ -94,7 +94,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     private MediaDB mediaDB;
 
     // MediaManager Sub Objects
-    public boolean mediaPlayerIsPaused;
+    public boolean mediaPlayerIsPaused = true;
     public RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
     private Random shufflerRandomizer;
     private PlaybackState mPlaybackState;
@@ -309,7 +309,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
         persistentNotif.updateNotification();
 
-        mediaPlayer.start();
+        //mediaPlayer.start();
         setmPlaybackState(new PlaybackState.Builder()
                 .setState(PlaybackState.STATE_PLAYING,
                         mMediaPlayer.getCurrentPosition(), 1.0f)
@@ -361,7 +361,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
         audioManager = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
 
-        //mediaDB = new MediaDB(mainActivity.getApplicationContext()); // Instantiate the SQLite Object
+        mediaDB = new MediaDB(mainActivity.getApplicationContext()); // Instantiate the SQLite Object
 
         // Instantiate the MediaPlayer Object
         mMediaPlayer = new MediaPlayer();
@@ -396,7 +396,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
 
-        mediaPlayerIsPaused = false;
         shufflerRandomizer = new Random();
         mPlaybackState = new PlaybackState.Builder()
                 .setState(PlaybackState.STATE_NONE, 0, 1.0f)
@@ -459,9 +458,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                     && currentlyPlayingIndex <= songFiles.size()) {
                 return songFiles.get(currentlyPlayingIndex);
             } else { // If we fail to find it, let's fix it
-                // This happens most of the time when the player just started
-                mMediaPlayer.reset();
-
                 // Retrieve the current song index from shared preferences
                 int lastPlayedSongIndex = preferenceHelper.getLastPlayedSong();
 
@@ -469,21 +465,13 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                     // Retrieve the current song
                     Song newCurrentSong = songFiles.get(lastPlayedSongIndex);
 
-                    mMediaPlayer.setDataSource(newCurrentSong.getDataPath());
-                    mMediaPlayer.prepare();
-                    mMediaPlayer.pause();
-                    mediaPlayerIsPaused = true;
-
-                    // Add it to the queue
-                    //managerQueue.add(newCurrentSong);
-
                     // Set the currentlyPlayingIndex to the newCurrentSong's Index
                     currentlyPlayingIndex = songFiles.indexOf(newCurrentSong);
 
                     // Make sure we perform repeat and shuffle checks
 
-
                     // Return in
+
                     return newCurrentSong;
                 } else {
                     // Since the user does not have a last played song yet, we'll give him the first

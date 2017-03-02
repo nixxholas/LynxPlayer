@@ -242,7 +242,6 @@ public class MainActivity extends AppCompatActivity {
         // the MediaPlayer
         mediaManager = new MediaManager(this);
         mDataAdapter.run();
-        mediaManager.initializeMediaDB(this);
         mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         mediaControls_Shuffle = (CustomImageButton) findViewById(R.id.media_controls_shuffle);
