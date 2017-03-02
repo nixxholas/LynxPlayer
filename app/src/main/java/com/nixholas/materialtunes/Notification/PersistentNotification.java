@@ -298,7 +298,8 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 @Override
                 protected Void doInBackground(Void... params) {
                         try {
-                            Bitmap albumBitmap = getAlbumArt(getInstance(), currentSong.getAlbumId());
+                            Bitmap albumBitmap = getAlbumArt(getInstance(),
+                                    currentSong.getAlbumId());
 
                             final int albColor = Palette.from(albumBitmap)
                                     .generate()
