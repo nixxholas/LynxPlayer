@@ -218,6 +218,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
                             mediaManager.mMediaPlayer.reset();
                             mediaManager.mMediaPlayer.setDataSource(context, audioUri);
                             mediaManager.mMediaPlayer.prepare();
+                            mediaManager.mMediaPlayer.start();
                             mediaManager.mediaPlayerIsPaused = false;
 
                             /**
@@ -276,6 +277,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
                             mediaManager.mMediaPlayer.reset();
                             mediaManager.mMediaPlayer.setDataSource(context, audioUri);
                             mediaManager.mMediaPlayer.prepare();
+                            mediaManager.mMediaPlayer.start();
                             mediaManager.mediaPlayerIsPaused = false;
 
                             /**

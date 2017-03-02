@@ -236,6 +236,9 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
             Log.d("PersistentNotifiation", "buildNotification()");
 
             mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            normalView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_normal);
+            bigView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_big);
+
             final Song currentSong = mediaManager.getCurrent();
 
             // Setup the normalView items
@@ -252,13 +255,32 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
             bigView.setTextViewText(R.id.notibig_artist, currentSong.getArtistName());
             bigView.setTextViewText(R.id.notibig_album, currentSong.getAlbumName());
 
-            if (mediaManager.mMediaPlayer.isPlaying()) {
-                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
-                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_36dp);
-            } else {
-                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_24dp);
-                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_24dp);
-            }
+            // Setup the onClicks
+            normalView.setOnClickPendingIntent(R.id.noti_playpause,
+                    getPendingSelfIntent(mContext, NOTIF_PLAYPAUSE));
+            normalView.setOnClickPendingIntent(R.id.noti_previous,
+                    getPendingSelfIntent(mContext, NOTIF_PREVIOUS));
+            normalView.setOnClickPendingIntent(R.id.noti_next,
+                    getPendingSelfIntent(mContext, NOTIF_NEXT));
+
+            bigView.setOnClickPendingIntent(R.id.notibig_playpause,
+                    getPendingSelfIntent(mContext, NOTIF_PLAYPAUSE));
+            bigView.setOnClickPendingIntent(R.id.notibig_previous,
+                    getPendingSelfIntent(mContext, NOTIF_PREVIOUS));
+            bigView.setOnClickPendingIntent(R.id.notibig_next,
+                    getPendingSelfIntent(mContext, NOTIF_NEXT));
+            bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
+                    getPendingSelfIntent(mContext, NOTIF_DISMISS));
+
+            // http://stackoverflow.com/questions/9214715/notifcation-launches-multiple-instances-of-activities
+            normalView.setOnClickPendingIntent(R.id.noti_layout,
+                    PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                            PendingIntent.FLAG_UPDATE_CURRENT));
+            bigView.setOnClickPendingIntent(R.id.notibig_layout,
+                    PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                            PendingIntent.FLAG_UPDATE_CURRENT));
 
             // Debugging Album Art
             //Log.e("FilePathIsValid", filePathIsValid("content://media/e0ternal/audio/albumart/" + currentSong.getAlbumId()) + "");
@@ -294,6 +316,9 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                 // Creating a Notifcation
                                 // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
                                 mBuilder
+                                        .setSmallIcon(R.drawable.ic_app_icon)
+                                        .setCustomContentView(normalView)
+                                        .setCustomBigContentView(bigView)
                                         // Converting albumArtUri to a Bitmap directly
                                         // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                                         //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
@@ -309,6 +334,9 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                 // Creating a Notifcation
                                 // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
                                 mBuilder
+                                        .setSmallIcon(R.drawable.ic_app_icon)
+                                        .setCustomContentView(normalView)
+                                        .setCustomBigContentView(bigView)
                                         // Converting albumArtUri to a Bitmap directly
                                         // http://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                                         //.setLargeIcon(MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), albumArtUri))
