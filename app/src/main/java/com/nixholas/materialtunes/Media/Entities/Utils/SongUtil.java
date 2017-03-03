@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import static com.nixholas.materialtunes.MainActivity.getInstance;
-import static com.nixholas.materialtunes.MainActivity.mDataAdapter;
 
 /**
  * Created by nixholas on 20/12/16.

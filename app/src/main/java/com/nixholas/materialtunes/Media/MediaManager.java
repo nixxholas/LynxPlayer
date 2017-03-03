@@ -1,12 +1,9 @@
 package com.nixholas.materialtunes.Media;
 
-import android.app.ActivityManager;
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaMetadata;
 import android.media.MediaPlayer;
@@ -16,7 +13,6 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.media.MediaMetadataCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -34,12 +30,9 @@ import com.nixholas.materialtunes.Utils.RemoteControlReceiver;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
-import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 import java.util.concurrent.BlockingQueue;

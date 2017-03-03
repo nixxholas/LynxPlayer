@@ -6,8 +6,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 
-import com.nixholas.materialtunes.R;
-
 
 /**
  * Created by nixho on 10-Nov-16.

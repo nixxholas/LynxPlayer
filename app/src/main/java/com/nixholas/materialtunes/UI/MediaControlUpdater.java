@@ -6,9 +6,6 @@ import android.net.Uri;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;

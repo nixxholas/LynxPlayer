@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.nixholas.materialtunes.Fragments.IntroFragment;
-import com.nixholas.materialtunes.Utils.PreferenceHelper;
 
 import static com.nixholas.materialtunes.MainActivity.preferenceHelper;
 

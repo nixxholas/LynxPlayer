@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--http://stackoverflow.com/questions/29738510/toolbar-overlapping-below-status-bar-->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/slided_layout"
     android:layout_alignBaseline="@+id/slide_layout"
     android:fitsSystemWindows="true"

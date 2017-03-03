@@ -40,8 +40,6 @@ import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.slideAlbumArt;
 import static com.nixholas.materialtunes.MainActivity.slideButton;
-import static com.nixholas.materialtunes.MainActivity.slideSongArtist;
-import static com.nixholas.materialtunes.MainActivity.slideSongTitle;
 import static com.nixholas.materialtunes.MainActivity.slidedAlbumArt;
 import static com.nixholas.materialtunes.MainActivity.slidedRelativeLayout;
 import static com.nixholas.materialtunes.Media.Entities.Utils.SongUtil.removeSong;

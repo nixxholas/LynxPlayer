@@ -5,9 +5,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
-import com.nixholas.materialtunes.Media.Entities.Song;
-
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Stack;

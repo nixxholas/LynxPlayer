@@ -4,22 +4,20 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -29,10 +27,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nixholas.materialtunes.Fragments.Adapters.DataAdapter;
 import com.nixholas.materialtunes.Fragments.AlbumFragment;
 import com.nixholas.materialtunes.Fragments.PlaylistFragment;
 import com.nixholas.materialtunes.Fragments.SongFragment;
-import com.nixholas.materialtunes.Fragments.Adapters.DataAdapter;
 import com.nixholas.materialtunes.Media.MediaManager;
 import com.nixholas.materialtunes.Notification.PersistentNotification;
 import com.nixholas.materialtunes.UI.Button.CustomImageButton;
@@ -41,8 +39,6 @@ import com.nixholas.materialtunes.UI.SlidingBarUpdater;
 import com.nixholas.materialtunes.Utils.PreferenceHelper;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
-import java.util.concurrent.BlockingQueue;
 
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.materialtunes.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;

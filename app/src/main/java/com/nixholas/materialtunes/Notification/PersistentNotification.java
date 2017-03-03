@@ -4,12 +4,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.graphics.Palette;
@@ -17,13 +15,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import com.bumptech.glide.Glide;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 
 import java.io.File;
-import java.util.concurrent.ExecutionException;
 
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;

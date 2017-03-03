@@ -21,9 +21,9 @@ import com.bumptech.glide.request.target.ImageViewTarget;
 import com.nixholas.materialtunes.Fragments.FragmentItem.AlbumActivity;
 import com.nixholas.materialtunes.Media.Entities.Album;
 import com.nixholas.materialtunes.R;
+import com.nixholas.materialtunes.Utils.Color.TextColorHelper;
 import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmap;
 import com.nixholas.materialtunes.Utils.PaletteBitmap.PaletteBitmapTranscoder;
-import com.nixholas.materialtunes.Utils.Color.TextColorHelper;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.File;

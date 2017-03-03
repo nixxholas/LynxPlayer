@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.nixholas.materialtunes.R;
 
-import java.io.File;
 import java.io.FileDescriptor;
 
 import static com.nixholas.materialtunes.MainActivity.getInstance;
