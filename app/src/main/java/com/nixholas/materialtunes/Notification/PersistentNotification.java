@@ -413,6 +413,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                         }
 
                         mNotification = mBuilder.build();
+
                         mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
 
                         mNotificationManager.notify(NOTIFICATION_ID, mNotification); // Notify the app to notify the system
