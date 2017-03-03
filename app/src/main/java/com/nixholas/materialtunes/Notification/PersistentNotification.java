@@ -4,10 +4,12 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.graphics.Palette;
@@ -15,11 +17,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.bumptech.glide.Glide;
 import com.nixholas.materialtunes.MainActivity;
 import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
 
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaManager;
@@ -39,7 +43,7 @@ import static com.nixholas.materialtunes.Utils.Color.TextColorHelper.isColorDark
 
 public class PersistentNotification extends BroadcastReceiver implements Runnable {
     // Notification Runnable
-    AsyncTask<Void, Void, Void> PersisNotifyRunner;
+    AsyncTask<Void, Void, Void> PersisNotifRunner;
 
     // Notification Tags
     private static final String NOTIF_PREVIOUS = "NOTI_PREVIOUS";
@@ -112,12 +116,12 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
         bigView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_big);
 
         // Setup the normalView Static Contents
-        normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_36dp);
-        normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_36dp);
+        normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_24dp);
+        normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_24dp);
 
         // Setup the BigView Static Contents
-        bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
-        bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
+        bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_24dp);
+        bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_24dp);
 
         // http://stackoverflow.com/questions/13472990/implementing-onclick-listener-for-app-widget
         normalView.setOnClickPendingIntent(R.id.noti_playpause,
@@ -228,7 +232,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
      * http://stackoverflow.com/questions/7988018/custom-notification-java-lang-runtimeexception-bad-array-lengths
      */
     public void updateNotification() {
-            PersisNotifyRunner = new AsyncTask<Void, Void, Void>() {
+            new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     try {
@@ -360,18 +364,18 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
                         if (isColorDark(albColor)) {
                             //Setup the BigView Static Contents
-                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_white_36dp);
-                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_white_36dp);
-                            bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_white_36dp);
-                            bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_white_36dp);
-                            bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_white_36dp);
+                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_white_24dp);
+                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_white_24dp);
+                            bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_white_24dp);
+                            bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_white_24dp);
+                            bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_white_24dp);
 
                             if (mediaManager.mMediaPlayer.isPlaying()) {
-                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_white_36dp);
-                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_white_36dp);
+                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_white_24dp);
+                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_white_24dp);
                             } else {
-                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_white_36dp);
-                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_white_36dp);
+                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_white_24dp);
+                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_white_24dp);
                             }
 
                             normalView.setInt(R.id.noti_title, "setTextColor",
@@ -386,15 +390,15 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                     Color.WHITE);
                         } else {
                             //Setup the BigView Static Contents
-                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_36dp);
-                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_36dp);
-                            bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
-                            bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
-                            bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_36dp);
+                            normalView.setImageViewResource(R.id.noti_previous, R.drawable.ic_skip_previous_black_24dp);
+                            normalView.setImageViewResource(R.id.noti_next, R.drawable.ic_skip_next_black_24dp);
+                            bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_24dp);
+                            bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_24dp);
+                            bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_24dp);
 
                             if (mediaManager.mMediaPlayer.isPlaying()) {
-                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_36dp);
-                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_36dp);
+                                normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_24dp);
+                                bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_24dp);
                             } else {
                                 normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_play_arrow_black_24dp);
                                 bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_play_arrow_black_24dp);
