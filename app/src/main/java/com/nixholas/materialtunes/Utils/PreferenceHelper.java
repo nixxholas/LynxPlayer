@@ -7,6 +7,11 @@ import android.preference.PreferenceManager;
 
 import com.nixholas.materialtunes.Media.Entities.Song;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.Stack;
+
 /**
  * Created by nixho on 26-Nov-16.
  */
@@ -25,6 +30,7 @@ public class PreferenceHelper {
 
     // Last Played Song Preference
     private static final String LAST_PLAYED_SONG = "last_played_song";
+    private static final String HISTORY_STACK = "history_stack";
 
     private static SharedPreferences mPreferences;
     private SharedPreferences.Editor mPreferenceEditor;
@@ -110,5 +116,37 @@ public class PreferenceHelper {
         mPreferenceEditor.putInt(LAST_PLAYED_SONG, value);
 
         mPreferenceEditor.apply();
+    }
+
+    public void setHistoryStack(Stack<Integer> historyStack) {
+        // Initialize a string set
+        Set<String> historySet = new LinkedHashSet<>();
+
+        // Add the integer in
+        for (Integer i : historyStack) {
+            historySet.add(i.toString());
+        }
+
+        // Push the set to sharedPreferences
+        mPreferenceEditor.putStringSet(HISTORY_STACK, historySet);
+    }
+
+    public final Stack<Integer> getHistoryStack() {
+        // Initialize a stack of integers
+        Stack<Integer> historyStack = new Stack<>();
+
+        // Retrieve the set
+        Set<String> historySet = mPreferences.getStringSet(HISTORY_STACK, null);
+
+        if (historySet != null) {
+            // Perform an inverse for loop to iterate stack properly
+            for (int i = historySet.size() - 1; i >= 0; i--) {
+                //historyStack.add(Integer.parseInt(historySet[i]));
+            }
+        } else {
+            historyStack = null;
+        }
+
+        return historyStack;
     }
 }
