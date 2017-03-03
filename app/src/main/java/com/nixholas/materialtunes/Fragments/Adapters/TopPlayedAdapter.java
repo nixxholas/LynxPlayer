@@ -2,6 +2,7 @@ package com.nixholas.materialtunes.Fragments.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.nixholas.materialtunes.Media.Entities.Song;
 import com.nixholas.materialtunes.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by nixholas on 29/1/17.
@@ -26,7 +28,7 @@ public class TopPlayedAdapter extends RecyclerView.Adapter<TopPlayedAdapter.View
         TextView title, count;
         RelativeLayout currentLayout;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             this.v = v;
             this.currentLayout = (RelativeLayout) v.findViewById(R.id.topplayeditem_layout);
@@ -59,12 +61,14 @@ public class TopPlayedAdapter extends RecyclerView.Adapter<TopPlayedAdapter.View
         final Song currentSong = mDataset.get(position);
 
         holder.title.setText(currentSong.getTitle());
-        holder.count.setText(currentSong.getCount() + "");
+        holder.count.setText(String.format(Locale.ENGLISH,
+                "Times Played: %d", currentSong.getCount()));
 
         holder.currentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // Debugging Purposes
+                Log.d("TopPlayedItem", "OnClick Running");
             }
         });
     }
