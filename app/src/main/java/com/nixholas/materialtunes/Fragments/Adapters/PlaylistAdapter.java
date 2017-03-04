@@ -163,7 +163,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 // Debugging Only
-                Log.e("playlistOnClick", "Clicked on List Card");
+                Log.d("playlistOnClick", "Clicked on List Card");
             }
         });
     }

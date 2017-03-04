@@ -173,7 +173,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                      * Under the hood changes
                      */
 
-                    //Log.e("SongAdapter", "Working");
+                    //Log.d("SongAdapter", "Working");
 
                     // http://stackoverflow.com/questions/9008770/media-player-called-in-state-0-error-38-0
                     mediaManager.mMediaPlayer.reset();

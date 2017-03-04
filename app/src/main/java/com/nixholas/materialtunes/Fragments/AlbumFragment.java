@@ -52,7 +52,7 @@ public class AlbumFragment extends Fragment {
         /**
          * User Interface Initialization
          */
-        //Log.e("AlbumFragment ", "Called");
+        //Log.d("AlbumFragment ", "Called");
         rVLayoutManager = new GridLayoutManager(getActivity(), 2);
 
         // Use a linear layout manager

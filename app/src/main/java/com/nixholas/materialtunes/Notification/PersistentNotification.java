@@ -233,8 +233,8 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 protected Void doInBackground(Void... params) {
                     try {
                         // Debugging Works
-                        //Log.e("FilePath", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
-                        //Log.e("Current Context", MainActivity.getInstance().getPackageName());
+                        //Log.d("FilePath", filePathIsValid("content://media/external/audio/albumart/" + currentSong.getAlbumId()) + "");
+                        //Log.d("Current Context", MainActivity.getInstance().getPackageName());
                         Log.d("PersistentNotifiation", "updateNotification()");
 
                         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -285,7 +285,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                                         PendingIntent.FLAG_UPDATE_CURRENT));
 
                         // Debugging Album Art
-                        //Log.e("FilePathIsValid", filePathIsValid("content://media/e0ternal/audio/albumart/" + currentSong.getAlbumId()) + "");
+                        //Log.d("FilePathIsValid", filePathIsValid("content://media/e0ternal/audio/albumart/" + currentSong.getAlbumId()) + "");
 
                         // Album Art
                         // http://stackoverflow.com/questions/7817551/how-to-check-file-exist-or-not-and-if-not-create-a-new-file-in-sdcard-in-async-t
@@ -442,24 +442,24 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
      * @param intent
      */
     public void onReceive(Context context, Intent intent) {
-        //Log.e("onReceive:", "Works" + intent.getAction());
+        //Log.d("onReceive:", "Works" + intent.getAction());
 
         switch(intent.getAction()) {
             case NOTIF_PLAYPAUSE:
                 // Debugging Purposes
-                Log.e("onReceive:", NOTIF_PLAYPAUSE + " Running");
+                Log.d("onReceive:", NOTIF_PLAYPAUSE + " Running");
                 mediaControlsOnClickPlayPause();
                 break;
 
             case NOTIF_NEXT:
                 // Debugging Purposes
-                Log.e("onReceive:", NOTIF_NEXT + " Running");
+                Log.d("onReceive:", NOTIF_NEXT + " Running");
                 mediaControlsOnClickNext(getInstance().getCurrentFocus());
                 break;
 
             case NOTIF_PREVIOUS:
                 // Debugging Purposes
-                Log.e("onReceive:", NOTIF_PREVIOUS + " Running");
+                Log.d("onReceive:", NOTIF_PREVIOUS + " Running");
                 mediaControlsOnClickPrevious(getInstance().getCurrentFocus());
                 break;
 

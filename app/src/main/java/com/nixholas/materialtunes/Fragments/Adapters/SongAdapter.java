@@ -103,7 +103,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.song_playlist:
-                        //Log.e("OnMenuItemClick", "SongMenuClickListener is Working");
+                        //Log.d("OnMenuItemClick", "SongMenuClickListener is Working");
                         AddToPlaylistDialog addToPlaylistDialog = new AddToPlaylistDialog();
                         addToPlaylistDialog.show(getInstance().getFragmentManager(), "AddToPlaylistDialogFragment");
                         return true;
@@ -168,7 +168,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
                 .parse("content://media/external/audio/albumart");
         Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
 
-        //Log.e("Album Art URI", albumArtUri.toString());
+        //Log.d("Album Art URI", albumArtUri.toString());
 
         // http://stackoverflow.com/questions/32136973/how-to-get-a-context-in-a-recycler-view-adapter
         Glide.with(context)
@@ -181,11 +181,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
             @Override
             public void onClick(View view) {
                 // Debugging Only
-                //Log.e("CardOnClick", "Clicked");
+                //Log.d("CardOnClick", "Clicked");
                 Log.d("OnClick", "Song View Item");
 
                 try {
-                    //Log.e("LOG ", currentSong.getDataPath());
+                    //Log.d("LOG ", currentSong.getDataPath());
 
                     /**
                      * This line breaks the Queue system.
@@ -269,7 +269,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
                              * Under the hood changes
                              */
 
-                            //Log.e("SongAdapter", "Working");
+                            //Log.d("SongAdapter", "Working");
 
                             // http://stackoverflow.com/questions/9008770/media-player-called-in-state-0-error-38-0
                             mediaManager.mMediaPlayer.reset();

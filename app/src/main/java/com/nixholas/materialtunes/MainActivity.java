@@ -134,10 +134,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Request for proper permissions first
         // https://developer.android.com/training/permissions/requesting.html
-                ActivityCompat.requestPermissions(this,
+        ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         1); // Reading
-                ActivityCompat.requestPermissions(this,
+        ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         2); // Writing
 
@@ -421,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
                     songFragment = SongFragment.newInstance(position);
                     return songFragment;
                 case 1:
-                    //Log.e("AlbumFragment", "SectionsPagerAdapter/getItem Call");
+                    //Log.d("AlbumFragment", "SectionsPagerAdapter/getItem Call");
                     return AlbumFragment.newInstance(position);
                 case 2:
                     playlistFragment = PlaylistFragment.newInstance(position);
@@ -460,7 +460,7 @@ public class MainActivity extends AppCompatActivity {
      * @param v
      */
     public void slideButtonOnClick(View v) {
-        Log.e("Slide Button", "Clicked");
+        Log.d("Slide Button", "Clicked");
 
         if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
             // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
@@ -507,7 +507,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Next is repeat all..
                 mediaManager.setRepeatState(MediaManager.RepeatState.REPEATALL);
-                //Log.e("getmPlaybackState()", "Repeat All");
+                //Log.d("getmPlaybackState()", "Repeat All");
                 preferenceHelper.setRepeat(1);
                 break;
             case 1:

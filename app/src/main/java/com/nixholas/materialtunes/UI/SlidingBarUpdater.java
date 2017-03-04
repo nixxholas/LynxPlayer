@@ -48,7 +48,7 @@ public class SlidingBarUpdater {
                         .parse("content://media/external/audio/albumart");
                 Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, currentSong.getAlbumId());
 
-                //Log.e("Album Art URI", albumArtUri.toString());
+                //Log.d("Album Art URI", albumArtUri.toString());
 
                 // Collapsed View Layout
                 // http://stackoverflow.com/questions/32136973/how-to-get-a-context-in-a-recycler-view-adapter
@@ -127,7 +127,7 @@ public class SlidingBarUpdater {
                 mediaControls_Shuffle.setEnabledUI(preferenceHelper.getShuffle());
             }
         } catch (Exception ex) {
-           Log.e("updateSlideBar()", "An error occured");
+           Log.d("updateSlideBar()", "An error occured");
             ex.printStackTrace();
         }
     }

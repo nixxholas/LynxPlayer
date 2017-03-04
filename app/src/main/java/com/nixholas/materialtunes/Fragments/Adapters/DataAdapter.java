@@ -71,17 +71,17 @@ public class DataAdapter implements Runnable {
                     //String data = songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.DATA));
 
                     // Debug
-                    //Log.e("Song Path", data);
+                    //Log.d("Song Path", data);
 
                     // (long _id, long _albumId, long _artistId, String _title,
                     // String _artistName, String _albumName, int _duration)
-                    //Log.e("Music ID", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media._ID)));
-                    //Log.e("Music Album ID", songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
-                    //Log.e("Music Artist ID", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)));
-                    //Log.e("Music Title", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-                    //Log.e("Music Artist Name", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
-                    //Log.e("Music Album Name", songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
-                    //Log.e("Music Duration", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+                    //Log.d("Music ID", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media._ID)));
+                    //Log.d("Music Album ID", songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
+                    //Log.d("Music Artist ID", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)));
+                    //Log.d("Music Title", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                    //Log.d("Music Artist Name", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
+                    //Log.d("Music Album Name", songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
+                    //Log.d("Music Duration", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION)));
 
                     mediaManager.getSongFiles().add(new Song(
                             songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.DATA)),
@@ -123,12 +123,12 @@ public class DataAdapter implements Runnable {
             if (albumCount > 0) {
                 while (albumCur.moveToNext()) {
                     // Debug
-                    // Log.e("Column 0", String.valueOf(albumCur.getLong(0)));
-                    // Log.e("Column 1", String.valueOf(albumCur.getString(1)));
-                    // Log.e("Column 2", String.valueOf(albumCur.getString(2)));
-                    // Log.e("Column 3", String.valueOf(albumCur.getLong(3)));
-                    // Log.e("Column 4", String.valueOf(albumCur.getInt(4)));
-                    // Log.e("Column 5", String.valueOf(albumCur.getInt(5)));
+                    // Log.d("Column 0", String.valueOf(albumCur.getLong(0)));
+                    // Log.d("Column 1", String.valueOf(albumCur.getString(1)));
+                    // Log.d("Column 2", String.valueOf(albumCur.getString(2)));
+                    // Log.d("Column 3", String.valueOf(albumCur.getLong(3)));
+                    // Log.d("Column 4", String.valueOf(albumCur.getInt(4)));
+                    // Log.d("Column 5", String.valueOf(albumCur.getInt(5)));
                     Album newAlbum = new Album(
                             albumCur.getLong(0),
                             albumCur.getString(1),

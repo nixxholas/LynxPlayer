@@ -148,7 +148,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
      */
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        Log.e("onCompletion", "Running");
+        Log.d("onCompletion", "Running");
 
         try {
             if (repeatState == RepeatState.REPEATALL) {
@@ -207,7 +207,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         // Retrieve the current song
         Song currentlyPlaying = songFiles.get(currentlyPlayingIndex);
 
-        //Log.e("OnPrepared", "Working");
+        //Log.d("OnPrepared", "Working");
         long songDuration = currentlyPlaying.getDuration();
 
         slideSongTitle.setText(currentlyPlaying.getTitle());
@@ -217,7 +217,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         preferenceHelper.setCurrentSongId(currentlyPlaying.getId());
 
         // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android
-        //Log.e("MaxDuration", getCurrent().getDuration() + "");
+        //Log.d("MaxDuration", getCurrent().getDuration() + "");
         slidingSeekBar.setMax((int) songDuration); // Set the max duration
         slidedSeekBar.setMax((int) songDuration);
 
@@ -344,7 +344,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     public MediaManager() {} // Don't use this at all please, it's pointless, like your life lol.
 
     public MediaManager(final MainActivity mainActivity) {
-        //Log.e("onCreate: MediaManager", "Working");
+        //Log.d("onCreate: MediaManager", "Working");
         mDecodeThreadPool = new ThreadPoolExecutor(
                 NUMBER_OF_CORES,       // Initial pool size
                 NUMBER_OF_CORES,       // Max pool size
@@ -613,20 +613,31 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public boolean findDuplicateAlbum(Album album) {
-        for (Album a : albumFiles) {
-            if (a.getArtistName().equals(album.getArtistName()) &&
-                    a.getTitle().equals(album.getTitle())) { // If we really find a dupe
-                for (Song s : songFiles) { // Set all the existing songs
-                    if (s.getAlbumId() == album.getId()) { // To the existing album
-                        s.setAlbumId(a.getId());
-                        s.setAlbumName(a.getTitle());
+        Log.d("findDuplicateAlbum", "Running");
+
+        try {
+            if (albumFiles != null && !albumFiles.isEmpty()) {
+                for (Album a : albumFiles) {
+                    if (a.getArtistName().equals(album.getArtistName()) &&
+                            a.getTitle().equals(album.getTitle())) { // If we really find a dupe
+                        for (Song s : songFiles) { // Set all the existing songs
+                            if (s.getAlbumId() == album.getId()) { // To the existing album
+                                s.setAlbumId(a.getId());
+                                s.setAlbumName(a.getTitle());
+                            }
+                        }
+                        return true; // Then return true
                     }
                 }
-                return true; // Then return true
             }
-        }
 
-        return false;
+            Log.d("findDuplicateAlbum", "albumFiles is either null or is empty");
+            return false;
+        } catch (Exception ex) {
+            Log.d("findDuplicateAlbum", "An error occured");
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     // Updates the songFiles and the topPlayed

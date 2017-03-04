@@ -177,8 +177,8 @@ public class MediaControlUpdater {
         Log.d("mCOnClickNext", "Running method");
 
         try {
-            //Log.e("onClickNext", "Working");
-            //Log.e("mMediaPlayer.isPlaying", mediaManager.mMediaPlayer.isPlaying() + "");
+            //Log.d("onClickNext", "Working");
+            //Log.d("mMediaPlayer.isPlaying", mediaManager.mMediaPlayer.isPlaying() + "");
             /**
              * If getInstance().getCurrentFocus() is used, there will be a high probability of
              * com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView{18335a0 VFED..... .F.....D 0,0-1440,2070 #7f0c00a9 app:id/main_RecyclerView}
