@@ -138,11 +138,19 @@ public class DataAdapter implements Runnable {
                             albumCur.getInt(5),
                             albumCur.getString(6));
 
-                    if (mediaManager.findDuplicateAlbum(newAlbum)) {
-                        // Do nothing
-                    } else {
-                        mediaManager.getAlbumFiles().add(newAlbum);
+                    // Perform thorough null checks for strings
+                    if (newAlbum.getTitle() == null) {
+                        newAlbum.setTitle(""); // Don't make it null, make it blank
+                        // Here's the reinforced reason
+                        // http://stackoverflow.com/questions/4802015/difference-between-null-and-empty-java-string
                     }
+
+                    if (newAlbum.getArtistName() == null) {
+                        newAlbum.setTitle("");
+                    }
+
+                    // Call the duplicate checker
+                    mediaManager.findDuplicateAlbum(newAlbum);
                 }
             }
 

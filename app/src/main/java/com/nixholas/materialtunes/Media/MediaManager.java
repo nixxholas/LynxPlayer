@@ -42,6 +42,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.nixholas.materialtunes.MainActivity.getInstance;
 import static com.nixholas.materialtunes.MainActivity.mediaControls_PlayPause;
+import static com.nixholas.materialtunes.MainActivity.mediaManager;
 import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Maximum;
 import static com.nixholas.materialtunes.MainActivity.mediaSeekText_Progress;
 import static com.nixholas.materialtunes.MainActivity.persistentNotif;
@@ -629,9 +630,12 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                         return true; // Then return true
                     }
                 }
+
+                // Since no dupes are found
+                albumFiles.add(album);
             }
 
-            Log.d("findDuplicateAlbum", "albumFiles is either null or is empty");
+            //Log.d("findDuplicateAlbum", "albumFiles is either null or is empty");
             return false;
         } catch (Exception ex) {
             Log.d("findDuplicateAlbum", "An error occured");
