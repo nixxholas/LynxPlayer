@@ -24,7 +24,7 @@
             android:layout_marginTop="8sp"
             android:layout_marginBottom="8sp"
             android:paddingLeft="@dimen/notification_info_container_padding_left"
-            android:paddingRight="128sp">
+            android:paddingRight="152sp">
 
                 <TextView
                     android:id="@+id/noti_title"
