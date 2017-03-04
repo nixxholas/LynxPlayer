@@ -18,6 +18,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -391,11 +392,16 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            // http://stackoverflow.com/questions/26582075/cannot-catch-toolbar-home-button-click-event
+            case android.R.id.home:
+                // http://stackoverflow.com/questions/17821532/how-to-open-navigation-drawer-with-no-actionbar-open-with-just-a-button
+                drawerLayout.openDrawer(Gravity.LEFT);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
