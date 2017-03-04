@@ -245,7 +245,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
 
