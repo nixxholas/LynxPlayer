@@ -92,7 +92,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     public boolean mediaPlayerIsPaused = true;
     public RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
     private Random shufflerRandomizer;
-    private PlaybackState mPlaybackState;
     public int currentlyPlayingIndex; // This is binded with the managerQueue, so that we'll know what is up.
 
     // MediaManager Resources
@@ -165,11 +164,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                 mMediaPlayer.reset(); // Reset the player first
                 Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
                 mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
-
-                mPlaybackState = new PlaybackState.Builder()
-                        .setState(PlaybackState.STATE_NONE, 0, 1.0f)
-                        .build();
-                //mMediaSession.setPlaybackState(mPlaybackState);
 
                 // Update the UI
                 slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
@@ -319,11 +313,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
         persistentNotif.updateNotification();
 
-        setmPlaybackState(new PlaybackState.Builder()
-                .setState(PlaybackState.STATE_PAUSED,
-                        mMediaPlayer.getCurrentPosition(), 1.0f)
-                .build());
-
         // Make sure to pause it
         mMediaPlayer.pause();
     }
@@ -404,9 +393,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         }
 
         shufflerRandomizer = new Random();
-        mPlaybackState = new PlaybackState.Builder()
-                .setState(PlaybackState.STATE_NONE, 0, 1.0f)
-                .build();
     }
 
     /**
@@ -451,12 +437,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
-
-    public PlaybackState getmPlaybackState() {
-        return mPlaybackState;
-    }
-
-    public void setmPlaybackState(PlaybackState state) { mPlaybackState = state; }
 
     public Song getCurrent() {
         try {
