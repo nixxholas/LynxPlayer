@@ -274,7 +274,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
                             // http://stackoverflow.com/questions/9008770/media-player-called-in-state-0-error-38-0
                             mediaManager.mMediaPlayer.reset();
                             mediaManager.mMediaPlayer.setDataSource(context, audioUri);
-                            mediaManager.mMediaPlayer.prepare();
+                            mediaManager.mMediaPlayer.prepareAsync();
                             mediaManager.mMediaPlayer.start();
                             mediaManager.mediaPlayerIsPaused = false;
 

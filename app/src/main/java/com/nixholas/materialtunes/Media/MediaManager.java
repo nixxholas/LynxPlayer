@@ -174,6 +174,9 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                 // Update the UI
                 slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+
+                // Then prepare the mediaplayer
+                mMediaPlayer.prepareAsync();
             } else if (repeatState == RepeatState.REPEATONE){
                 //Since it's repeat one, let's replay it again.
 
@@ -185,7 +188,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                 mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
 
                 // Then play it again
-                mMediaPlayer.prepare();
+                mMediaPlayer.prepareAsync();
                 mMediaPlayer.start();
             } else {
                 // Something must have gone wrong, just reset the song in that case
@@ -317,9 +320,12 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         persistentNotif.updateNotification();
 
         setmPlaybackState(new PlaybackState.Builder()
-                .setState(PlaybackState.STATE_PLAYING,
+                .setState(PlaybackState.STATE_PAUSED,
                         mMediaPlayer.getCurrentPosition(), 1.0f)
                 .build());
+
+        // Make sure to pause it
+        mMediaPlayer.pause();
     }
 
     @Override
@@ -503,15 +509,15 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             Log.d("setupLastPlayed()", "Resetting mMediaPlayer");
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(getInstance().getApplicationContext(), audioUri);
-            mMediaPlayer.prepare();
+            mMediaPlayer.prepareAsync();
+
+            //Log.d("setupLastPlayed()", "Pausing mMediaPlayer");
+            //mediaPlayerIsPaused = true;
+            //mMediaPlayer.pause();
 
             Log.d("setupLastPlayed()", "Calling updateSliderBar()");
             // Update the UI
             updateSlideBar(getInstance());
-
-            Log.d("setupLastPlayed()", "Pausing mMediaPlayer");
-            mediaPlayerIsPaused = true;
-            mMediaPlayer.pause();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
