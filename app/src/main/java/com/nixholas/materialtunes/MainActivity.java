@@ -311,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
                         new LibsBuilder()
                                 .withAboutAppName("MaterialTunes")
                                 .withLicenseShown(true)
-                                .withVersionShown(true) 
+                                .withVersionShown(true)
                                 .withActivityTitle("About")
                                 .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
                                 .start(MainActivity.this);
