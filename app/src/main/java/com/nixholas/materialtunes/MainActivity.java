@@ -387,6 +387,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Create an intent which will handle any of the cases.
+        Intent intent;
+
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -394,7 +397,15 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.navigation_drawer_spotify:
+                return true;
+            case R.id.navigation_drawer_about:
+                return true;
+            case R.id.navigation_drawer_settings:
+                intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
             // http://stackoverflow.com/questions/26582075/cannot-catch-toolbar-home-button-click-event

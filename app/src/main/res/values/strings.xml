@@ -23,4 +23,9 @@
     <string name="transition_album_cover">Album Expand</string>
     <string name="transition_album_image">Album Art Expand</string>
     <string name="transition_album_title">Album Title Expand</string>
+
+    // DrawerLayout Items
+    <string name="drawer_spotify">Spotify Connect</string>
+    <string name="drawer_about">About</string>
+    <string name="drawer_settings">Settings</string>
 </resources>

@@ -3,18 +3,18 @@
 
     <group android:checkableBehavior="all">
         <item
-            android:id="@+id/navigation_drawer_item1"
+            android:id="@+id/navigation_drawer_spotify"
             android:icon="@android:drawable/ic_dialog_map"
-            android:title="Navigation Item 1" />
+            android:title="@string/drawer_spotify" />
         <item
-            android:id="@+id/navigation_drawer_item2"
+            android:id="@+id/navigation_drawer_about"
             android:icon="@android:drawable/ic_dialog_info"
-            android:title="Navigation Item 2" />
+            android:title="@string/drawer_about" />
 
         <item
-            android:id="@+id/navigation_drawer_item3"
-            android:icon="@android:drawable/ic_menu_share"
-            android:title="Navigation Item 3" />
+            android:id="@+id/navigation_drawer_settings"
+            android:icon="@android:drawable/ic_secure"
+            android:title="@string/drawer_settings" />
     </group>
 
 </menu>
