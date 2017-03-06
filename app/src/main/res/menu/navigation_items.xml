@@ -3,6 +3,11 @@
 
     <group android:checkableBehavior="all">
         <item
+            android:checked="true"
+            android:id="@+id/navigation_drawer_main"
+            android:icon="@android:drawable/ic_media_play"
+            android:title="@string/drawer_main" />
+        <item
             android:id="@+id/navigation_drawer_spotify"
             android:icon="@android:drawable/ic_dialog_map"
             android:title="@string/drawer_spotify" />

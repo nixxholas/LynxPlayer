@@ -7,6 +7,8 @@ import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,6 +33,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mikepenz.aboutlibraries.Libs;
+import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.nixholas.materialtunes.Fragments.Adapters.DataAdapter;
 import com.nixholas.materialtunes.Fragments.AlbumFragment;
 import com.nixholas.materialtunes.Fragments.PlaylistFragment;
@@ -118,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
      */
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -288,6 +293,39 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.app_name, R.string.app_name);
         drawerLayout.addDrawerListener(drawerToggle);
 
+        // Setup the navigationView and its item selected listener
+        navigationView = (NavigationView) findViewById(R.id.navigation_drawer);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // Have an intent for any selection
+                Intent intent;
+
+                switch (item.getItemId()) {
+                    case R.id.navigation_drawer_main:
+                        drawerLayout.closeDrawers();
+                        return true;
+                    case R.id.navigation_drawer_spotify:
+                        return true;
+                    case R.id.navigation_drawer_about:
+                        new LibsBuilder()
+                                .withAboutAppName("MaterialTunes")
+                                .withLicenseShown(true)
+                                .withVersionShown(true) 
+                                .withActivityTitle("About")
+                                .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                                .start(MainActivity.this);
+                        return true;
+                    case R.id.navigation_drawer_settings:
+                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                        startActivity(intent);
+                        return true;
+                }
+
+                return false;
+            }
+        });
+
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Home");
@@ -397,14 +435,6 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_settings:
-                intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.navigation_drawer_spotify:
-                return true;
-            case R.id.navigation_drawer_about:
-                return true;
-            case R.id.navigation_drawer_settings:
                 intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
