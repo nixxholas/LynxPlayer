@@ -24,8 +24,6 @@ android {
     lintOptions {
         abortOnError false
     }
-    productFlavors {
-    }
 }
 
 dependencies {

@@ -313,8 +313,9 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
         persistentNotif.updateNotification();
 
-        // Make sure to pause it
-        mMediaPlayer.pause();
+        // Make sure to start it
+        mMediaPlayer.start();
+        mediaPlayerIsPaused = false;
     }
 
     @Override
@@ -492,8 +493,8 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             mMediaPlayer.prepareAsync();
 
             //Log.d("setupLastPlayed()", "Pausing mMediaPlayer");
-            //mediaPlayerIsPaused = true;
-            //mMediaPlayer.pause();
+            mediaPlayerIsPaused = true;
+            mMediaPlayer.pause();
 
             Log.d("setupLastPlayed()", "Calling updateSliderBar()");
             // Update the UI

@@ -215,9 +215,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
                             //mediaManager.mediaPlayer.stop();
                             mediaManager.mMediaPlayer.reset();
                             mediaManager.mMediaPlayer.setDataSource(context, audioUri);
-                            mediaManager.mMediaPlayer.prepare();
-                            mediaManager.mMediaPlayer.start();
-                            mediaManager.mediaPlayerIsPaused = false;
+                            mediaManager.mMediaPlayer.prepareAsync();
 
                             /**
                              * User Interface Changes
@@ -275,8 +273,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
                             mediaManager.mMediaPlayer.reset();
                             mediaManager.mMediaPlayer.setDataSource(context, audioUri);
                             mediaManager.mMediaPlayer.prepareAsync();
-                            mediaManager.mMediaPlayer.start();
-                            mediaManager.mediaPlayerIsPaused = false;
 
                             /**
                              * User Interface Changes
