@@ -28,4 +28,10 @@
     <string name="drawer_spotify">Spotify Connect</string>
     <string name="drawer_about">About</string>
     <string name="drawer_settings">Settings</string>
+
+    // About Libraries
+    <string name="aboutLibraries_description_showIcon">true</string>
+    <string name="aboutLibraries_description_showVersion">true</string>
+    <string name="aboutLibraries_description_text">Description Placeholder</string>
+
 </resources>
