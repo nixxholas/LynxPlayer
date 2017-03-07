@@ -88,6 +88,15 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     public RemoteControlReceiver remoteControlReceiver;
     private MediaDB mediaDB;
 
+    /**
+     * Runnable, progressRunable
+     *
+     * This runnable allows us to carefully manage the seekbar for the current song that is being
+     * played without reducing the usage of the main thread which is heavily used during general
+     * usage.
+     */
+    Runnable progressRunnable;
+
     // MediaManager Sub Objects
     public boolean mediaPlayerIsPaused = true;
     public RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
@@ -259,7 +268,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             }
         });
 
-        Runnable progressRunnable = new Runnable() {
+        progressRunnable = new Runnable() {
             @Override
             public void run() {
                 try {

@@ -206,8 +206,6 @@ public class MediaControlUpdater {
                 mediaManager.mMediaPlayer.reset();
                 mediaManager.mMediaPlayer.setDataSource(getInstance().getApplicationContext(), audioUri);
                 mediaManager.mMediaPlayer.prepareAsync();
-                mediaManager.mMediaPlayer.start();
-                mediaManager.mediaPlayerIsPaused = false;
 
                 /**
                  * User Interface Changes

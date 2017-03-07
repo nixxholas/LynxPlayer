@@ -33,6 +33,6 @@
     // About Libraries
     <string name="aboutLibraries_description_showIcon">true</string>
     <string name="aboutLibraries_description_showVersion">true</string>
-    <string name="aboutLibraries_description_text">Description Placeholder</string>
+    <string name="aboutLibraries_description_text">A simple and easy media player.</string>
 
 </resources>
