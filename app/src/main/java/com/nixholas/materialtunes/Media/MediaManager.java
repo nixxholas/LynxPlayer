@@ -89,6 +89,14 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     private MediaDB mediaDB;
 
     /**
+     * mainHandler
+     *
+     * This handler allows an extra thread to reconnect with the main thread so as to offload tasks
+     * that are being executed/waiting to be executed in the main thread.
+     */
+    Handler mainHandler;
+
+    /**
      * Runnable, progressRunable
      *
      * This runnable allows us to carefully manage the seekbar for the current song that is being
@@ -220,10 +228,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         }
 
-        // Get a handler that can be used to post to the main thread
-        // http://stackoverflow.com/questions/11123621/running-code-in-main-thread-from-another-thread
-        final Handler mainHandler = new Handler(getInstance().getMainLooper());
-
         // Retrieve the current song
         Song currentlyPlaying = songFiles.get(currentlyPlayingIndex);
 
@@ -267,6 +271,8 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+
+        mainHandler.removeCallbacks(progressRunnable);
 
         progressRunnable = new Runnable() {
             @Override
@@ -378,6 +384,10 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                 mDecodeWorkQueue);
 
         audioManager = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
+
+        // Get a handler that can be used to post to the main thread
+        // http://stackoverflow.com/questions/11123621/running-code-in-main-thread-from-another-thread
+        mainHandler = new Handler(getInstance().getMainLooper());
 
         initializeMediaDB(mainActivity.getApplicationContext()); // Instantiate the SQLite Object
 
