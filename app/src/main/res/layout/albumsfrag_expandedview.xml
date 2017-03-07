@@ -22,7 +22,7 @@ http://www.mindgrub.com/blog/matt-stanford/implementing-collapsing-toolbar-andro
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/albumexpanded_collapsetoolbar"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|enterAlways"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             app:expandedTitleMarginStart="48dp"
@@ -42,7 +42,6 @@ http://www.mindgrub.com/blog/matt-stanford/implementing-collapsing-toolbar-andro
                 android:id="@+id/albumexpanded_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
