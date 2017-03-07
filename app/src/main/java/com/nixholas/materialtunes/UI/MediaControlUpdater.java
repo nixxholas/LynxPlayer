@@ -36,8 +36,7 @@ public class MediaControlUpdater {
     public static void mediaControlsOnClickPlayPause() {
         Log.d("mCOnClickPlayPause", "Running method");
 
-        if (mediaManager.mMediaPlayer != null) {
-            if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
+        if (mediaManager.mMediaPlayer != null && mediaManager.mMediaPlayer.isPlaying()) {
                 // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
                 if (mediaManager.mediaPlayerIsPaused) { // If the current song is paused,
                     mediaManager.mMediaPlayer.start();
@@ -53,7 +52,6 @@ public class MediaControlUpdater {
                 }
 
                 persistentNotif.updateNotification();
-            }
         }
     }
 
