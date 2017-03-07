@@ -586,7 +586,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         if (!mHistory.isEmpty()) {
             return songFiles.get(mHistory.pop());
         } else { // Return the current song since there isn't any history.
-            return getCurrent();
+            return songFiles.get(currentlyPlayingIndex);
         }
     }
 

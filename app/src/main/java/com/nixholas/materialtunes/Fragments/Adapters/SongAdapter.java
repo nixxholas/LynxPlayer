@@ -206,7 +206,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
 
                     Uri albumArtUri = getAlbumArtUri(currentSong.getAlbumId());
 
-                        if (mediaManager.mMediaPlayer.isPlaying()) {
+                        if (mediaManager.mMediaPlayer.isPlaying() && !mediaManager.mediaPlayerIsPaused) {
                             /**
                              * Under the hood changes
                              */
