@@ -129,7 +129,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
                                                          int viewType) {
         // create a new view
         final View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.song_item, parent, false);
+                .inflate(R.layout.playlist_item, parent, false);
 
         // set the view's size, margins, paddings and layout parameters'
         PlaylistAdapter.ViewHolder vh = new PlaylistAdapter.ViewHolder(v);
