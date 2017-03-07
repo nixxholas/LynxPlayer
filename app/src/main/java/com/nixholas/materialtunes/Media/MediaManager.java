@@ -93,6 +93,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     public RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
     private Random shufflerRandomizer;
     public int currentlyPlayingIndex; // This is binded with the managerQueue, so that we'll know what is up.
+    private boolean isThisLastPlayed = false;
 
     // MediaManager Resources
     /**
@@ -314,8 +315,14 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         persistentNotif.updateNotification();
 
         // Make sure to start it
-        mMediaPlayer.start();
-        mediaPlayerIsPaused = false;
+        if (isThisLastPlayed) {
+            mMediaPlayer.pause();
+            mediaPlayerIsPaused = true;
+            isThisLastPlayed = false;
+        } else {
+            mMediaPlayer.start();
+            mediaPlayerIsPaused = false;
+        }
     }
 
     @Override
@@ -487,14 +494,16 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             // Set it up
             Uri audioUri = Uri.parse("file://" + songFiles.get(currentlyPlayingIndex).getDataPath());
 
+            isThisLastPlayed = true;
+
             Log.d("setupLastPlayed()", "Resetting mMediaPlayer");
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(getInstance().getApplicationContext(), audioUri);
             mMediaPlayer.prepareAsync();
 
             //Log.d("setupLastPlayed()", "Pausing mMediaPlayer");
-            mediaPlayerIsPaused = true;
-            mMediaPlayer.pause();
+            //            mediaPlayerIsPaused = true;
+            //            mMediaPlayer.pause();
 
             Log.d("setupLastPlayed()", "Calling updateSliderBar()");
             // Update the UI
