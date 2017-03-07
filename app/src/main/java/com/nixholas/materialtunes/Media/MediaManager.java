@@ -188,7 +188,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
 
                 // Then prepare the mediaplayer
-                mMediaPlayer.prepareAsync();
+                mMediaPlayer.prepare();
             } else if (repeatState == RepeatState.REPEATONE){
                 //Since it's repeat one, let's replay it again.
 
@@ -200,8 +200,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                 mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
 
                 // Then play it again
-                mMediaPlayer.prepareAsync();
-                mMediaPlayer.start();
+                mMediaPlayer.prepare();
             } else {
                 // Something must have gone wrong, just reset the song in that case
 
@@ -518,7 +517,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             Log.d("setupLastPlayed()", "Resetting mMediaPlayer");
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(getInstance().getApplicationContext(), audioUri);
-            mMediaPlayer.prepareAsync();
+            mMediaPlayer.prepare();
 
             //Log.d("setupLastPlayed()", "Pausing mMediaPlayer");
             //            mediaPlayerIsPaused = true;

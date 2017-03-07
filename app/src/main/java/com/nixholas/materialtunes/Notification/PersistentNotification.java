@@ -228,7 +228,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
      * http://stackoverflow.com/questions/7988018/custom-notification-java-lang-runtimeexception-bad-array-lengths
      */
     public void updateNotification() {
-            new AsyncTask<Void, Void, Void>() {
+        PersisNotifRunner = new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     try {
@@ -237,7 +237,6 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                         //Log.d("Current Context", MainActivity.getInstance().getPackageName());
                         Log.d("PersistentNotifiation", "updateNotification()");
 
-                        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
                         normalView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_normal);
                         bigView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_big);
 
