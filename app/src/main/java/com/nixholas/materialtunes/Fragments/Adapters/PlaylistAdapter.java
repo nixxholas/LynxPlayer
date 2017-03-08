@@ -174,7 +174,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         return mDataset.size();
     }
 
-    public void removeAt(int position) {
+    private void removeAt(int position) {
         mDataset.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, mDataset.size());
