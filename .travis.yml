@@ -23,7 +23,7 @@ android:
 before_install:
   - "chmod +x gradlew"
 
-install: ant deps
+# install: ant deps
 
 directories:
   - $HOME/.gradle/caches/
