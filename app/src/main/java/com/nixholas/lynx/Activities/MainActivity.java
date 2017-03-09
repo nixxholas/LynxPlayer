@@ -33,8 +33,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mikepenz.aboutlibraries.Libs;
-import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.nixholas.lynx.Fragments.Adapters.DataAdapter;
 import com.nixholas.lynx.Fragments.AlbumFragment;
 import com.nixholas.lynx.Fragments.PlaylistFragment;
@@ -309,13 +307,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.navigation_drawer_spotify:
                         return true;
                     case R.id.navigation_drawer_about:
-                        new LibsBuilder()
-                                .withAboutAppName("Lynx")
-                                .withLicenseShown(true)
-                                .withVersionShown(true)
-                                .withActivityTitle("About")
-                                .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                                .start(MainActivity.this);
+
                         return true;
                     case R.id.navigation_drawer_settings:
                         intent = new Intent(getApplicationContext(), SettingsActivity.class);

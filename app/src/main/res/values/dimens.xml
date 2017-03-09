@@ -15,6 +15,7 @@
     <dimen name="slideduplayout_cardpadding">-2dp</dimen>
 
     <dimen name="card_margin">2dp</dimen>
+    <dimen name="card_padding_openSource">1dp</dimen>
     <dimen name="card_album_radius">0dp</dimen>
     <dimen name="album_title_padding">10dp</dimen>
     <dimen name="album_title">15sp</dimen>

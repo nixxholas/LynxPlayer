@@ -10,8 +10,8 @@ android {
         applicationId "com.nixholas.lynx"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 26
-        versionName '1.8.12 BETA'
+        versionCode 27
+        versionName '1.8.13 BETA'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -48,9 +48,6 @@ dependencies {
     compile 'com.yqritc:recyclerview-flexibledivider:1.4.0'
     compile 'com.yalantis:eqwaves:1.0.1'
     compile 'com.github.paolorotolo:appintro:4.1.0'
-    compile('com.mikepenz:aboutlibraries:5.9.1@aar') {
-        transitive = true
-    }
     compile "com.github.ksoichiro:android-observablescrollview:1.5.2"
     compile 'com.afollestad.material-dialogs:core:0.9.1.0'
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
