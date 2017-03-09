@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.nixholas.materialtunes.MainActivity">
+    tools:context="com.nixholas.lynx.Activities.MainActivity">
 
     <!-- http://stackoverflow.com/questions/26889976/should-use-androidshowasaction-when-not-using-the-appcompat-library -->
     <item

@@ -31,7 +31,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent">
 
-                                <com.nixholas.materialtunes.UI.Text.SemiBoldTextView
+                                <com.nixholas.lynx.UI.Text.SemiBoldTextView
                                     android:text="Most Played"
                                     android:textSize="36dp"
                                     android:ellipsize="end"

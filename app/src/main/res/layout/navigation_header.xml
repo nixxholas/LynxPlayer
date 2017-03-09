@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="18dp"
-        android:text="MaterialTunes"
+        android:text="Lynx"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textStyle="bold" />
 

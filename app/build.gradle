@@ -7,7 +7,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.nixholas.materialtunes"
+        applicationId "com.nixholas.lynx"
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 26
