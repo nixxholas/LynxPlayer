@@ -10,8 +10,8 @@ android {
         applicationId "com.nixholas.lynx"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 27
-        versionName '1.8.13 BETA'
+        versionCode 1
+        versionName '0.1.0 BETA'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
