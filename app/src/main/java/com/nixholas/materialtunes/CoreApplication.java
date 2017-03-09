@@ -9,6 +9,11 @@ import com.squareup.leakcanary.LeakCanary;
  */
 
 public class CoreApplication extends Application {
+    private static CoreApplication mInstance;
+
+    public static synchronized CoreApplication getInstance() {
+        return mInstance;
+    }
 
     @Override
     public void onCreate() {

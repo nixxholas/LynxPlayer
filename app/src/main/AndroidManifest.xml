@@ -18,13 +18,14 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
+        android:name=".CoreApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_app_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- android:configChanges
+        <!-- android:configChanges1
         http://stackoverflow.com/questions/34455170/actionbaractivity-content-gets-reset-when-orientation-changed-drawerlayout-->
         <activity
             android:name=".MainActivity"
