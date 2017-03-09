@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--http://stackoverflow.com/questions/29738510/toolbar-overlapping-below-status-bar-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/slided_layout"
     android:layout_alignBaseline="@+id/slide_layout"
     android:fitsSystemWindows="true"
@@ -14,16 +15,19 @@
     <FrameLayout
         android:id="@+id/slided_framelayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clipToPadding="false">
 
         <!--http://stackoverflow.com/questions/17499789/set-position-of-seekbar-below-an-image-view-->
-        <ImageView
-            android:id="@+id/slided_image"
-            android:adjustViewBounds="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:contentDescription="slided album art" />
+            <ImageView
+                android:id="@+id/slided_image"
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:contentDescription="@null"
+                android:padding="@dimen/sliding_tab_expanded_albumart_padding"
+                android:elevation="@dimen/sliding_tab_expanded_albumart_elevation"/>
 
         <LinearLayout
             android:padding="@dimen/fragment_padding_topbottom"
@@ -55,7 +59,6 @@
         -->
     <LinearLayout
         android:id="@+id/slided_texts"
-        android:paddingTop="@dimen/card_padding_openSource"
         android:layout_below="@id/slided_framelayout"
         android:orientation="vertical"
         android:layout_gravity="center_horizontal"

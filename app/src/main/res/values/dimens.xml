@@ -6,6 +6,10 @@
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="ic_album_overflow_height">30dp</dimen>
 
+    <!-- Sliding Tab Layout Expanded dimensions -->
+    <dimen name="sliding_tab_expanded_albumart_padding">36sp</dimen>
+    <dimen name="sliding_tab_expanded_albumart_elevation">8sp</dimen>
+
     <!-- Default Paddings for each fragment -->
     <dimen name="fragment_padding_topbottom">10dp</dimen>
 
