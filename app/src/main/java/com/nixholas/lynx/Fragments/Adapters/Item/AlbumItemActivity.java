@@ -29,7 +29,7 @@ import java.io.File;
 
 import static com.nixholas.lynx.Activities.MainActivity.mediaManager;
 
-public class AlbumActivity extends AppCompatActivity {
+public class AlbumItemActivity extends AppCompatActivity {
     // Recycler View and it's components
     CollapsingToolbarLayout collapsingToolbarLayout;
     FloatingActionButton floatingActionButton;

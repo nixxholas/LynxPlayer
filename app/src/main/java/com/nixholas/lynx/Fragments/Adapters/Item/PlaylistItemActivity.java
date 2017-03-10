@@ -3,7 +3,7 @@ package com.nixholas.lynx.Fragments.Adapters.Item;
 import android.support.v7.app.AppCompatActivity;
 
 /**
- * PlaylistActivity
+ * PlaylistItemActivity
  *
  * Created by nixholas on 8/1/17.
  *
@@ -13,6 +13,6 @@ import android.support.v7.app.AppCompatActivity;
  * for our mediaplayer object.
  */
 
-public class PlaylistActivity extends AppCompatActivity {
+public class PlaylistItemActivity extends AppCompatActivity {
 
 }

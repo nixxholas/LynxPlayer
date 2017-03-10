@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.ImageViewTarget;
-import com.nixholas.lynx.Fragments.Adapters.Item.AlbumActivity;
+import com.nixholas.lynx.Fragments.Adapters.Item.AlbumItemActivity;
 import com.nixholas.lynx.Media.Entities.Album;
 import com.nixholas.lynx.R;
 import com.nixholas.lynx.Utils.Color.TextColorHelper;
@@ -164,7 +164,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                  *
                  * http://stackoverflow.com/questions/27736848/cardview-animation-raise-and-expand-on-click
                  */
-                Intent intent = new Intent(v.getContext(), AlbumActivity.class);
+                Intent intent = new Intent(v.getContext(), AlbumItemActivity.class);
                 //int w = v.getWidth();
                 //int h = v.getHeight();
                 // float maxRadius = (float) Math.sqrt(w * w / 4 + h * h / 4);

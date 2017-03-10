@@ -47,7 +47,7 @@
         <activity
             android:name="com.nixholas.lynx.Activities.SettingsActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".Fragments.Adapters.Item.AlbumActivity"
+        <activity android:name=".Fragments.Adapters.Item.AlbumItemActivity"
             android:configChanges="orientation|screenSize" />
         <activity android:name="com.nixholas.lynx.Fragments.MostPlayedActivity"
             android:configChanges="orientation|screenSize" />
