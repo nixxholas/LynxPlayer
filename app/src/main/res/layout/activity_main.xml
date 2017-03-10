@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <!--http://stackoverflow.com/questions/33043536/menu-tabs-dont-respond-->
-        <com.nixholas.lynx.UI.CustomSlidingUpLayout
+        <com.nixholas.lynx.ui.CustomSlidingUpLayout
             android:id="@+id/sliding_layout"
             xmlns:sothree="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                tools:context="com.nixholas.lynx.Activities.MainActivity">
+                tools:context="com.nixholas.lynx.activities.MainActivity">
 
             <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
@@ -142,7 +142,7 @@
                         android:layout_height="match_parent">
 
                         <!-- http://stackoverflow.com/questions/2507798/prevent-textview-from-wrapping-in-parent -->
-                        <com.nixholas.lynx.UI.Text.SemiBoldTextView
+                        <com.nixholas.lynx.ui.text.SemiBoldTextView
                             android:id="@+id/slide_songtitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
                             android:maxLines="1"
                             android:ellipsize="end"/>
 
-                        <com.nixholas.lynx.UI.Text.RegularTextView
+                        <com.nixholas.lynx.ui.text.RegularTextView
                             android:id="@+id/slide_songartist"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -187,7 +187,7 @@
 
             </LinearLayout>
 
-        </com.nixholas.lynx.UI.CustomSlidingUpLayout>
+        </com.nixholas.lynx.ui.CustomSlidingUpLayout>
 
     </RelativeLayout>
 

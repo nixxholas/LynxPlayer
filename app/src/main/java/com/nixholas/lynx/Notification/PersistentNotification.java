@@ -15,19 +15,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import com.nixholas.lynx.Activities.MainActivity;
-import com.nixholas.lynx.Media.Entities.Song;
+import com.nixholas.lynx.activities.MainActivity;
+import com.nixholas.lynx.media.entities.Song;
 import com.nixholas.lynx.R;
 
 import java.io.File;
 
-import static com.nixholas.lynx.Activities.MainActivity.getInstance;
-import static com.nixholas.lynx.Activities.MainActivity.mediaManager;
-import static com.nixholas.lynx.UI.MediaControlUpdater.mediaControlsOnClickNext;
-import static com.nixholas.lynx.UI.MediaControlUpdater.mediaControlsOnClickPlayPause;
-import static com.nixholas.lynx.UI.MediaControlUpdater.mediaControlsOnClickPrevious;
-import static com.nixholas.lynx.Utils.AlbumService.getAlbumArt;
-import static com.nixholas.lynx.Utils.Color.TextColorHelper.isColorDark;
+import static com.nixholas.lynx.activities.MainActivity.getInstance;
+import static com.nixholas.lynx.activities.MainActivity.mediaManager;
+import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickNext;
+import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickPlayPause;
+import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickPrevious;
+import static com.nixholas.lynx.utils.AlbumService.getAlbumArt;
+import static com.nixholas.lynx.utils.color.TextColorHelper.isColorDark;
 
 /**
  * The Generic Notification Object for Lynx.
