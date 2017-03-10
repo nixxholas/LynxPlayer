@@ -645,6 +645,10 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
         try {
             if (albumFiles != null && !albumFiles.isEmpty()) {
+//                if (albumFiles.contains(album)) {
+//
+//                }
+
                 for (Album a : albumFiles) {
                     if (a.getArtistName().equals(album.getArtistName()) &&
                             a.getTitle().equals(album.getTitle())) { // If we really find a dupe
@@ -658,7 +662,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                     }
                 }
             }
-
 
             // Since no dupes are found
             albumFiles.add(album);
