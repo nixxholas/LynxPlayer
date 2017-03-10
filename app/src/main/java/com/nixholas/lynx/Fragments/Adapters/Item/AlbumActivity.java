@@ -1,4 +1,4 @@
-package com.nixholas.lynx.Fragments.FragmentItem;
+package com.nixholas.lynx.Fragments.Adapters.Item;
 
 import android.net.Uri;
 import android.os.Bundle;

@@ -47,7 +47,7 @@
         <activity
             android:name="com.nixholas.lynx.Activities.SettingsActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name="com.nixholas.lynx.Fragments.FragmentItem.AlbumActivity"
+        <activity android:name=".Fragments.Adapters.Item.AlbumActivity"
             android:configChanges="orientation|screenSize" />
         <activity android:name="com.nixholas.lynx.Fragments.MostPlayedActivity"
             android:configChanges="orientation|screenSize" />
@@ -61,7 +61,7 @@
         <service
             android:name="com.nixholas.lynx.Media.MediaManager"
             android:enabled="true"
-            android:process=":materialtunes"
+            android:process=":lynx"
             android:exported="false"/>
     </application>
 

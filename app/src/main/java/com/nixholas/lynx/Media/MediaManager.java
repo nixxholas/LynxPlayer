@@ -105,7 +105,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
     // MediaManager Sub Objects
     public boolean mediaPlayerIsPaused = true;
-    public RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
+    private RepeatState repeatState = RepeatState.NOREPEAT; // 0 for none, 1 for repeat one, 2 for repeat all
     private Random shufflerRandomizer;
     public int currentlyPlayingIndex; // This is binded with the managerQueue, so that we'll know what is up.
     private boolean isThisLastPlayed = false;
@@ -416,6 +416,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
 
+        // Setup the shuffle randomizer
         shufflerRandomizer = new Random();
     }
 
@@ -432,10 +433,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         final String strSec = placeZeroIfNeeded(sec);
         return String.format("%s:%s",strMin,strSec);
     }
-
-//    public LinkedList<Song> getManagerQueue() {
-//        return managerQueue;
-//    }
 
     public ArrayList<Song> getSongFiles() {
         return songFiles;
@@ -480,6 +477,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                     currentlyPlayingIndex = lastPlayedSongIndex;
 
                     // Make sure we perform repeat and shuffle checks
+
 
                     // Return in
 

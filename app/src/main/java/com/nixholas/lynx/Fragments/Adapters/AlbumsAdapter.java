@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.ImageViewTarget;
-import com.nixholas.lynx.Fragments.FragmentItem.AlbumActivity;
+import com.nixholas.lynx.Fragments.Adapters.Item.AlbumActivity;
 import com.nixholas.lynx.Media.Entities.Album;
 import com.nixholas.lynx.R;
 import com.nixholas.lynx.Utils.Color.TextColorHelper;
