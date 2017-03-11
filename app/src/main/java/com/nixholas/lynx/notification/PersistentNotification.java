@@ -1,4 +1,4 @@
-package com.nixholas.lynx.Notification;
+package com.nixholas.lynx.notification;
 
 import android.app.Notification;
 import android.app.NotificationManager;

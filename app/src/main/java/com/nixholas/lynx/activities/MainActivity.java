@@ -38,7 +38,7 @@ import com.nixholas.lynx.fragments.AlbumFragment;
 import com.nixholas.lynx.fragments.PlaylistFragment;
 import com.nixholas.lynx.fragments.SongFragment;
 import com.nixholas.lynx.media.MediaManager;
-import com.nixholas.lynx.Notification.PersistentNotification;
+import com.nixholas.lynx.notification.PersistentNotification;
 import com.nixholas.lynx.R;
 import com.nixholas.lynx.ui.button.CustomImageButton;
 import com.nixholas.lynx.ui.CustomSlidingUpLayout;
