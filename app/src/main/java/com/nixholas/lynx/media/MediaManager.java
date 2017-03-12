@@ -18,12 +18,12 @@ import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.nixholas.lynx.R;
 import com.nixholas.lynx.activities.MainActivity;
 import com.nixholas.lynx.media.entities.Album;
 import com.nixholas.lynx.media.entities.Playlist;
 import com.nixholas.lynx.media.entities.Song;
 import com.nixholas.lynx.media.entities.utils.PlaylistUtil;
-import com.nixholas.lynx.R;
 import com.nixholas.lynx.utils.AlbumService;
 import com.nixholas.lynx.utils.RemoteControlReceiver;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -34,9 +34,6 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Stack;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.nixholas.lynx.activities.MainActivity.getInstance;
@@ -67,13 +64,13 @@ import static com.nixholas.lynx.ui.SlidingBarUpdater.updateSlideBar;
 public class MediaManager extends Service implements MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
     // Action Strings
-//    public static final String ACTION_PLAY = "action_play";
-//    public static final String ACTION_PAUSE = "action_pause";
-//    public static final String ACTION_REWIND = "action_rewind";
-//    public static final String ACTION_FAST_FORWARD = "action_fast_foward";
-//    public static final String ACTION_NEXT = "action_next";
-//    public static final String ACTION_PREVIOUS = "action_previous";
-//    public static final String ACTION_STOP = "action_stop";
+    public static final String ACTION_PLAY = "action_play";
+    public static final String ACTION_PAUSE = "action_pause";
+    public static final String ACTION_REWIND = "action_rewind";
+    public static final String ACTION_FAST_FORWARD = "action_fast_foward";
+    public static final String ACTION_NEXT = "action_next";
+    public static final String ACTION_PREVIOUS = "action_previous";
+    public static final String ACTION_STOP = "action_stop";
 
     // Static Variables for Data Sets
     private static int HISTORY_LIMIT = 1000;
@@ -142,206 +139,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     // Playlist Helper
     public PlaylistUtil playlistUtil = new PlaylistUtil();
 
-    // ThreadPoolExecutor
-    ThreadPoolExecutor mDecodeThreadPool;
-    /*
-     * Gets the number of available cores
-     * (not always the same as the maximum number of cores)
-     */
-    private static int NUMBER_OF_CORES =
-            Runtime.getRuntime().availableProcessors();
-    // Instantiates the queue of Runnables as a LinkedBlockingQueue
-    BlockingQueue<Runnable> mDecodeWorkQueue = new LinkedBlockingQueue<Runnable>();
-    // Sets the amount of time an idle thread waits before terminating
-    private static final int KEEP_ALIVE_TIME = 1;
-    // Sets the Time Unit to seconds
-    private static final TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
-
-    /**
-     * Some management methods for the MediaPlayer Object
-     *
-     * @param mediaPlayer http://stackoverflow.com/questions/10529226/notify-once-the-audio-is-finished-playing
-     */
-    @Override
-    public void onCompletion(MediaPlayer mediaPlayer) {
-        Log.d("onCompletion", "Running");
-
-        try {
-            if (repeatState == RepeatState.REPEATALL) {
-                // Since it's repeat all, naturally it mimics an onClick Next
-                // so that we can reuse code instead
-
-                // Add the completed song to the history first
-                mHistory.add(currentlyPlayingIndex);
-
-                mediaControlsOnClickNext(MainActivity.getInstance().getCurrentFocus());
-            } else if (repeatState == RepeatState.NOREPEAT) {
-                Song currentSong = songFiles.get(currentlyPlayingIndex); // Get the current song that just ended
-                mMediaPlayer.reset(); // Reset the player first
-                Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
-                mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
-
-                // Update the UI
-                slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
-                mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
-
-                // Then prepare the mediaplayer
-                mMediaPlayer.prepare();
-            } else if (repeatState == RepeatState.REPEATONE){
-                //Since it's repeat one, let's replay it again.
-
-                // Make sure it's stopped
-                mMediaPlayer.stop();
-                Song currentSong = songFiles.get(currentlyPlayingIndex); // Get the current song that just ended
-                mMediaPlayer.reset(); // Reset the player first
-                Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
-                mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
-
-                // Then play it again
-                mMediaPlayer.prepare();
-            } else {
-                // Something must have gone wrong, just reset the song in that case
-
-                // Make sure it's stopped
-                mMediaPlayer.stop();
-                Song currentSong = songFiles.get(currentlyPlayingIndex); // Get the current song that just ended
-                mMediaPlayer.reset(); // Reset the player first
-                Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
-                mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
-
-                // Then play it again
-                mMediaPlayer.prepare();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onPrepared(MediaPlayer mediaPlayer) {
-        // Check to make sure it's not hidden
-        if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.HIDDEN) {
-            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        }
-
-        // Retrieve the current song
-        Song currentlyPlaying = songFiles.get(currentlyPlayingIndex);
-
-        //Log.d("OnPrepared", "Working");
-        long songDuration = currentlyPlaying.getDuration();
-
-        slideSongTitle.setText(currentlyPlaying.getTitle());
-        slideSongArtist.setText(currentlyPlaying.getArtistName());
-        slided_SongTitle.setText(currentlyPlaying.getTitle());
-        slided_SongArtist.setText(currentlyPlaying.getArtistName());
-        preferenceHelper.setCurrentSongId(currentlyPlaying.getId());
-
-        // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android
-        //Log.d("MaxDuration", getCurrent().getDuration() + "");
-        slidingSeekBar.setMax((int) songDuration); // Set the max duration
-        slidedSeekBar.setMax((int) songDuration);
-
-        // Retrieve the length of the song and set it into the Maximum Text View
-        //mediaSeekText_Maximum.setText(getCurrent().getDuration() + "");
-        // http://stackoverflow.com/questions/625433/how-to-convert-milliseconds-to-x-mins-x-seconds-in-java
-        mediaSeekText_Maximum.setText(String.format(Locale.ENGLISH, "%02d:%02d",
-                TimeUnit.MILLISECONDS.toMinutes(songDuration),
-                TimeUnit.MILLISECONDS.toSeconds(songDuration) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(songDuration))
-        ));
-
-        // What if the user wants to scrub the time
-        // http://stackoverflow.com/questions/35407578/how-to-control-the-audio-using-android-media-player-seek-bar
-        slidedSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser)
-                    mMediaPlayer.seekTo(progress);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-        mainHandler.removeCallbacks(progressRunnable);
-
-        progressRunnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Log.d("mainHandler", "mediaPlayerIsPaused: " + mediaPlayerIsPaused);
-
-                    if (!mediaPlayerIsPaused && mMediaPlayer != null) {
-                        // http://stackoverflow.com/questions/35027321/seek-bar-and-media-player-and-a-time-of-a-track
-                        //set seekbar progress
-                        slidingSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
-                        slidedSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
-
-                        long currentPosition = mMediaPlayer.getCurrentPosition();
-                        // Set current time
-                        //mediaSeekText_Progress.setText(mMediaPlayer.getCurrentPosition() + "");
-                        //mediaSeekText_Progress.setText(msecondsToString(mMediaPlayer.getCurrentPosition()));
-                        // http://stackoverflow.com/questions/13444546/android-adt-21-0-warning-implicitly-using-the-default-locale
-                        mediaSeekText_Progress.setText(String.format(Locale.ENGLISH, "%02d:%02d",
-                                TimeUnit.MILLISECONDS.toMinutes(currentPosition),
-                                TimeUnit.MILLISECONDS.toSeconds(currentPosition) -
-                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(currentPosition))
-                        ));
-
-                        //repeat yourself that again in 600 miliseconds
-                        mainHandler.postDelayed(this, 600);
-                    } else {
-                        // Don't update if it's not playing..
-                        //repeat yourself that again in 600 miliseconds
-                        mainHandler.postDelayed(this, 600);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        mainHandler.post(progressRunnable);
-
-        // Finally, bump the counter in the SQLite table
-
-        // Debugging Purposes Only
-        // Log.d("checkWithDB on " + getCurrent().getTitle(),
-        // mediaDB.checkMediaCountIfExists(getCurrent().getId(), getCurrent().getTitle()) + "");
-
-        if (!mediaDB.checkMediaCountIfExists(getCurrent().getId(), getCurrent().getTitle())) {
-            Log.d("mediaDBCheck", "This song does not exist in the DB");
-            mediaDB.addSongToMediaCount(getCurrent());
-        } else {
-            // Since it exists, give it's row an increment in the playcount column
-            Log.d("mediaDBCheck", "This song exists in the DB");
-            mediaDB.incrementMediaCount(getCurrent());
-        }
-        updateTopPlayed(); // finally, update the top played list
-
-        persistentNotif.updateNotification();
-
-        // Make sure to start it
-        if (isThisLastPlayed) {
-            // Don't need to pause()
-            mediaPlayerIsPaused = true;
-            isThisLastPlayed = false;
-        } else {
-            mMediaPlayer.start();
-            mediaPlayerIsPaused = false;
-        }
-    }
-
-    @Override
-    public boolean onError(MediaPlayer mp, int what, int extra) {
-        return false;
-    }
-
     public class ServiceBinder extends Binder {
         public MediaManager getService() {
             return MediaManager.this;
@@ -350,9 +147,9 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
     private Binder mBinder = new MediaManager.ServiceBinder();
 
-//    public MediaSession.Token getMediaSessionToken() {
-//        return mMediaSession.getSessionToken();
-//    }
+    public MediaSession.Token getMediaSessionToken() {
+        return mSession.getSessionToken();
+    }
 
     /**
      * Creating an enum for the repeat state validation is more efficient than utilizing the
@@ -373,13 +170,8 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
     public MediaManager(final MainActivity mainActivity) {
         //Log.d("onCreate: MediaManager", "Working");
-        mDecodeThreadPool = new ThreadPoolExecutor(
-                NUMBER_OF_CORES,       // Initial pool size
-                NUMBER_OF_CORES,       // Max pool size
-                KEEP_ALIVE_TIME,
-                KEEP_ALIVE_TIME_UNIT,
-                mDecodeWorkQueue);
 
+        // Initialize the audio manager and register any headset controls for playback
         audioManager = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
 
         // Get a handler that can be used to post to the main thread
@@ -742,4 +534,191 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                 .putString(MediaMetadata.METADATA_KEY_TITLE, getCurrent().getTitle())
                 .build());
     }
+
+
+    /**
+     * Some management methods for the MediaPlayer Object
+     *
+     * @param mediaPlayer http://stackoverflow.com/questions/10529226/notify-once-the-audio-is-finished-playing
+     */
+    @Override
+    public void onCompletion(MediaPlayer mediaPlayer) {
+        Log.d("onCompletion", "Running");
+
+        try {
+            if (repeatState == RepeatState.REPEATALL) {
+                // Since it's repeat all, naturally it mimics an onClick Next
+                // so that we can reuse code instead
+
+                // Add the completed song to the history first
+                mHistory.add(currentlyPlayingIndex);
+
+                mediaControlsOnClickNext(MainActivity.getInstance().getCurrentFocus());
+            } else if (repeatState == RepeatState.NOREPEAT) {
+                Song currentSong = songFiles.get(currentlyPlayingIndex); // Get the current song that just ended
+                mMediaPlayer.reset(); // Reset the player first
+                Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
+                mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
+
+                // Update the UI
+                slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+
+                // Then prepare the mediaplayer
+                mMediaPlayer.prepare();
+            } else if (repeatState == RepeatState.REPEATONE){
+                //Since it's repeat one, let's replay it again.
+
+                // Make sure it's stopped
+                mMediaPlayer.stop();
+                Song currentSong = songFiles.get(currentlyPlayingIndex); // Get the current song that just ended
+                mMediaPlayer.reset(); // Reset the player first
+                Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
+                mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
+
+                // Then play it again
+                mMediaPlayer.prepare();
+            } else {
+                // Something must have gone wrong, just reset the song in that case
+
+                // Make sure it's stopped
+                mMediaPlayer.stop();
+                Song currentSong = songFiles.get(currentlyPlayingIndex); // Get the current song that just ended
+                mMediaPlayer.reset(); // Reset the player first
+                Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
+                mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
+
+                // Then play it again
+                mMediaPlayer.prepare();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        // Check to make sure it's not hidden
+        if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.HIDDEN) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        }
+
+        // Retrieve the current song
+        Song currentlyPlaying = songFiles.get(currentlyPlayingIndex);
+
+        //Log.d("OnPrepared", "Working");
+        long songDuration = currentlyPlaying.getDuration();
+
+        slideSongTitle.setText(currentlyPlaying.getTitle());
+        slideSongArtist.setText(currentlyPlaying.getArtistName());
+        slided_SongTitle.setText(currentlyPlaying.getTitle());
+        slided_SongArtist.setText(currentlyPlaying.getArtistName());
+        preferenceHelper.setCurrentSongId(currentlyPlaying.getId());
+
+        // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android
+        //Log.d("MaxDuration", getCurrent().getDuration() + "");
+        slidingSeekBar.setMax((int) songDuration); // Set the max duration
+        slidedSeekBar.setMax((int) songDuration);
+
+        // Retrieve the length of the song and set it into the Maximum Text View
+        //mediaSeekText_Maximum.setText(getCurrent().getDuration() + "");
+        // http://stackoverflow.com/questions/625433/how-to-convert-milliseconds-to-x-mins-x-seconds-in-java
+        mediaSeekText_Maximum.setText(String.format(Locale.ENGLISH, "%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(songDuration),
+                TimeUnit.MILLISECONDS.toSeconds(songDuration) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(songDuration))
+        ));
+
+        // What if the user wants to scrub the time
+        // http://stackoverflow.com/questions/35407578/how-to-control-the-audio-using-android-media-player-seek-bar
+        slidedSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser)
+                    mMediaPlayer.seekTo(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        mainHandler.removeCallbacks(progressRunnable);
+
+        progressRunnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Log.d("mainHandler", "mediaPlayerIsPaused: " + mediaPlayerIsPaused);
+
+                    if (!mediaPlayerIsPaused && mMediaPlayer != null) {
+                        // http://stackoverflow.com/questions/35027321/seek-bar-and-media-player-and-a-time-of-a-track
+                        //set seekbar progress
+                        slidingSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+                        slidedSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+
+                        long currentPosition = mMediaPlayer.getCurrentPosition();
+                        // Set current time
+                        //mediaSeekText_Progress.setText(mMediaPlayer.getCurrentPosition() + "");
+                        //mediaSeekText_Progress.setText(msecondsToString(mMediaPlayer.getCurrentPosition()));
+                        // http://stackoverflow.com/questions/13444546/android-adt-21-0-warning-implicitly-using-the-default-locale
+                        mediaSeekText_Progress.setText(String.format(Locale.ENGLISH, "%02d:%02d",
+                                TimeUnit.MILLISECONDS.toMinutes(currentPosition),
+                                TimeUnit.MILLISECONDS.toSeconds(currentPosition) -
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(currentPosition))
+                        ));
+
+                        //repeat yourself that again in 600 miliseconds
+                        mainHandler.postDelayed(this, 600);
+                    } else {
+                        // Don't update if it's not playing..
+                        //repeat yourself that again in 600 miliseconds
+                        mainHandler.postDelayed(this, 600);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        mainHandler.post(progressRunnable);
+
+        // Finally, bump the counter in the SQLite table
+
+        // Debugging Purposes Only
+        // Log.d("checkWithDB on " + getCurrent().getTitle(),
+        // mediaDB.checkMediaCountIfExists(getCurrent().getId(), getCurrent().getTitle()) + "");
+
+        if (!mediaDB.checkMediaCountIfExists(getCurrent().getId(), getCurrent().getTitle())) {
+            Log.d("mediaDBCheck", "This song does not exist in the DB");
+            mediaDB.addSongToMediaCount(getCurrent());
+        } else {
+            // Since it exists, give it's row an increment in the playcount column
+            Log.d("mediaDBCheck", "This song exists in the DB");
+            mediaDB.incrementMediaCount(getCurrent());
+        }
+        updateTopPlayed(); // finally, update the top played list
+
+        persistentNotif.updateNotification();
+
+        // Make sure to start it
+        if (isThisLastPlayed) {
+            // Don't need to pause()
+            mediaPlayerIsPaused = true;
+            isThisLastPlayed = false;
+        } else {
+            mMediaPlayer.start();
+            mediaPlayerIsPaused = false;
+        }
+    }
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        return false;
+    }
+
 }
