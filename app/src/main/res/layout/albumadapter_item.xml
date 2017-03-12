@@ -25,7 +25,7 @@
                 android:scaleType="centerInside"
                 android:transitionName="@string/transition_album_image"/>
 
-            <com.nixholas.lynx.ui.text.SemiBoldTextView
+            <com.nixholas.lynx.ui.elements.text.SemiBoldTextView
                 android:id="@+id/album_cardtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                 android:maxLines="1"
                 android:ellipsize="end" />
 
-            <com.nixholas.lynx.ui.text.RegularTextView
+            <com.nixholas.lynx.ui.elements.text.RegularTextView
                 android:id="@+id/album_cardartist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

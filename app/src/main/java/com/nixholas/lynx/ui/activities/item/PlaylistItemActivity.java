@@ -1,4 +1,4 @@
-package com.nixholas.lynx.fragments.adapters.item;
+package com.nixholas.lynx.ui.activities.item;
 
 import android.support.v7.app.AppCompatActivity;
 

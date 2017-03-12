@@ -9,8 +9,8 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 import static android.content.ContentValues.TAG;
-import static com.nixholas.lynx.activities.MainActivity.getInstance;
-import static com.nixholas.lynx.activities.MainActivity.mDataAdapter;
+import static com.nixholas.lynx.ui.activities.MainActivity.getInstance;
+import static com.nixholas.lynx.ui.activities.MainActivity.mDataAdapter;
 
 /**
  * Created by nixholas on 20/12/16.

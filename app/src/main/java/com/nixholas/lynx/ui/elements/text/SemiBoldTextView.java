@@ -1,4 +1,4 @@
-package com.nixholas.lynx.ui.text;
+package com.nixholas.lynx.ui.elements.text;
 
 import android.content.Context;
 import android.graphics.Typeface;

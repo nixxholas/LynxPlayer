@@ -1,4 +1,4 @@
-package com.nixholas.lynx.activities;
+package com.nixholas.lynx.ui.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.github.paolorotolo.appintro.AppIntro2;
-import com.nixholas.lynx.fragments.IntroFragment;
+import com.nixholas.lynx.ui.fragments.IntroFragment;
 import com.nixholas.lynx.R;
 
 /**

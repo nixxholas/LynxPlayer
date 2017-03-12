@@ -1,4 +1,4 @@
-package com.nixholas.lynx.fragments;
+package com.nixholas.lynx.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -1,4 +1,4 @@
-package com.nixholas.lynx.fragments.adapters;
+package com.nixholas.lynx.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -22,16 +22,16 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import static com.nixholas.lynx.activities.MainActivity.getInstance;
-import static com.nixholas.lynx.activities.MainActivity.mediaControls_PlayPause;
-import static com.nixholas.lynx.activities.MainActivity.mediaManager;
-import static com.nixholas.lynx.activities.MainActivity.preferenceHelper;
-import static com.nixholas.lynx.activities.MainActivity.slideAlbumArt;
-import static com.nixholas.lynx.activities.MainActivity.slideButton;
-import static com.nixholas.lynx.activities.MainActivity.slideSongArtist;
-import static com.nixholas.lynx.activities.MainActivity.slideSongTitle;
-import static com.nixholas.lynx.activities.MainActivity.slidedAlbumArt;
-import static com.nixholas.lynx.activities.MainActivity.slidedRelativeLayout;
+import static com.nixholas.lynx.ui.activities.MainActivity.getInstance;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaControls_PlayPause;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
+import static com.nixholas.lynx.ui.activities.MainActivity.preferenceHelper;
+import static com.nixholas.lynx.ui.activities.MainActivity.slideAlbumArt;
+import static com.nixholas.lynx.ui.activities.MainActivity.slideButton;
+import static com.nixholas.lynx.ui.activities.MainActivity.slideSongArtist;
+import static com.nixholas.lynx.ui.activities.MainActivity.slideSongTitle;
+import static com.nixholas.lynx.ui.activities.MainActivity.slidedAlbumArt;
+import static com.nixholas.lynx.ui.activities.MainActivity.slidedRelativeLayout;
 import static com.nixholas.lynx.utils.AlbumService.getAlbumArtUri;
 
 /**

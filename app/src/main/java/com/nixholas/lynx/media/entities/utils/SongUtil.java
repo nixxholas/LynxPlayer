@@ -4,7 +4,7 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import static com.nixholas.lynx.activities.MainActivity.getInstance;
+import static com.nixholas.lynx.ui.activities.MainActivity.getInstance;
 
 /**
  * Created by nixholas on 20/12/16.

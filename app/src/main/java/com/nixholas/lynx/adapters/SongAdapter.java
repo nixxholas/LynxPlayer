@@ -1,4 +1,4 @@
-package com.nixholas.lynx.fragments.adapters;
+package com.nixholas.lynx.adapters;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.nixholas.lynx.fragments.Dialogs.playlist.AddToPlaylistDialog;
+import com.nixholas.lynx.ui.fragments.Dialogs.playlist.AddToPlaylistDialog;
 import com.nixholas.lynx.media.entities.Song;
 import com.nixholas.lynx.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
@@ -34,13 +34,13 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.nixholas.lynx.activities.MainActivity.getInstance;
-import static com.nixholas.lynx.activities.MainActivity.mediaControls_PlayPause;
-import static com.nixholas.lynx.activities.MainActivity.mediaManager;
-import static com.nixholas.lynx.activities.MainActivity.slideAlbumArt;
-import static com.nixholas.lynx.activities.MainActivity.slideButton;
-import static com.nixholas.lynx.activities.MainActivity.slidedAlbumArt;
-import static com.nixholas.lynx.activities.MainActivity.slidedRelativeLayout;
+import static com.nixholas.lynx.ui.activities.MainActivity.getInstance;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaControls_PlayPause;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
+import static com.nixholas.lynx.ui.activities.MainActivity.slideAlbumArt;
+import static com.nixholas.lynx.ui.activities.MainActivity.slideButton;
+import static com.nixholas.lynx.ui.activities.MainActivity.slidedAlbumArt;
+import static com.nixholas.lynx.ui.activities.MainActivity.slidedRelativeLayout;
 import static com.nixholas.lynx.media.entities.utils.SongUtil.removeSong;
 import static com.nixholas.lynx.utils.AlbumService.getAlbumArtUri;
 

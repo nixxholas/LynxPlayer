@@ -66,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.nixholas.lynx.ui.text.SemiBoldTextView
+        <com.nixholas.lynx.ui.elements.text.SemiBoldTextView
             android:id="@+id/slided_title"
             android:textStyle="bold"
             android:textSize="20sp"
@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.nixholas.lynx.ui.text.RegularTextView
+        <com.nixholas.lynx.ui.elements.text.RegularTextView
             android:id="@+id/slided_artist"
             android:textSize="14sp"
             android:textColor="@android:color/white"
@@ -95,7 +95,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal">
 
-            <com.nixholas.lynx.ui.button.CustomImageButton
+            <com.nixholas.lynx.ui.elements.button.CustomImageButton
                 android:id="@+id/media_controls_shuffle"
                 android:src="@drawable/ic_shuffle_white_24dp"
                 android:scaleType="center"
@@ -159,7 +159,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2" />
 
-            <com.nixholas.lynx.ui.button.CustomImageButton
+            <com.nixholas.lynx.ui.elements.button.CustomImageButton
                 android:id="@+id/media_controls_repeat"
                 android:layout_marginTop="6sp"
                 android:layout_width="36dp"
@@ -203,7 +203,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.nixholas.lynx.ui.text.RegularTextView
+                <com.nixholas.lynx.ui.elements.text.RegularTextView
                     android:id="@+id/slided_seekTextCurrent"
                     android:textColor="#000000"
                     android:layout_gravity="left"
@@ -216,7 +216,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
-                <com.nixholas.lynx.ui.text.RegularTextView
+                <com.nixholas.lynx.ui.elements.text.RegularTextView
                     android:id="@+id/slided_seekTextMax"
                     android:textColor="#000000"
                     android:layout_gravity="right"

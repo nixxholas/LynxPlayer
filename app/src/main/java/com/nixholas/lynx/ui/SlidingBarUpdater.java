@@ -9,29 +9,29 @@ import android.util.Log;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.nixholas.lynx.activities.MainActivity;
+import com.nixholas.lynx.ui.activities.MainActivity;
 import com.nixholas.lynx.media.entities.Song;
 import com.nixholas.lynx.R;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import static com.nixholas.lynx.activities.MainActivity.mediaControls_PlayPause;
-import static com.nixholas.lynx.activities.MainActivity.mediaControls_Shuffle;
-import static com.nixholas.lynx.activities.MainActivity.mediaManager;
-import static com.nixholas.lynx.activities.MainActivity.mediaSeekText_Maximum;
-import static com.nixholas.lynx.activities.MainActivity.mediaSeekText_Progress;
-import static com.nixholas.lynx.activities.MainActivity.preferenceHelper;
-import static com.nixholas.lynx.activities.MainActivity.slideAlbumArt;
-import static com.nixholas.lynx.activities.MainActivity.slideButton;
-import static com.nixholas.lynx.activities.MainActivity.slideSongArtist;
-import static com.nixholas.lynx.activities.MainActivity.slideSongTitle;
-import static com.nixholas.lynx.activities.MainActivity.slidedAlbumArt;
-import static com.nixholas.lynx.activities.MainActivity.slidedRelativeLayout;
-import static com.nixholas.lynx.activities.MainActivity.slidedSeekBar;
-import static com.nixholas.lynx.activities.MainActivity.slided_SongArtist;
-import static com.nixholas.lynx.activities.MainActivity.slided_SongTitle;
-import static com.nixholas.lynx.activities.MainActivity.slidingSeekBar;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaControls_PlayPause;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaControls_Shuffle;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaSeekText_Maximum;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaSeekText_Progress;
+import static com.nixholas.lynx.ui.activities.MainActivity.preferenceHelper;
+import static com.nixholas.lynx.ui.activities.MainActivity.slideAlbumArt;
+import static com.nixholas.lynx.ui.activities.MainActivity.slideButton;
+import static com.nixholas.lynx.ui.activities.MainActivity.slideSongArtist;
+import static com.nixholas.lynx.ui.activities.MainActivity.slideSongTitle;
+import static com.nixholas.lynx.ui.activities.MainActivity.slidedAlbumArt;
+import static com.nixholas.lynx.ui.activities.MainActivity.slidedRelativeLayout;
+import static com.nixholas.lynx.ui.activities.MainActivity.slidedSeekBar;
+import static com.nixholas.lynx.ui.activities.MainActivity.slided_SongArtist;
+import static com.nixholas.lynx.ui.activities.MainActivity.slided_SongTitle;
+import static com.nixholas.lynx.ui.activities.MainActivity.slidingSeekBar;
 
 /**
  * Created by nixho on 22-Nov-16.

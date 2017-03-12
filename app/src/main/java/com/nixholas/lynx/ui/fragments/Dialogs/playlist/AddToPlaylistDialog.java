@@ -1,4 +1,4 @@
-package com.nixholas.lynx.fragments.Dialogs.playlist;
+package com.nixholas.lynx.ui.fragments.Dialogs.playlist;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -11,7 +11,7 @@ import com.nixholas.lynx.media.entities.Playlist;
 
 import java.util.ArrayList;
 
-import static com.nixholas.lynx.activities.MainActivity.mediaManager;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
 
 /**
  * Created by nixholas on 20/12/16.

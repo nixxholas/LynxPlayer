@@ -1,4 +1,4 @@
-package com.nixholas.lynx.fragments.Dialogs.playlist;
+package com.nixholas.lynx.ui.fragments.Dialogs.playlist;
 
 import android.app.Dialog;
 import android.app.DialogFragment;

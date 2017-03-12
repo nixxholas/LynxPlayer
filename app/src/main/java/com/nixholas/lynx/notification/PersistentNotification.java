@@ -15,14 +15,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import com.nixholas.lynx.activities.MainActivity;
+import com.nixholas.lynx.ui.activities.MainActivity;
 import com.nixholas.lynx.media.entities.Song;
 import com.nixholas.lynx.R;
 
 import java.io.File;
 
-import static com.nixholas.lynx.activities.MainActivity.getInstance;
-import static com.nixholas.lynx.activities.MainActivity.mediaManager;
+import static com.nixholas.lynx.ui.activities.MainActivity.getInstance;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
 import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickPlayPause;
 import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickPrevious;

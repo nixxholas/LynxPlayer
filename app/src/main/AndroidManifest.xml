@@ -28,7 +28,7 @@
         <!-- android:configChanges
         http://stackoverflow.com/questions/34455170/actionbaractivity-content-gets-reset-when-orientation-changed-drawerlayout-->
         <activity
-            android:name="com.nixholas.lynx.activities.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:launchMode="singleTop"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
@@ -42,14 +42,14 @@
                 <!--<data android:mimeType="audio/*" />-->
             </intent-filter>
         </activity>
-        <activity android:name="com.nixholas.lynx.activities.IntroActivity">
+        <activity android:name=".ui.activities.IntroActivity">
         </activity>
         <activity
-            android:name="com.nixholas.lynx.activities.SettingsActivity"
+            android:name=".ui.activities.SettingsActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".fragments.adapters.item.AlbumItemActivity"
+        <activity android:name=".ui.activities.item.AlbumItemActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name="com.nixholas.lynx.fragments.MostPlayedActivity"
+        <activity android:name=".ui.fragments.MostPlayedActivity"
             android:configChanges="orientation|screenSize" />
         <receiver android:name="com.nixholas.lynx.notification.PersistentNotification"
             tools:ignore="InnerclassSeparator">

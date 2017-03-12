@@ -1,4 +1,4 @@
-package com.nixholas.lynx.fragments.adapters;
+package com.nixholas.lynx.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

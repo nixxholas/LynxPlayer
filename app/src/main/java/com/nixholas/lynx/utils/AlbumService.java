@@ -12,7 +12,7 @@ import com.nixholas.lynx.R;
 
 import java.io.FileDescriptor;
 
-import static com.nixholas.lynx.activities.MainActivity.getInstance;
+import static com.nixholas.lynx.ui.activities.MainActivity.getInstance;
 
 /**
  * Created by nixholas on 12/1/17.

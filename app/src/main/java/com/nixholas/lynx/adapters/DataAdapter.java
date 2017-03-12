@@ -1,4 +1,4 @@
-package com.nixholas.lynx.fragments.adapters;
+package com.nixholas.lynx.adapters;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -9,7 +9,7 @@ import com.nixholas.lynx.media.entities.Album;
 import com.nixholas.lynx.media.entities.Playlist;
 import com.nixholas.lynx.media.entities.Song;
 
-import static com.nixholas.lynx.activities.MainActivity.mediaManager;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
 
 /**
  * Created by nixho on 13-Nov-16.

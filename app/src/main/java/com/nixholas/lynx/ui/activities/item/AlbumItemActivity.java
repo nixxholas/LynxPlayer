@@ -1,4 +1,4 @@
-package com.nixholas.lynx.fragments.adapters.item;
+package com.nixholas.lynx.ui.activities.item;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.ImageViewTarget;
-import com.nixholas.lynx.fragments.adapters.AlbumAdapter;
+import com.nixholas.lynx.adapters.AlbumAdapter;
 import com.nixholas.lynx.R;
 import com.nixholas.lynx.utils.color.TextColorHelper;
 import com.nixholas.lynx.utils.palettebitmap.PaletteBitmap;
@@ -27,7 +27,7 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.File;
 
-import static com.nixholas.lynx.activities.MainActivity.mediaManager;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
 
 public class AlbumItemActivity extends AppCompatActivity {
     // Recycler View and it's components

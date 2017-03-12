@@ -1,4 +1,4 @@
-package com.nixholas.lynx.ui.button;
+package com.nixholas.lynx.ui.elements.button;
 
 import android.content.Context;
 import android.graphics.Color;

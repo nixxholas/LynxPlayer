@@ -36,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
 
-                    <com.nixholas.lynx.ui.text.SemiBoldTextView
+                    <com.nixholas.lynx.ui.elements.text.SemiBoldTextView
                         android:id="@+id/card_title"
                         android:textStyle="bold"
                         android:ellipsize="end"
@@ -44,7 +44,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
-                    <com.nixholas.lynx.ui.text.RegularTextView
+                    <com.nixholas.lynx.ui.elements.text.RegularTextView
                         android:id="@+id/card_artist"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />

@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import static com.nixholas.lynx.activities.MainActivity.mediaManager;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
 
 /**
  * Created by nixho on 20-Nov-16.

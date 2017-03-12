@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                tools:context="com.nixholas.lynx.activities.MainActivity">
+                tools:context=".ui.activities.MainActivity">
 
             <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
@@ -142,7 +142,7 @@
                         android:layout_height="match_parent">
 
                         <!-- http://stackoverflow.com/questions/2507798/prevent-textview-from-wrapping-in-parent -->
-                        <com.nixholas.lynx.ui.text.SemiBoldTextView
+                        <com.nixholas.lynx.ui.elements.text.SemiBoldTextView
                             android:id="@+id/slide_songtitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
                             android:maxLines="1"
                             android:ellipsize="end"/>
 
-                        <com.nixholas.lynx.ui.text.RegularTextView
+                        <com.nixholas.lynx.ui.elements.text.RegularTextView
                             android:id="@+id/slide_songartist"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

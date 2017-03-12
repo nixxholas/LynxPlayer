@@ -1,4 +1,4 @@
-package com.nixholas.lynx.activities;
+package com.nixholas.lynx.ui.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -33,19 +33,22 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nixholas.lynx.fragments.adapters.DataAdapter;
-import com.nixholas.lynx.fragments.AlbumFragment;
-import com.nixholas.lynx.fragments.PlaylistFragment;
-import com.nixholas.lynx.fragments.SongFragment;
+import com.nixholas.lynx.R;
+import com.nixholas.lynx.ui.fragments.AlbumFragment;
+import com.nixholas.lynx.ui.fragments.PlaylistFragment;
+import com.nixholas.lynx.ui.fragments.SongFragment;
+import com.nixholas.lynx.adapters.DataAdapter;
 import com.nixholas.lynx.media.MediaManager;
 import com.nixholas.lynx.notification.PersistentNotification;
-import com.nixholas.lynx.R;
-import com.nixholas.lynx.ui.button.CustomImageButton;
 import com.nixholas.lynx.ui.CustomSlidingUpLayout;
 import com.nixholas.lynx.ui.SlidingBarUpdater;
+import com.nixholas.lynx.ui.elements.button.CustomImageButton;
 import com.nixholas.lynx.utils.PreferenceHelper;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import mehdi.sakout.aboutpage.AboutPage;
+import mehdi.sakout.aboutpage.Element;
 
 import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickPlayPause;
@@ -305,17 +308,44 @@ public class MainActivity extends AppCompatActivity {
                         drawerLayout.closeDrawers();
                         return true;
                     case R.id.navigation_drawer_spotify:
-                        Toast spotifyToast = new Toast(getApplicationContext());
-                        spotifyToast.makeText("Coming soon!");
-                        spotifyToast.show();
+                        Toast.makeText(getApplicationContext(), "Coming soon!",
+                                Toast.LENGTH_SHORT).show();
 
                         drawerLayout.closeDrawers();
                         return true;
                     case R.id.navigation_drawer_about:
-                        Toast aboutToast = new Toast(getApplicationContext());
-                        aboutToast.setText("Coming Soon!");
-                        aboutToast.show();
+                        Element versionElement = new Element();
+                        try {
+                            versionElement.setTitle(
+                                    // Retrieve the app version via the Manifest
+                                    // http://stackoverflow.com/questions/4471025/how-can-you-get-the-manifest-version-number-from-the-apps-layout-xml-variable
+                                    getPackageManager()
+                                    .getPackageInfo(getPackageName(), 0).versionName);
 
+                            View aboutPage = new AboutPage(getApplicationContext())
+                                    .isRTL(false)
+                                    .setImage(R.drawable.ic_app_icon)
+                                    .addItem(versionElement)
+                                    //.addItem(adsElement)
+                                    .addGroup("Connect with us")
+                                    .addEmail("nixholas@outlook.com")
+                                    //.addWebsite("http://medyo.github.io/")
+                                    //.addFacebook("the.medy")
+                                    //.addTwitter("medyo80")
+                                    //.addYoutube("UCdPQtdWIsg7_pi4mrRu46vA")
+                                    .addPlayStore("com.nixholas.lynx")
+                                    .addGitHub("nixxholas")
+                                    .addInstagram("nixxholas")
+                                    .create();
+
+
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "An error has occured",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        drawerLayout.closeDrawers();
                         return true;
                     case R.id.navigation_drawer_settings:
                         intent = new Intent(getApplicationContext(), SettingsActivity.class);

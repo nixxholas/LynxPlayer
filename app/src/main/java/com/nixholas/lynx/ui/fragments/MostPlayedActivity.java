@@ -1,4 +1,4 @@
-package com.nixholas.lynx.fragments;
+package com.nixholas.lynx.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,11 +6,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.nixholas.lynx.fragments.adapters.TopPlayedAdapter;
+import com.nixholas.lynx.adapters.TopPlayedAdapter;
 import com.nixholas.lynx.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
-import static com.nixholas.lynx.activities.MainActivity.mediaManager;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
 
 /**
  * Created by nixholas on 29/1/17.

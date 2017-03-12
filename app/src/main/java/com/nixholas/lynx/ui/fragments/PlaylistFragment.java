@@ -1,4 +1,4 @@
-package com.nixholas.lynx.fragments;
+package com.nixholas.lynx.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nixholas.lynx.fragments.adapters.PlaylistAdapter;
+import com.nixholas.lynx.adapters.PlaylistAdapter;
 import com.nixholas.lynx.R;
 
-import static com.nixholas.lynx.activities.MainActivity.mediaManager;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
 
 /**
  * Created by nixho on 03-Nov-16.

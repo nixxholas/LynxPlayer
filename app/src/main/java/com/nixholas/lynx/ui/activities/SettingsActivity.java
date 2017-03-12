@@ -1,4 +1,4 @@
-package com.nixholas.lynx.activities;
+package com.nixholas.lynx.ui.activities;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
