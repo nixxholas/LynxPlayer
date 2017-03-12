@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.navigation_drawer_spotify:
                         Toast spotifyToast = new Toast(getApplicationContext());
-                        spotifyToast.setText("Coming soon!");
+                        spotifyToast.makeText("Coming soon!");
                         spotifyToast.show();
 
                         drawerLayout.closeDrawers();
