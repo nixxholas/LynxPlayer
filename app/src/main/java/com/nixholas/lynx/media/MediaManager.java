@@ -294,12 +294,12 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(currentPosition))
                         ));
 
-                        //repeat yourself that again in 100 miliseconds
-                        mainHandler.postDelayed(this, 1000);
+                        //repeat yourself that again in 600 miliseconds
+                        mainHandler.postDelayed(this, 600);
                     } else {
                         // Don't update if it's not playing..
-                        //repeat yourself that again in 100 miliseconds
-                        mainHandler.postDelayed(this, 1000);
+                        //repeat yourself that again in 600 miliseconds
+                        mainHandler.postDelayed(this, 600);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -328,7 +328,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
         // Make sure to start it
         if (isThisLastPlayed) {
-            mMediaPlayer.pause();
+            // Don't need to pause()
             mediaPlayerIsPaused = true;
             isThisLastPlayed = false;
         } else {
