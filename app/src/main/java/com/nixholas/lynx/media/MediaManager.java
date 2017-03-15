@@ -20,11 +20,11 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.nixholas.lynx.R;
-import com.nixholas.lynx.ui.activities.MainActivity;
 import com.nixholas.lynx.media.entities.Album;
 import com.nixholas.lynx.media.entities.Playlist;
 import com.nixholas.lynx.media.entities.Song;
 import com.nixholas.lynx.media.entities.utils.PlaylistUtil;
+import com.nixholas.lynx.ui.activities.MainActivity;
 import com.nixholas.lynx.utils.AlbumService;
 import com.nixholas.lynx.utils.RemoteControlReceiver;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -37,6 +37,8 @@ import java.util.Random;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
+import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickNext;
+import static com.nixholas.lynx.ui.SlidingBarUpdater.updateSlideBar;
 import static com.nixholas.lynx.ui.activities.MainActivity.getInstance;
 import static com.nixholas.lynx.ui.activities.MainActivity.mediaControls_PlayPause;
 import static com.nixholas.lynx.ui.activities.MainActivity.mediaSeekText_Maximum;
@@ -51,8 +53,6 @@ import static com.nixholas.lynx.ui.activities.MainActivity.slided_SongArtist;
 import static com.nixholas.lynx.ui.activities.MainActivity.slided_SongTitle;
 import static com.nixholas.lynx.ui.activities.MainActivity.slidingSeekBar;
 import static com.nixholas.lynx.ui.activities.MainActivity.slidingUpPanelLayout;
-import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickNext;
-import static com.nixholas.lynx.ui.SlidingBarUpdater.updateSlideBar;
 
 /**
  * Created by nixho on 02-Nov-16.
@@ -65,13 +65,18 @@ import static com.nixholas.lynx.ui.SlidingBarUpdater.updateSlideBar;
 public class MediaManager extends Service implements MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
     // Action Strings
-    public static final String ACTION_PLAY = "action_play";
-    public static final String ACTION_PAUSE = "action_pause";
-    public static final String ACTION_REWIND = "action_rewind";
-    public static final String ACTION_FAST_FORWARD = "action_fast_foward";
-    public static final String ACTION_NEXT = "action_next";
-    public static final String ACTION_PREVIOUS = "action_previous";
-    public static final String ACTION_STOP = "action_stop";
+
+    // Standard actions
+    public static final String LYNX_ACTION_PLAY = "action_play";
+    public static final String LYNX_ACTION_PAUSE = "action_pause";
+    public static final String LYNX_ACTION_REWIND = "action_rewind";
+    public static final String LYNX_ACTION_FAST_FORWARD = "action_fast_foward";
+    public static final String LYNX_ACTION_NEXT = "action_next";
+    public static final String LYNX_ACTION_PREVIOUS = "action_previous";
+    public static final String LYNX_ACTION_STOP = "action_stop";
+
+    // Command sources
+    public static final String LYNX_SOURCE_PHYSICAL_BUTTON = "lynx_physical_button";
 
     // Static Variables for Data Sets
     private static int HISTORY_LIMIT = 1000;
@@ -80,7 +85,11 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     public AudioManager audioManager;
     // MediaSession allows interaction with media controllers, volume keys, media buttons, and transport controls
     public MediaSession mSession;
+
+    // Handles music playback
     public MediaPlayer mMediaPlayer;
+
+    
     public RemoteControlReceiver remoteControlReceiver;
     private MediaDB mediaDB;
 

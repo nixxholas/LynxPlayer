@@ -324,7 +324,6 @@ public class MainActivity extends AppCompatActivity {
 
                             View aboutPage = new AboutPage(getApplicationContext())
                                     .isRTL(false)
-                                    .setImage(R.drawable.ic_app_icon)
                                     .addItem(versionElement)
                                     //.addItem(adsElement)
                                     .addGroup("Connect with us")
@@ -344,6 +343,10 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "An error has occured",
                                     Toast.LENGTH_SHORT).show();
                         }
+
+                        // Tem3porary Information Toast
+                        Toast.makeText(getApplicationContext(), "An error has occured",
+                                Toast.LENGTH_SHORT).show();
 
                         drawerLayout.closeDrawers();
                         return true;
