@@ -89,7 +89,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     // Handles music playback
     public MediaPlayer mMediaPlayer;
 
-    
     public RemoteControlReceiver remoteControlReceiver;
     private MediaDB mediaDB;
 
