@@ -88,6 +88,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
     // Handles music playback
     public MediaPlayer mMediaPlayer;
+    private LynxMediaPlayer lynxMediaPlayer;
 
     public RemoteControlReceiver remoteControlReceiver;
     private MediaDB mediaDB;
@@ -196,6 +197,8 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnCompletionListener(this);
 
+        lynxMediaPlayer = new LynxMediaPlayer(this);
+
         PhoneStateListener phoneStateListener = new PhoneStateListener() {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
@@ -208,7 +211,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                 } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
                     //A call is dialing, active or on hold
                     // Phone is on idle, so we shall start playing.
-                    mMediaPlayer.start();
+                    //mMediaPlayer.start();
                 }
                 super.onCallStateChanged(state, incomingNumber);
             }

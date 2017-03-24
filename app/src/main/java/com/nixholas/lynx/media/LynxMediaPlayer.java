@@ -32,7 +32,7 @@ public class LynxMediaPlayer implements MediaPlayer.OnBufferingUpdateListener,
     /**
      * Constructor of <code>MultiPlayer</code>
      */
-    public LynxMediaPlayer(final MediaManager service) {
+    LynxMediaPlayer(final MediaManager service) {
         mService = new WeakReference<MediaManager>(service);
     }
 
@@ -237,7 +237,7 @@ public class LynxMediaPlayer implements MediaPlayer.OnBufferingUpdateListener,
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-
+        mp.start();
     }
 
     @Override

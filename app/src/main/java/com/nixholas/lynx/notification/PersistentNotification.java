@@ -469,10 +469,6 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                 mNotificationManager.cancel(255);
                 //mediaManager.mMediaPlayer.release();
                 mediaManager.purgeMediaplayer();
-
-                // Kill the whole app to give the user all the processing space we took
-                // http://stackoverflow.com/questions/3105673/how-to-kill-an-application-with-all-its-activities
-                //android.os.Process.killProcess(android.os.Process.myPid());
                 break;
             default:
                 break;
