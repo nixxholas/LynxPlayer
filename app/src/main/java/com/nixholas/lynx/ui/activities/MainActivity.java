@@ -499,12 +499,14 @@ public class MainActivity extends AppCompatActivity {
                     return songFragment;
                 case 1:
                     //Log.d("AlbumFragment", "SectionsPagerAdapter/getItem Call");
-                    return AlbumFragment.newInstance(position);
+                    albumFragment = AlbumFragment.newInstance(position);
+                    return albumFragment;
                 case 2:
                     playlistFragment = PlaylistFragment.newInstance(position);
                     return playlistFragment;
                 default:
-                    return SongFragment.newInstance(position);
+                    songFragment = SongFragment.newInstance(position);
+                    return songFragment;
             }
         }
 

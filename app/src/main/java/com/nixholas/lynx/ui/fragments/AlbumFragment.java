@@ -58,7 +58,7 @@ public class AlbumFragment extends Fragment {
         // Use a linear layout manager
         recyclerView.setLayoutManager(rVLayoutManager);
 
-        rVAdapter = new AlbumsAdapter(mediaManager.mDataAdapter.getAlbums());
+        rVAdapter = new AlbumsAdapter(mediaManager);
         recyclerView.setAdapter(rVAdapter);
 
         return rootView;
