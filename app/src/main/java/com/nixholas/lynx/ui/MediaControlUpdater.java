@@ -67,7 +67,7 @@ public class MediaControlUpdater {
             }
 
             final Song prevSong = mediaManager.getPrevious();
-            mediaManager.setCurrent(mediaManager.getSongFiles().indexOf(prevSong));
+            mediaManager.setCurrent(mediaManager.mDataAdapter.getSongs().indexOf(prevSong));
 
             Uri audioUri = Uri.parse("file://" + prevSong.getDataPath());
 
@@ -188,7 +188,7 @@ public class MediaControlUpdater {
             final Song nextSong = mediaManager.getNext();
 
             // Set the next song as the current song
-            mediaManager.setCurrent(mediaManager.getSongFiles().indexOf(nextSong));
+            mediaManager.setCurrent(mediaManager.mDataAdapter.getSongs().indexOf(nextSong));
 
             Uri audioUri = Uri.parse("file://" + nextSong.getDataPath());
 

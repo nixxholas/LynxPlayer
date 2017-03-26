@@ -34,15 +34,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nixholas.lynx.R;
-import com.nixholas.lynx.ui.fragments.AlbumFragment;
-import com.nixholas.lynx.ui.fragments.PlaylistFragment;
-import com.nixholas.lynx.ui.fragments.SongFragment;
-import com.nixholas.lynx.adapters.DataAdapter;
 import com.nixholas.lynx.media.MediaManager;
 import com.nixholas.lynx.notification.PersistentNotification;
 import com.nixholas.lynx.ui.CustomSlidingUpLayout;
 import com.nixholas.lynx.ui.SlidingBarUpdater;
 import com.nixholas.lynx.ui.elements.button.CustomImageButton;
+import com.nixholas.lynx.ui.fragments.AlbumFragment;
+import com.nixholas.lynx.ui.fragments.PlaylistFragment;
+import com.nixholas.lynx.ui.fragments.SongFragment;
 import com.nixholas.lynx.utils.PreferenceHelper;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -88,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Publicly Accessible Entities
     public static MediaManager mediaManager;
-    public static DataAdapter mDataAdapter;
     public static PreferenceHelper preferenceHelper;
 
     // Fragment Entities
@@ -166,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
         slideSongTitle = (TextView) findViewById(R.id.slide_songtitle);
         slideButton = (ImageButton) findViewById(R.id.slide_button);
         slideRelativeLayout = (RelativeLayout) findViewById(R.id.slide_layout);
-        mDataAdapter = new DataAdapter(getContentResolver());
         slidingSeekBar = (SeekBar) findViewById(R.id.slide_seekbar);
         slidingSeekBar.getThumb().mutate().setAlpha(0);
 
@@ -262,7 +259,6 @@ public class MainActivity extends AppCompatActivity {
         // Finally initialize the data responsible for media playback along with the database and
         // the MediaPlayer
         mediaManager = new MediaManager(this);
-        mDataAdapter.run();
         mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         switch (preferenceHelper.getRepeat()) {

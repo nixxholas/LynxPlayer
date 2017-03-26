@@ -59,7 +59,7 @@ public class SongFragment extends Fragment {
         // use a linear layout manager
         recyclerView.setLayoutManager(rVLayoutManager);
 
-        rVAdapter = new SongAdapter(mediaManager.getSongFiles());
+        rVAdapter = new SongAdapter(mediaManager.mDataAdapter.getSongs());
         recyclerView.setAdapter(rVAdapter);
 
         return rootView;

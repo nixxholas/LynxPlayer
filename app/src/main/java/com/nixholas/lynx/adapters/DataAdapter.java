@@ -9,6 +9,8 @@ import com.nixholas.lynx.media.entities.Album;
 import com.nixholas.lynx.media.entities.Playlist;
 import com.nixholas.lynx.media.entities.Song;
 
+import java.util.ArrayList;
+
 import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
 
 /**
@@ -36,19 +38,29 @@ public class DataAdapter implements Runnable {
 //            KEEP_ALIVE_TIME_UNIT,
 //            mDecodeWorkQueue);
 
-
-    // Resources-based Variables
-//    Uri sArtworkUri = Uri
-//            .parse("content://media/external/audio/albumart"); // For us to parse the albumArtUri
-
-    ContentResolver cr;
+    private ArrayList<Song> songs = new ArrayList<>();
+    private ArrayList<Album> albums = new ArrayList<>();
+    private ArrayList<Playlist> playlists = new ArrayList<>();
+    private ContentResolver cr;
 
     public DataAdapter(ContentResolver cr_) {
         this.cr = cr_;
     }
 
+    public ArrayList<Song> getSongs() {
+        return songs;
+    }
+
+    public ArrayList<Album> getAlbums() {
+        return albums;
+    }
+
+    public ArrayList<Playlist> getPlaylists() {
+        return playlists;
+    }
+
     private void loadSongData(ContentResolver cr) {
-        mediaManager.getSongFiles().clear(); // Make sure we reset it first before we re-initialize to look for new audio files
+        songs.clear(); // Make sure we reset it first before we re-initialize to look for new audio files
 
         /**
          * Media Data Initialization Phase
@@ -100,8 +112,61 @@ public class DataAdapter implements Runnable {
         }
     }
 
+    private void loadSongDataset(ContentResolver cr, ArrayList<Song> mDataSet) {
+        mDataSet.clear(); // Make sure we reset it first before we re-initialize to look for new audio files
+
+        /**
+         * Media Data Initialization Phase
+         */
+        // Get Content Dynamically
+        Uri songsUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        String songsSelection = MediaStore.Audio.Media.IS_MUSIC + "!= 0";
+        String songsSortOrder = MediaStore.Audio.Media.TITLE + " ASC";
+        Cursor songCur = cr.query(songsUri, null, songsSelection, null, songsSortOrder);
+        int songCount = 0;
+
+        if(songCur != null)
+        {
+            songCount = songCur.getCount();
+
+            if(songCount > 0)
+            {
+                while(songCur.moveToNext())
+                {
+                    //String data = songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.DATA));
+
+                    // Debug
+                    //Log.d("Song Path", data);
+
+                    // (long _id, long _albumId, long _artistId, String _title,
+                    // String _artistName, String _albumName, int _duration)
+                    //Log.d("Music ID", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media._ID)));
+                    //Log.d("Music Album ID", songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
+                    //Log.d("Music Artist ID", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)));
+                    //Log.d("Music Title", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                    //Log.d("Music Artist Name", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
+                    //Log.d("Music Album Name", songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
+                    //Log.d("Music Duration", songCur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+
+                    mDataSet.add(new Song(
+                            songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.DATA)),
+                            songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media._ID)),
+                            songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
+                            songCur.getLong(songCur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)),
+                            songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.TITLE)),
+                            songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
+                            songCur.getString(songCur.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
+                            songCur.getInt(songCur.getColumnIndex(MediaStore.Audio.Media.DURATION))));
+                }
+
+            }
+
+            songCur.close();
+        }
+    }
+
     private void loadAlbumData(ContentResolver cr) {
-        mediaManager.getAlbumFiles().clear(); // Make sure we reset it first before we re-initialize to look for new albums
+        albums.clear(); // Make sure we reset it first before we re-initialize to look for new albums
 
         /**
          * Media Data Initialization Phase
@@ -160,7 +225,7 @@ public class DataAdapter implements Runnable {
     }
 
     private void loadPlaylistData(ContentResolver cr) {
-        mediaManager.getPlayLists().clear(); // Make sure we reset it first before we re-initialize to look for new playlists
+        playlists.clear(); // Make sure we reset it first before we re-initialize to look for new playlists
 
         /**
          * Media Data Initialization Phase
@@ -185,12 +250,10 @@ public class DataAdapter implements Runnable {
                     //Log.d("Column 0", String.valueOf(playlistCur.getLong(0)));
                     //Log.d("Column 1", String.valueOf(playlistCur.getString(1)));
 
-                    Playlist newPlaylist = new Playlist(
+                    playlists.add(new Playlist(
                             playlistCur.getLong(0),
                             playlistCur.getString(1),
-                            playlistCur.getString(2));
-
-                    mediaManager.getPlayLists().add(newPlaylist);
+                            playlistCur.getString(2)));
                 }
             }
 
@@ -214,7 +277,7 @@ public class DataAdapter implements Runnable {
     @Override
     public void run() {
         loadAlbumData(cr);
-        loadSongData(cr);
+        //loadSongData(cr);
         loadPlaylistData(cr);
 
         // If the index is not proper,
