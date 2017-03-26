@@ -121,6 +121,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public PlaylistAdapter(MediaManager mediaManager) {
+
+        mDataset = new ArrayList<>();
         mediaManager.mDataAdapter.updatePlaylistDataset(mDataset);
     }
 

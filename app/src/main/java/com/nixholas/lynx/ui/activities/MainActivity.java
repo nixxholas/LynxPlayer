@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Finally initialize the data responsible for media playback along with the database and
         // the MediaPlayer
-        mediaManager = new MediaManager(this);
+        mediaManager = new MediaManager(this, getContentResolver());
         mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         switch (preferenceHelper.getRepeat()) {
@@ -482,9 +482,9 @@ public class MainActivity extends AppCompatActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        private SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -622,13 +622,6 @@ public class MainActivity extends AppCompatActivity {
 
         mediaControls_Shuffle.setEnabledUI(result);
         preferenceHelper.setShuffle(result);
-        /*if (preferenceHelper.getShuffle()) { // SharedPreferences says Shuffle is true,
-            preferenceHelper.setShuffle(false); // Set the shuffle to false
-            buttonHelper.greyOut(mediaControls_Shuffle); // Grey out the shuffle button
-        } else { // Else SharedPreference says Shuffle is false or is not initialized
-            preferenceHelper.setShuffle(true); //  Set the shuffle to true
-            buttonHelper.unGreyOut(mediaControls_Shuffle); // Ungrey out the shuffle
-        }*/
     }
 
     @Override

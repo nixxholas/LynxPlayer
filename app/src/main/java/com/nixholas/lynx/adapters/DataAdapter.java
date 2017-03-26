@@ -95,7 +95,8 @@ public class DataAdapter implements Runnable {
 //    }
 
     public void updateSongDataset(ArrayList<Song> mDataSet) {
-        mDataSet.clear(); // Make sure we reset it first before we re-initialize to look for new audio files
+        if (mDataSet != null)
+            mDataSet.clear(); // Make sure we reset it first before we re-initialize to look for new audio files
 
         /**
          * Media Data Initialization Phase
@@ -145,6 +146,8 @@ public class DataAdapter implements Runnable {
 
             songCur.close();
         }
+
+        mediaManager.setSongDataset(mDataSet);
     }
 
     private void loadAlbumData(ContentResolver cr) {
@@ -259,6 +262,7 @@ public class DataAdapter implements Runnable {
             albumCur.close();
         }
 
+        mediaManager.setAlbumDataset(mDataset);
     }
 
     private void loadPlaylistData(ContentResolver cr) {
@@ -331,11 +335,13 @@ public class DataAdapter implements Runnable {
 
             playlistCur.close();
         }
+
+        mediaManager.setPlaylistDataset(_mDataset);
     }
 
     public void updatePlaylistData() {
         //Log.d("updatePlaylistData", "Running");
-        loadPlaylistData(cr);
+        loadPlaylistData(cr);   
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.nixholas.lynx.media;
 
 import android.app.Service;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -98,9 +99,9 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     private PowerManager.WakeLock mHeadsetHookWakeLock;
 
     // Weak references to the datasets
-    WeakReference<ArrayList<Song>> songDataset;
-    WeakReference<ArrayList<Album>> albumDataset;
-    WeakReference<ArrayList<Playlist>> playlistDataset;
+    private WeakReference<ArrayList<Song>> songDataset;
+    private WeakReference<ArrayList<Album>> albumDataset;
+    private WeakReference<ArrayList<Playlist>> playlistDataset;
 
     /**
      * mainHandler
@@ -150,7 +151,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
      */
     private static LinkedList<Integer> mUpcoming = new LinkedList<>();
     private static Stack<Integer> mHistory = new Stack<>();
-    public DataAdapter mDataAdapter = new DataAdapter(getContentResolver());
+    public DataAdapter mDataAdapter;
     protected ArrayList<Song> topPlayed = new ArrayList<>();
 
     // Playlist Helper
@@ -185,8 +186,11 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
     public MediaManager() {} // Don't use this at all please, it's pointless, like your life lol.
 
-    public MediaManager(final MainActivity mainActivity) {
+    public MediaManager(final MainActivity mainActivity, ContentResolver contentResolver) {
         //Log.d("onCreate: MediaManager", "Working");
+
+        // Setup the Data adapter
+        mDataAdapter = new DataAdapter(contentResolver);
 
         // Initialize the audio manager and register any headset controls for playback
         audioManager = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
@@ -435,6 +439,30 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         }
 
         return result;
+    }
+
+    public WeakReference<ArrayList<Song>> getSongDataset() {
+        return songDataset;
+    }
+
+    public WeakReference<ArrayList<Album>> getAlbumDataset() {
+        return albumDataset;
+    }
+
+    public WeakReference<ArrayList<Playlist>> getPlaylistDataset() {
+        return playlistDataset;
+    }
+
+    public void setSongDataset(ArrayList<Song> dataset) {
+        songDataset = new WeakReference<>(dataset);
+    }
+
+    public void setAlbumDataset(ArrayList<Album> dataset) {
+        albumDataset = new WeakReference<>(dataset);
+    }
+
+    public void setPlaylistDataset(ArrayList<Playlist> dataset) {
+        playlistDataset = new WeakReference<>(dataset);
     }
 
     public boolean findDuplicateAlbum(Album album) {

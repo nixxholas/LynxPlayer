@@ -66,6 +66,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     // Provide a suitable constructor (depends on the kind of dataset)
     public AlbumsAdapter(MediaManager mediaManager) {
         //mDataset = dataSet;
+
+        mDataset = new ArrayList<>();
+        mediaManager.mDataAdapter.updateAlbumDataset(mDataset);
     }
 
     @Override

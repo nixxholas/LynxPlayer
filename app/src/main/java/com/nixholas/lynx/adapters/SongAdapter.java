@@ -135,6 +135,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
     // Provide a suitable constructor (depends on the kind of dataset)
     public SongAdapter(MediaManager mediaManager) {
         //mDataset = dataSet;
+
+        mDataset = new ArrayList<>();
         mediaManager.mDataAdapter.updateSongDataset(mDataset);
     }
 
