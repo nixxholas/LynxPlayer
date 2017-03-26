@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.nixholas.lynx.media.MediaManager;
 import com.nixholas.lynx.ui.fragments.Dialogs.playlist.AddToPlaylistDialog;
 import com.nixholas.lynx.media.entities.Song;
 import com.nixholas.lynx.R;
@@ -132,8 +133,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SongAdapter(ArrayList<Song> dataSet) {
-        mDataset = dataSet;
+    public SongAdapter(MediaManager mediaManager) {
+        //mDataset = dataSet;
+        mediaManager.mDataAdapter.updateSongDataset(mDataset);
     }
 
     // Create new views (invoked by the layout manager)
@@ -197,7 +199,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
                     mediaManager.putAllOnQueue(currentSong);
 
                     //Log.d("LOG Song Index: ", mediaManager.managerQueue.indexOf(currentSong) + "");
-                    mediaManager.currentlyPlayingIndex = mediaManager.getSongFiles().indexOf(currentSong);
+                    mediaManager.currentlyPlayingIndex = mDataset.indexOf(currentSong);
 
                     /*Uri sArtworkUri = Uri
                             .parse("content://media/external/audio/albumart");

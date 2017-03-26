@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.ImageViewTarget;
+import com.nixholas.lynx.media.MediaManager;
 import com.nixholas.lynx.ui.activities.item.AlbumItemActivity;
 import com.nixholas.lynx.media.entities.Album;
 import com.nixholas.lynx.R;
@@ -63,8 +64,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public AlbumsAdapter(ArrayList<Album> dataSet) {
-        mDataset = dataSet;
+    public AlbumsAdapter(MediaManager mediaManager) {
+        //mDataset = dataSet;
     }
 
     @Override

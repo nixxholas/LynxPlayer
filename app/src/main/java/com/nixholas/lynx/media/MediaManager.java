@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.nixholas.lynx.R;
 import com.nixholas.lynx.adapters.DataAdapter;
 import com.nixholas.lynx.media.entities.Album;
+import com.nixholas.lynx.media.entities.Playlist;
 import com.nixholas.lynx.media.entities.Song;
 import com.nixholas.lynx.media.entities.utils.PlaylistUtil;
 import com.nixholas.lynx.ui.activities.MainActivity;
@@ -29,6 +30,7 @@ import com.nixholas.lynx.utils.AlbumService;
 import com.nixholas.lynx.utils.RemoteControlReceiver;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -94,6 +96,11 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     private MediaDB mediaDB;
 
     private PowerManager.WakeLock mHeadsetHookWakeLock;
+
+    // Weak references to the datasets
+    WeakReference<ArrayList<Song>> songDataset;
+    WeakReference<ArrayList<Album>> albumDataset;
+    WeakReference<ArrayList<Playlist>> playlistDataset;
 
     /**
      * mainHandler
@@ -254,16 +261,16 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     public Song getCurrent() {
         try {
             // If the MediaManager has already been playing
-            if (!mDataAdapter.getSongs().isEmpty() && currentlyPlayingIndex >= 0
-                    && currentlyPlayingIndex <= mDataAdapter.getSongs().size()) {
-                return mDataAdapter.getSongs().get(currentlyPlayingIndex);
+            if (!songDataset.get().isEmpty() && currentlyPlayingIndex >= 0
+                    && currentlyPlayingIndex <= songDataset.get().size()) {
+                return songDataset.get().get(currentlyPlayingIndex);
             } else { // If we fail to find it, let's fix it
                 // Retrieve the current song index from shared preferences
                 int lastPlayedSongIndex = preferenceHelper.getLastPlayedSong();
 
-                if (lastPlayedSongIndex <= mDataAdapter.getSongs().size() && lastPlayedSongIndex >= 0) {
+                if (lastPlayedSongIndex <= songDataset.get().size() && lastPlayedSongIndex >= 0) {
                     // Retrieve the current song
-                    Song newCurrentSong = mDataAdapter.getSongs().get(lastPlayedSongIndex);
+                    Song newCurrentSong = songDataset.get().get(lastPlayedSongIndex);
 
                     // Set the currentlyPlayingIndex to the newCurrentSong's Index
                     currentlyPlayingIndex = lastPlayedSongIndex;
@@ -277,8 +284,8 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                 } else {
                     // Since the user does not have a last played song yet, we'll give him the first
                     // song he has.
-                    if (!mDataAdapter.getSongs().isEmpty()) {
-                        return mDataAdapter.getSongs().get(0);
+                    if (!songDataset.get().isEmpty()) {
+                        return songDataset.get().get(0);
                     }
 
                     return null; // Return null if there still isn't anything.
@@ -298,7 +305,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
         try {
             // Set it up
-            Uri audioUri = Uri.parse("file://" + mDataAdapter.getSongs().get(currentlyPlayingIndex).getDataPath());
+            Uri audioUri = Uri.parse("file://" + songDataset.get().get(currentlyPlayingIndex).getDataPath());
 
             isThisLastPlayed = true;
 
@@ -337,7 +344,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         if (!mUpcoming.isEmpty()) {
             // Since he/she did add something, we'll play it first
             Log.d("getNext()", "Returning upcoming song");
-            return mDataAdapter.getSongs().get(mUpcoming.removeFirst());
+            return songDataset.get().get(mUpcoming.removeFirst());
         }
 
         if (preferenceHelper.getShuffle()) { // If shuffle mode is on
@@ -345,16 +352,16 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
             // Shuffle and retrieve the song
             int newSong = currentlyPlayingIndex;
-            if (mDataAdapter.getSongs().size() > 0) { // Don't let a Deadlock happen
+            if (songDataset.get().size() > 0) { // Don't let a Deadlock happen
                 while (newSong == currentlyPlayingIndex) {
-                    newSong = shufflerRandomizer.nextInt(mDataAdapter.getSongs().size());
+                    newSong = shufflerRandomizer.nextInt(songDataset.get().size());
                 }
             }
             currentlyPlayingIndex = newSong;
         } else {
             // else retrieve the next song with an increment on currentlyPlayingIndex
             currentlyPlayingIndex++;
-            if (currentlyPlayingIndex == mDataAdapter.getSongs().size()) { // Make it circular
+            if (currentlyPlayingIndex == songDataset.get().size()) { // Make it circular
                 currentlyPlayingIndex = 0;
             }
         }
@@ -363,7 +370,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         Log.d("getNext()", "Returning Song object with currentlyPlayingIndex of "
                 + currentlyPlayingIndex);
 
-        return mDataAdapter.getSongs().get(currentlyPlayingIndex);
+        return songDataset.get().get(currentlyPlayingIndex);
     }
 
     public Song getPrevious() {
@@ -371,9 +378,9 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         Log.d("historyStack", "isEmpty -> " + mHistory.isEmpty());
 
         if (!mHistory.isEmpty()) {
-            return mDataAdapter.getSongs().get(mHistory.pop());
+            return songDataset.get().get(mHistory.pop());
         } else { // Return the current song since there isn't any history.
-            return mDataAdapter.getSongs().get(currentlyPlayingIndex);
+            return songDataset.get().get(currentlyPlayingIndex);
         }
     }
 
@@ -385,10 +392,10 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     public void putAllOnQueue(Song currentSong) {
         Log.d("putAllOnQueue()", "Current Song: " + currentSong.getTitle());
 
-        for (Song s : mDataAdapter.getSongs()) {
+        for (Song s : songDataset.get()) {
             if (s.getId() != currentSong.getId()) {
                 // Add the song to the queue
-                mUpcoming.add(mDataAdapter.getSongs().indexOf(s));
+                mUpcoming.add(songDataset.get().indexOf(s));
             }
         }
     }
@@ -396,7 +403,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     public void putAlbumOnQueue(ArrayList<Song> songs, Song dupe) {
         for (Song s : songs) {
             if (s != dupe) {
-                mUpcoming.add(mDataAdapter.getSongs().indexOf(s));
+                mUpcoming.add(songDataset.get().indexOf(s));
             }
         }
     }
@@ -410,9 +417,9 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public void purgeList(long playlistId) {
-        for (int i = 0; i < mDataAdapter.getPlaylists().size(); i++) {
-            if (mDataAdapter.getPlaylists().get(i).getPlaylistId() == playlistId) {
-                mDataAdapter.getPlaylists().remove(i);
+        for (int i = 0; i < playlistDataset.get().size(); i++) {
+            if (playlistDataset.get().get(i).getPlaylistId() == playlistId) {
+                playlistDataset.get().remove(i);
                 break;
             }
         }
@@ -421,7 +428,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     public ArrayList<Song> getAlbumSongs(long albumId) {
         ArrayList<Song> result = new ArrayList<>();
 
-        for (Song s : mDataAdapter.getSongs()) {
+        for (Song s : songDataset.get()) {
             if (s.getAlbumId() == albumId) {
                 result.add(s);
             }
@@ -434,12 +441,12 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         Log.d("findDuplicateAlbum", "Running");
 
         try {
-            if (mDataAdapter.getAlbums() != null && !mDataAdapter.getAlbums().isEmpty()) {
+            if (albumDataset.get() != null && !albumDataset.get().isEmpty()) {
 
-                for (Album a : mDataAdapter.getAlbums()) {
+                for (Album a : albumDataset.get()) {
                     if (a.getArtistName().equals(album.getArtistName()) &&
                             a.getTitle().equals(album.getTitle())) { // If we really find a dupe
-                        for (Song s : mDataAdapter.getSongs()) { // Set all the existing songs
+                        for (Song s : songDataset.get()) { // Set all the existing songs
                             if (s.getAlbumId() == album.getId()) { // To the existing album
                                 s.setAlbumId(a.getId());
                                 s.setAlbumName(a.getTitle());
@@ -451,7 +458,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             }
 
             // Since no dupes are found
-            mDataAdapter.getAlbums().add(album);
+            albumDataset.get().add(album);
 
             //Log.d("findDuplicateAlbum", "albumFiles is either null or is empty");
             return false;
@@ -470,7 +477,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
         HashMap<Long, Long> count = mediaDB.retrieveCountFromDB();
         // Then we update the the database with the songfiles
-        for (Song s : mDataAdapter.getSongs()) {
+        for (Song s : songDataset.get()) {
             if (count.containsKey(s.getId())) {
                 s.setCount(count.get(s.getId()));
             }
@@ -478,7 +485,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
         // Finally, update the playlist via the Database
         for (Long mediaStoreId : mediaDB.retrieveTopPlayed()) {
-            for (Song s : mDataAdapter.getSongs()) {
+            for (Song s : songDataset.get()) {
                 if (mediaStoreId == s.getId()) {
                     topPlayed.add(s);
                 }
@@ -491,7 +498,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         HashMap<Long, Long> count = mediaDB.retrieveCountFromDB();
 
         if (!count.isEmpty()) {
-            for (Song s : mDataAdapter.getSongs()) {
+            for (Song s : songDataset.get()) {
                 if (count.containsKey(s.getId())) {
                     s.setCount(count.get(s.getId()));
                 }
@@ -550,7 +557,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
                 mediaControlsOnClickNext(MainActivity.getInstance().getCurrentFocus());
             } else if (repeatState == RepeatState.NOREPEAT) {
-                Song currentSong = mDataAdapter.getSongs().get(currentlyPlayingIndex); // Get the current song that just ended
+                Song currentSong = songDataset.get().get(currentlyPlayingIndex); // Get the current song that just ended
                 mMediaPlayer.reset(); // Reset the player first
                 Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
                 mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
@@ -566,7 +573,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
                 // Make sure it's stopped
                 mMediaPlayer.stop();
-                Song currentSong = mDataAdapter.getSongs().get(currentlyPlayingIndex); // Get the current song that just ended
+                Song currentSong = songDataset.get().get(currentlyPlayingIndex); // Get the current song that just ended
                 mMediaPlayer.reset(); // Reset the player first
                 Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
                 mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
@@ -578,7 +585,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
                 // Make sure it's stopped
                 mMediaPlayer.stop();
-                Song currentSong = mDataAdapter.getSongs().get(currentlyPlayingIndex); // Get the current song that just ended
+                Song currentSong = songDataset.get().get(currentlyPlayingIndex); // Get the current song that just ended
                 mMediaPlayer.reset(); // Reset the player first
                 Uri audioUri = Uri.parse("file://" + currentSong.getDataPath()); // Get the path of the song
                 mMediaPlayer.setDataSource(MainActivity.getInstance().getApplicationContext(), audioUri); // Set it again
@@ -600,7 +607,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         }
 
         // Retrieve the current song
-        Song currentlyPlaying = mDataAdapter.getSongs().get(currentlyPlayingIndex);
+        Song currentlyPlaying = songDataset.get().get(currentlyPlayingIndex);
 
         //Log.d("OnPrepared", "Working");
         long songDuration = currentlyPlaying.getDuration();

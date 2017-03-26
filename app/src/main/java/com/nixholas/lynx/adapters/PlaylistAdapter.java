@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nixholas.lynx.media.MediaManager;
 import com.nixholas.lynx.media.entities.Playlist;
 import com.nixholas.lynx.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
@@ -119,8 +120,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public PlaylistAdapter(ArrayList<Playlist> dataSet) {
-        mDataset = dataSet;
+    public PlaylistAdapter(MediaManager mediaManager) {
+        mediaManager.mDataAdapter.updatePlaylistDataset(mDataset);
     }
 
     // Create new views (invoked by the layout manager)

@@ -102,7 +102,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
                 // Update the currentlyPlayingIndex for mediaManager
                 //Log.d("LOG Song Index: ", mediaManager.managerQueue.indexOf(currentSong) + "");
-                mediaManager.currentlyPlayingIndex = mediaManager.mDataAdapter.getSongs().indexOf(currentSong);
+                mediaManager.currentlyPlayingIndex = mDataset.indexOf(currentSong);
 
             try {
                 Uri albumArtUri = getAlbumArtUri(currentSong.getAlbumId());
