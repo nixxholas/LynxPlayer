@@ -180,20 +180,20 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
     public MediaManager() {} // Don't use this at all please, it's pointless, like your life lol.
 
-    public MediaManager(final MainActivity mainActivity, ContentResolver contentResolver) {
+    public MediaManager(ContentResolver contentResolver) {
         //Log.d("onCreate: MediaManager", "Working");
 
         // Setup the Data adapter
         mDataAdapter = new DataAdapter(contentResolver);
 
         // Initialize the audio manager and register any headset controls for playback
-        audioManager = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
+        audioManager = (AudioManager) getInstance().getSystemService(Context.AUDIO_SERVICE);
 
         // Get a handler that can be used to post to the main thread
         // http://stackoverflow.com/questions/11123621/running-code-in-main-thread-from-another-thread
         mainHandler = new Handler(getInstance().getMainLooper());
 
-        initializeMediaDB(mainActivity.getApplicationContext()); // Instantiate the SQLite Object
+        initializeMediaDB(getInstance().getApplicationContext()); // Instantiate the SQLite Object
 
         // Instantiate the MediaPlayer Object
         mMediaPlayer = new MediaPlayer();
@@ -220,7 +220,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             }
         };
 
-        TelephonyManager mgr = (TelephonyManager) mainActivity.getSystemService(TELEPHONY_SERVICE);
+        TelephonyManager mgr = (TelephonyManager) getInstance().getSystemService(TELEPHONY_SERVICE);
         if (mgr != null) {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }

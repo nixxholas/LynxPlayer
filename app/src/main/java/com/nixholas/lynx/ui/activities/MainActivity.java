@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Finally initialize the data responsible for media playback along with the database and
         // the MediaPlayer
-        mediaManager = new MediaManager(this, getContentResolver());
+        mediaManager = new MediaManager(getContentResolver());
         mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         switch (preferenceHelper.getRepeat()) {
