@@ -20,9 +20,9 @@ import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
  */
 
 public class PlaylistFragment extends Fragment {
+    public PlaylistAdapter rVAdapter;
     CardView mostPlayedCardView;
     RecyclerView recyclerView;
-    RecyclerView.Adapter rVAdapter;
     RecyclerView.LayoutManager rVLayoutManager;
     /**
      * The fragment argument representing the section number for this

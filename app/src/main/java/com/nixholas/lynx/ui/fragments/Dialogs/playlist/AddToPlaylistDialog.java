@@ -21,7 +21,7 @@ public class AddToPlaylistDialog extends DialogFragment {
     ArrayList<String> playlistItems = new ArrayList<>();
 
     public AddToPlaylistDialog() {
-        for(Playlist playlist : mediaManager.getPlaylistDataset().get()) {
+        for(Playlist playlist : mediaManager.getPlaylistDataset()) {
             playlistItems.add(playlist.getPlaylistName());
         }
         playlistItems.add("Create a new playlist");

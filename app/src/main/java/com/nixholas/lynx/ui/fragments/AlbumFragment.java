@@ -18,8 +18,8 @@ import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
  */
 
 public class AlbumFragment extends Fragment {
+    public AlbumsAdapter rVAdapter;
     RecyclerView recyclerView;
-    RecyclerView.Adapter rVAdapter;
     RecyclerView.LayoutManager rVLayoutManager;
 
     /**

@@ -11,8 +11,6 @@ import com.nixholas.lynx.media.entities.Song;
 
 import java.util.ArrayList;
 
-import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
-
 /**
  * Created by nixho on 13-Nov-16.
  */
@@ -95,8 +93,6 @@ public class DataAdapter implements Runnable {
 
             songCur.close();
         }
-
-        mediaManager.setSongDataset(mDataSet);
     }
 
     public void updateAlbumDataset(ArrayList<Album> mDataset) {
@@ -153,8 +149,6 @@ public class DataAdapter implements Runnable {
 
             albumCur.close();
         }
-
-        mediaManager.setAlbumDataset(mDataset);
     }
 
     public void updatePlaylistDataset(ArrayList<Playlist> _mDataset) {
@@ -192,8 +186,6 @@ public class DataAdapter implements Runnable {
 
             playlistCur.close();
         }
-
-        mediaManager.setPlaylistDataset(_mDataset);
     }
 
     @Override

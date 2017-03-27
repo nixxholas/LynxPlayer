@@ -12,20 +12,19 @@ import android.os.AsyncTask;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
-import android.view.View;
 import android.widget.RemoteViews;
 
-import com.nixholas.lynx.ui.activities.MainActivity;
-import com.nixholas.lynx.media.entities.Song;
 import com.nixholas.lynx.R;
+import com.nixholas.lynx.media.entities.Song;
+import com.nixholas.lynx.ui.activities.MainActivity;
 
 import java.io.File;
 
-import static com.nixholas.lynx.ui.activities.MainActivity.getInstance;
-import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
 import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickPlayPause;
 import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickPrevious;
+import static com.nixholas.lynx.ui.activities.MainActivity.getInstance;
+import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
 import static com.nixholas.lynx.utils.AlbumService.getAlbumArt;
 import static com.nixholas.lynx.utils.color.TextColorHelper.isColorDark;
 
@@ -37,9 +36,9 @@ import static com.nixholas.lynx.utils.color.TextColorHelper.isColorDark;
  * http://www.laurivan.com/android-display-a-notification/
  */
 
-public class PersistentNotification extends BroadcastReceiver implements Runnable {
+public class LynxNotification extends BroadcastReceiver implements Runnable {
     // Notification Runnable
-    AsyncTask<Void, Void, Void> PersisNotifRunner;
+    AsyncTask<Void, Void, Void> LynxNotificationRunner;
 
     // Notification Tags
     private static final String NOTIF_PREVIOUS = "NOTI_PREVIOUS";
@@ -79,19 +78,19 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
 
     // NormalView Widgets
 
-    public PersistentNotification() {
+    public LynxNotification() {
     }
 
-    public PersistentNotification(Context mContext) {
+    public LynxNotification(Context mContext) {
         //this.mContext = mContext;
 
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         //mNotificationManager.notify(NOTIFICATION_ID, notification); // Just for Debugging
 
-        prevIntent = new Intent(mContext, PersistentNotification.class);
-        pauseIntent = new Intent(mContext, PersistentNotification.class);
-        nextIntent = new Intent(mContext, PersistentNotification.class);
-        dismissIntent = new Intent(mContext, PersistentNotification.class);
+        prevIntent = new Intent(mContext, LynxNotification.class);
+        pauseIntent = new Intent(mContext, LynxNotification.class);
+        nextIntent = new Intent(mContext, LynxNotification.class);
+        dismissIntent = new Intent(mContext, LynxNotification.class);
         //launchIntent = new Intent(mContext, MainActivity.class);
 
         prevIntent.setAction(NOTIF_PREVIOUS);
@@ -148,57 +147,13 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
                         PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
-    public PersistentNotification(Context mContext, View parentView) {
-        //this.mContext = mContext;
-        //this.parentView = parentView;
-
-        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        //mNotificationManager.notify(NOTIFICATION_ID, notification); // Just for Debugging
-
-        prevIntent = new Intent(mContext, PersistentNotification.class);
-        pauseIntent = new Intent(mContext, PersistentNotification.class);
-        nextIntent = new Intent(mContext, PersistentNotification.class);
-        dismissIntent = new Intent(mContext, PersistentNotification.class);
-
-        prevPendingIntent = PendingIntent.getBroadcast(mContext, NOTI_PREV
-                , prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        pausePendingIntent = PendingIntent.getBroadcast(mContext, NOTI_PLAYPAUSE
-                , pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        nextPendingIntent = PendingIntent.getBroadcast(mContext, NOTI_NEXT
-                , nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        dismissPendingIntent = PendingIntent.getBroadcast(mContext, NOTI_DISMISS
-                , dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        normalView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_normal);
-        bigView = new RemoteViews(getInstance().getPackageName(), R.layout.notification_big);
-
-        // Setup the BigView Static Contents
-        bigView.setImageViewResource(R.id.notibig_previous, R.drawable.ic_skip_previous_black_36dp);
-        bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_36dp);
-
-        // http://stackoverflow.com/questions/13472990/implementing-onclick-listener-for-app-widget
-        bigView.setOnClickPendingIntent(R.id.notibig_playpause,
-                getPendingSelfIntent(mContext, NOTIF_PLAYPAUSE));
-        bigView.setOnClickPendingIntent(R.id.notibig_previous,
-                getPendingSelfIntent(mContext, NOTIF_PREVIOUS));
-        bigView.setOnClickPendingIntent(R.id.notibig_next,
-                getPendingSelfIntent(mContext, NOTIF_NEXT));
-        bigView.setOnClickPendingIntent(R.id.notibig_dismiss,
-                getPendingSelfIntent(mContext, NOTIF_DISMISS));
-        // http://stackoverflow.com/questions/9214715/notifcation-launches-multiple-instances-of-activities
-        bigView.setOnClickPendingIntent(R.id.notibig_layout,
-                PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class)
-                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP),
-                        PendingIntent.FLAG_UPDATE_CURRENT));
-    }
-
     @Override
     public void run() {
         makeNotification(mContext);
     }
 
     private void makeNotification(Context context) {
-        Log.d("PersistentNotification", "makeNotification()");
+        Log.d("LynxNotification", "makeNotification()");
 
         mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(mContext)
                 // Show controls on lock screen even when user hides sensitive content.
@@ -228,7 +183,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
      * http://stackoverflow.com/questions/7988018/custom-notification-java-lang-runtimeexception-bad-array-lengths
      */
     public void updateNotification() {
-        PersisNotifRunner = new AsyncTask<Void, Void, Void>() {
+        LynxNotificationRunner = new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     try {
@@ -429,7 +384,7 @@ public class PersistentNotification extends BroadcastReceiver implements Runnabl
     }
 
     protected PendingIntent getPendingSelfIntent(Context context, String action) {
-        Intent intent = new Intent(context, PersistentNotification.class);
+        Intent intent = new Intent(context, LynxNotification.class);
         intent.setAction(action);
         return PendingIntent.getBroadcast(context, 0, intent, 0);
     }

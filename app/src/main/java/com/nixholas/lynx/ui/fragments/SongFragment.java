@@ -8,8 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nixholas.lynx.adapters.SongAdapter;
 import com.nixholas.lynx.R;
+import com.nixholas.lynx.adapters.SongAdapter;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
@@ -19,8 +19,8 @@ import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
  */
 
 public class SongFragment extends Fragment {
+    public SongAdapter rVAdapter;
     RecyclerView recyclerView;
-    RecyclerView.Adapter rVAdapter;
     RecyclerView.LayoutManager rVLayoutManager;
 
     /**

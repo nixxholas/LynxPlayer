@@ -35,7 +35,7 @@ import android.widget.Toast;
 
 import com.nixholas.lynx.R;
 import com.nixholas.lynx.media.MediaManager;
-import com.nixholas.lynx.notification.PersistentNotification;
+import com.nixholas.lynx.notification.LynxNotification;
 import com.nixholas.lynx.ui.CustomSlidingUpLayout;
 import com.nixholas.lynx.ui.SlidingBarUpdater;
 import com.nixholas.lynx.ui.elements.button.CustomImageButton;
@@ -45,9 +45,6 @@ import com.nixholas.lynx.ui.fragments.SongFragment;
 import com.nixholas.lynx.utils.PreferenceHelper;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
-import mehdi.sakout.aboutpage.AboutPage;
-import mehdi.sakout.aboutpage.Element;
 
 import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickNext;
 import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickPlayPause;
@@ -90,13 +87,13 @@ public class MainActivity extends AppCompatActivity {
     public static PreferenceHelper preferenceHelper;
 
     // Fragment Entities
-    private AlbumFragment albumFragment;
-    private PlaylistFragment playlistFragment;
-    SongFragment songFragment;
+    public AlbumFragment albumFragment;
+    public PlaylistFragment playlistFragment;
+    public SongFragment songFragment;
 
     // Notification Entities
     private static MainActivity finalMain;
-    public static PersistentNotification persistentNotif;
+    public static LynxNotification persistentNotif;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -214,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup the notifications
         Handler mHandler = new Handler();
         //Context appContext = getBaseContext().getApplicationContext();
-        mHandler.post(persistentNotif = new PersistentNotification(getApplicationContext()));
+        mHandler.post(persistentNotif = new LynxNotification(getApplicationContext()));
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
@@ -310,37 +307,14 @@ public class MainActivity extends AppCompatActivity {
                         drawerLayout.closeDrawers();
                         return true;
                     case R.id.navigation_drawer_about:
-                        Element versionElement = new Element();
                         try {
-                            versionElement.setTitle(
-                                    // Retrieve the app version via the Manifest
-                                    // http://stackoverflow.com/questions/4471025/how-can-you-get-the-manifest-version-number-from-the-apps-layout-xml-variable
-                                    getPackageManager()
-                                    .getPackageInfo(getPackageName(), 0).versionName);
-
-                            View aboutPage = new AboutPage(getApplicationContext())
-                                    .isRTL(false)
-                                    .addItem(versionElement)
-                                    //.addItem(adsElement)
-                                    .addGroup("Connect with us")
-                                    .addEmail("nixholas@outlook.com")
-                                    //.addWebsite("http://medyo.github.io/")
-                                    //.addFacebook("the.medy")
-                                    //.addTwitter("medyo80")
-                                    //.addYoutube("UCdPQtdWIsg7_pi4mrRu46vA")
-                                    .addPlayStore("com.nixholas.lynx")
-                                    .addGitHub("nixxholas")
-                                    .addInstagram("nixxholas")
-                                    .create();
-
-
-                        } catch (PackageManager.NameNotFoundException e) {
-                            e.printStackTrace();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
                             Toast.makeText(getApplicationContext(), "An error has occured",
                                     Toast.LENGTH_SHORT).show();
                         }
 
-                        // Tem3porary Information Toast
+                        // Temporary Information Toast
                         Toast.makeText(getApplicationContext(), "An error has occured",
                                 Toast.LENGTH_SHORT).show();
 

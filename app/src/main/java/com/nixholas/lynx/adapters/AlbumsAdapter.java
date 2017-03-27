@@ -37,7 +37,7 @@ import static android.support.v4.content.ContextCompat.startActivity;
  */
 
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
-    private ArrayList<Album> mDataset;
+    public ArrayList<Album> mDataset;
     private Context context;
 
     @NonNull

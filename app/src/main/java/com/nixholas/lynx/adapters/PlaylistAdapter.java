@@ -34,7 +34,7 @@ import static com.nixholas.lynx.media.entities.utils.PlaylistUtil.removePlaylist
  */
 
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
-    private ArrayList<Playlist> mDataset;
+    public ArrayList<Playlist> mDataset;
     private Context context;
 
     @NonNull

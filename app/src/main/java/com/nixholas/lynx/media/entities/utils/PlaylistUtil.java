@@ -10,7 +10,6 @@ import android.util.Log;
 
 import static android.content.ContentValues.TAG;
 import static com.nixholas.lynx.ui.activities.MainActivity.getInstance;
-import static com.nixholas.lynx.ui.activities.MainActivity.mediaManager;
 
 /**
  * Created by nixholas on 20/12/16.
@@ -33,7 +32,9 @@ public class PlaylistUtil {
         ContentValues values = new ContentValues(1);
         values.put(MediaStore.Audio.Playlists.NAME, newplaylist);
         resolver.insert(uri, values);
-        mediaManager.mDataAdapter.updatePlaylistData();
+
+        // We have yet to replace data adapter updating code
+        //mediaManager.mDataAdapter.updatePlaylistData();
     }
 
     public static void removePlaylist(Context context, long selectedPlaylist) {
@@ -42,7 +43,9 @@ public class PlaylistUtil {
         String where = MediaStore.Audio.Playlists._ID + "=?";
         String[] whereVal = {selectedPlaylist + ""};
         resolver.delete(uri, where, whereVal);
-        mediaManager.mDataAdapter.updatePlaylistData();
+
+        // We have yet to replace data adapter updating code
+        //mediaManager.mDataAdapter.updatePlaylistData();
         //Log.d("PlaylistUtil", "removePlaylist");
     }
 
@@ -61,7 +64,9 @@ public class PlaylistUtil {
         String[] whereVal = { Long.toString(playlist_id) };
         values.put(MediaStore.Audio.Playlists.NAME, newplaylist);
         resolver.update(uri, values, where, whereVal);
-        mediaManager.mDataAdapter.updatePlaylistData();
+
+        // We have yet to replace data adapter updating code
+        //mediaManager.mDataAdapter.updatePlaylistData();
     }
 
     static String getPlayListId(String playlist ) {

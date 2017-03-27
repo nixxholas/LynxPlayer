@@ -51,7 +51,7 @@
             android:configChanges="orientation|screenSize" />
         <activity android:name=".ui.fragments.MostPlayedActivity"
             android:configChanges="orientation|screenSize" />
-        <receiver android:name="com.nixholas.lynx.notification.PersistentNotification"
+        <receiver android:name="com.nixholas.lynx.notification.LynxNotification"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />

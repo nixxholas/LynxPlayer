@@ -50,7 +50,7 @@ import static com.nixholas.lynx.utils.AlbumService.getAlbumArtUri;
  */
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>
         implements FastScrollRecyclerView.SectionedAdapter {
-    private ArrayList<Song> mDataset;
+    public ArrayList<Song> mDataset;
     private Context context;
 
     @NonNull
