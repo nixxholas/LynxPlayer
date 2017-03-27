@@ -30,7 +30,7 @@ public class LynxMediaPlayer implements MediaPlayer.OnBufferingUpdateListener,
     private String mNextMediaPath;
 
     /**
-     * Constructor of <code>MultiPlayer</code>
+     * Constructor of <code>LynxMediaPlayer</code>
      */
     LynxMediaPlayer(final MediaManager service) {
         mService = new WeakReference<MediaManager>(service);

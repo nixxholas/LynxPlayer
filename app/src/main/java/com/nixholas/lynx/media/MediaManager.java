@@ -1,5 +1,7 @@
 package com.nixholas.lynx.media;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -25,7 +27,6 @@ import com.nixholas.lynx.adapters.DataAdapter;
 import com.nixholas.lynx.media.entities.Album;
 import com.nixholas.lynx.media.entities.Playlist;
 import com.nixholas.lynx.media.entities.Song;
-import com.nixholas.lynx.media.entities.utils.PlaylistUtil;
 import com.nixholas.lynx.ui.activities.MainActivity;
 import com.nixholas.lynx.utils.AlbumService;
 import com.nixholas.lynx.utils.RemoteControlReceiver;
@@ -85,12 +86,25 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
     // Main Objects for MediaManager
     public AudioManager audioManager;
-    // MediaSession allows interaction with media controllers, volume keys, media buttons, and transport controls
-    public MediaSession mSession;
 
-    // Handles music playback
+    /**
+     * Lock screen controls
+     */
+    private MediaSession mSession;
+
+    /**
+     * Handles music playback
+     */
     public MediaPlayer mMediaPlayer;
     private LynxMediaPlayer lynxMediaPlayer;
+
+    /**
+     * Alarm intent for removing the notification when nothing is playing
+     * for some time
+     */
+    private AlarmManager mAlarmManager;
+    private PendingIntent mShutdownIntent;
+    private boolean mShutdownScheduled;
 
     public RemoteControlReceiver remoteControlReceiver;
     private MediaDB mediaDB;
@@ -146,10 +160,10 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     private static LinkedList<Integer> mUpcoming = new LinkedList<>();
     private static Stack<Integer> mHistory = new Stack<>();
     public DataAdapter mDataAdapter;
-    protected ArrayList<Song> topPlayed = new ArrayList<>();
+    protected ArrayList<Song> topPlayed = new ArrayList<>(20);
 
     // Playlist Helper
-    public PlaylistUtil playlistUtil = new PlaylistUtil();
+    //public PlaylistUtil playlistUtil = new PlaylistUtil();
 
     public class ServiceBinder extends Binder {
         public MediaManager getService() {
