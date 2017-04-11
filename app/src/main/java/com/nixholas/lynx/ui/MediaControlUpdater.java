@@ -27,6 +27,8 @@ import static com.nixholas.lynx.ui.activities.MainActivity.slided_SongArtist;
 import static com.nixholas.lynx.ui.activities.MainActivity.slided_SongTitle;
 
 /**
+ * XML-Binded Media Controlling
+ *
  * Created by nixho on 22-Nov-16.
  */
 
@@ -196,7 +198,6 @@ public class MediaControlUpdater {
                     .parse("content://media/external/audio/albumart");
             Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, nextSong.getAlbumId());
 
-            if (mediaManager.mMediaPlayer.isPlaying() || !mediaManager.mediaPlayerIsPaused) {
                 mediaManager.mMediaPlayer.stop();
                 mediaManager.mMediaPlayer.reset();
                 mediaManager.mMediaPlayer.setDataSource(getInstance().getApplicationContext(), audioUri);
@@ -278,7 +279,6 @@ public class MediaControlUpdater {
                         .into(slidedAlbumArt);
 
                 persistentNotif.updateNotification();
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

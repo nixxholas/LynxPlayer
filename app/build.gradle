@@ -44,7 +44,6 @@ dependencies {
 
     // Tab Layout Library
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
-    compile 'com.aurelhubert:ahbottomnavigation:2.0.6'
 
     // Sliding up panel library
     compile 'com.sothree.slidinguppanel:library:3.3.1'
