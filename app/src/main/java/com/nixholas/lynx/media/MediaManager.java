@@ -96,7 +96,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
      * Handles music playback
      */
     public MediaPlayer mMediaPlayer;
-    private LynxMediaPlayer lynxMediaPlayer;
 
     /**
      * Alarm intent for removing the notification when nothing is playing
@@ -214,8 +213,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnCompletionListener(this);
 
-        lynxMediaPlayer = new LynxMediaPlayer(this);
-
         PhoneStateListener phoneStateListener = new PhoneStateListener() {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
@@ -302,8 +299,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                     // Make sure we perform repeat and shuffle checks
 
 
-                    // Return in
-
+                    // Return it
                     return newCurrentSong;
                 } else {
                     // Since the user does not have a last played song yet, we'll give him the first
@@ -459,38 +455,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         }
 
         return result;
-    }
-
-    public boolean findDuplicateAlbum(Album album) {
-        Log.d("findDuplicateAlbum", "Running");
-
-        try {
-            if (getAlbumDataset() != null && !getAlbumDataset().isEmpty()) {
-
-                for (Album a : getAlbumDataset()) {
-                    if (a.getArtistName().equals(album.getArtistName()) &&
-                            a.getTitle().equals(album.getTitle())) { // If we really find a dupe
-                        for (Song s : getSongDataset()) { // Set all the existing songs
-                            if (s.getAlbumId() == album.getId()) { // To the existing album
-                                s.setAlbumId(a.getId());
-                                s.setAlbumName(a.getTitle());
-                            }
-                        }
-                        return true; // Then return true
-                    }
-                }
-            }
-
-            // Since no dupes are found
-            getAlbumDataset().add(album);
-
-            //Log.d("findDuplicateAlbum", "albumFiles is either null or is empty");
-            return false;
-        } catch (Exception ex) {
-            Log.d("findDuplicateAlbum", "An error occured");
-            ex.printStackTrace();
-            return false;
-        }
     }
 
     // Updates the songFiles and the topPlayed

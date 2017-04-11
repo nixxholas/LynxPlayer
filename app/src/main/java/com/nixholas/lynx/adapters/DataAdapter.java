@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.nixholas.lynx.media.entities.Album;
 import com.nixholas.lynx.media.entities.Playlist;
@@ -143,7 +144,8 @@ public class DataAdapter implements Runnable {
                     }
 
                     if (!mDataset.contains(newAlbum))
-                        mDataset.add(newAlbum);
+                        //mDataset.add(newAlbum);
+                        checkDupeAndAdd(newAlbum, mDataset);
                 }
             }
 
@@ -186,6 +188,43 @@ public class DataAdapter implements Runnable {
 
             playlistCur.close();
         }
+    }
+
+    private boolean checkDupeAndAdd(Album album, ArrayList<Album> mDataset) {
+        Log.d("findDuplicateAlbum", "Running");
+
+        try {
+            if (mDataset != null && !mDataset.isEmpty()) {
+
+                for (Album a : mDataset) {
+                    if (a.getArtistName().equals(album.getArtistName()) &&
+                            a.getTitle().equals(album.getTitle())) { // If we really find a dupe
+//                        for (Song s : getSongDataset()) { // Set all the existing songs
+//                            if (s.getAlbumId() == album.getId()) { // To the existing album
+//                                s.setAlbumId(a.getId());
+//                                s.setAlbumName(a.getTitle());
+//                            }
+//                        }
+
+                        // As of now, we won't be doing anything to the album
+
+                        return true; // Then return true
+                    } else {
+                        // Since no dupes are found
+                        mDataset.add(album);
+
+                        //Log.d("findDuplicateAlbum", "albumFiles is either null or is empty");
+                        return false;
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            Log.d("findDuplicateAlbum", "An error occured");
+            ex.printStackTrace();
+            return false;
+        }
+
+        return false;
     }
 
     @Override
