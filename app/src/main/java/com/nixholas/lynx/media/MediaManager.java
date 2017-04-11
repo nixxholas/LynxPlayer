@@ -221,11 +221,12 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
                     mMediaPlayer.pause();
                 } else if(state == TelephonyManager.CALL_STATE_IDLE) {
                     //Not in call: Play music
-                    mMediaPlayer.start();
+                    if (!mediaPlayerIsPaused) { // Make the player is not paused deliberately first
+                        mMediaPlayer.start();
+                    }
                 } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
                     //A call is dialing, active or on hold
                     // Phone is on idle, so we shall start playing.
-                    //mMediaPlayer.start();
                 }
                 super.onCallStateChanged(state, incomingNumber);
             }
