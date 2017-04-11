@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -284,55 +283,55 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.app_name, R.string.app_name);
-        drawerLayout.addDrawerListener(drawerToggle);
+        //drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.app_name, R.string.app_name);
+        //drawerLayout.addDrawerListener(drawerToggle);
 
         // Setup the navigationView and its item selected listener
-        navigationView = (NavigationView) findViewById(R.id.navigation_drawer);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                // Have an intent for any selection
-                Intent intent;
+//        navigationView = (NavigationView) findViewById(R.id.navigation_drawer);
+//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                // Have an intent for any selection
+//                Intent intent;
+//
+//                switch (item.getItemId()) {
+//                    case R.id.navigation_drawer_main:
+//                        drawerLayout.closeDrawers();
+//                        return true;
+//                    case R.id.navigation_drawer_spotify:
+//                        Toast.makeText(getApplicationContext(), "Coming soon!",
+//                                Toast.LENGTH_SHORT).show();
+//
+//                        drawerLayout.closeDrawers();
+//                        return true;
+//                    case R.id.navigation_drawer_about:
+//                        try {
+//                        } catch (Exception ex) {
+//                            ex.printStackTrace();
+//                            Toast.makeText(getApplicationContext(), "An error has occured",
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                        // Temporary Information Toast
+//                        Toast.makeText(getApplicationContext(), "An error has occured",
+//                                Toast.LENGTH_SHORT).show();
+//
+//                        drawerLayout.closeDrawers();
+//                        return true;
+//                    case R.id.navigation_drawer_settings:
+//                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
+//                        startActivity(intent);
+//                        return true;
+//                }
+//
+//                return false;
+//            }
+//        });
 
-                switch (item.getItemId()) {
-                    case R.id.navigation_drawer_main:
-                        drawerLayout.closeDrawers();
-                        return true;
-                    case R.id.navigation_drawer_spotify:
-                        Toast.makeText(getApplicationContext(), "Coming soon!",
-                                Toast.LENGTH_SHORT).show();
-
-                        drawerLayout.closeDrawers();
-                        return true;
-                    case R.id.navigation_drawer_about:
-                        try {
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "An error has occured",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // Temporary Information Toast
-                        Toast.makeText(getApplicationContext(), "An error has occured",
-                                Toast.LENGTH_SHORT).show();
-
-                        drawerLayout.closeDrawers();
-                        return true;
-                    case R.id.navigation_drawer_settings:
-                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                        startActivity(intent);
-                        return true;
-                }
-
-                return false;
-            }
-        });
-
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Home");
+        //getSupportActionBar().setHomeButtonEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setTitle("Home");
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -383,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
+        //drawerToggle.syncState();
     }
 
     @Override

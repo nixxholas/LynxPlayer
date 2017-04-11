@@ -282,7 +282,8 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     public Song getCurrent() {
         try {
             // If the MediaManager has already been playing
-            if (!getSongDataset().isEmpty() && currentlyPlayingIndex >= 0
+            if (getSongDataset() != null && !getSongDataset().isEmpty()
+                    && currentlyPlayingIndex >= 0
                     && currentlyPlayingIndex <= getSongDataset().size()) {
                 return getSongDataset().get(currentlyPlayingIndex);
             } else { // If we fail to find it, let's fix it

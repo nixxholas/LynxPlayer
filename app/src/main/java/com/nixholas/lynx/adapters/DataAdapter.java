@@ -144,8 +144,7 @@ public class DataAdapter implements Runnable {
                     }
 
                     if (!mDataset.contains(newAlbum))
-                        //mDataset.add(newAlbum);
-                        checkDupeAndAdd(newAlbum, mDataset);
+                        mDataset.add(newAlbum);
                 }
             }
 
@@ -231,4 +230,5 @@ public class DataAdapter implements Runnable {
     public void run() {
 
     }
+
 }
