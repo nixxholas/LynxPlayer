@@ -218,10 +218,12 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             public void onCallStateChanged(int state, String incomingNumber) {
                 if (state == TelephonyManager.CALL_STATE_RINGING) {
                     //Incoming call: Pause music
-                    mMediaPlayer.pause();
+                    if (mediaPlayerIsPaused) { // Make sure the player is not paused deliberately first
+                        mMediaPlayer.pause();
+                    }
                 } else if(state == TelephonyManager.CALL_STATE_IDLE) {
                     //Not in call: Play music
-                    if (!mediaPlayerIsPaused) { // Make the player is not paused deliberately first
+                    if (!mediaPlayerIsPaused) { // Make sure the player is not paused deliberately first
                         mMediaPlayer.start();
                     }
                 } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
