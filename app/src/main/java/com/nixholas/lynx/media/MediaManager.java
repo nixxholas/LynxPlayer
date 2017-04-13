@@ -67,6 +67,7 @@ import static com.nixholas.lynx.ui.activities.MainActivity.slidingUpPanelLayout;
 
 public class MediaManager extends Service implements MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
+    private static String TAG = "MediaManager";
     // Action Strings
 
     // Standard actions
@@ -96,6 +97,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
      * Handles music playback
      */
     public MediaPlayer mMediaPlayer;
+    public LynxMediaPlayer mLynxMediaPlayer;
 
     /**
      * Alarm intent for removing the notification when nothing is playing
@@ -111,7 +113,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     private PowerManager.WakeLock mHeadsetHookWakeLock;
 
     /**
-     * mainHandler
+     * mHandler
      *
      * This handler allows an extra thread to reconnect with the main thread so as to offload tasks
      * that are being executed/waiting to be executed in the main thread.
@@ -212,6 +214,8 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnCompletionListener(this);
+
+        mLynxMediaPlayer = new LynxMediaPlayer(this);
 
         PhoneStateListener phoneStateListener = new PhoneStateListener() {
             @Override
@@ -337,6 +341,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(getInstance().getApplicationContext(), audioUri);
             mMediaPlayer.prepare();
+            mMediaPlayer.stop();
 
             //Log.d("setupLastPlayed()", "Pausing mMediaPlayer");
             //            mediaPlayerIsPaused = true;
@@ -584,6 +589,8 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
 
                 // Then play it again
                 mMediaPlayer.prepare();
+                // Pause it before it can play
+                mMediaPlayer.pause();
             }
 
         } catch (Exception e) {
@@ -648,7 +655,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
             @Override
             public void run() {
                 try {
-                    Log.d("mainHandler", "mediaPlayerIsPaused: " + mediaPlayerIsPaused);
+                    Log.d("mHandler", "mediaPlayerIsPaused: " + mediaPlayerIsPaused);
 
                     if (!mediaPlayerIsPaused && mMediaPlayer != null) {
                         // http://stackoverflow.com/questions/35027321/seek-bar-and-media-player-and-a-time-of-a-track
@@ -715,4 +722,22 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         return false;
     }
 
+    public void updateMediaDatabase() {
+        Log.d(TAG, "Running updateMediaDatabase()");
+
+        // Debugging Purposes Only
+        // Log.d("checkWithDB on " + getCurrent().getTitle(),
+        // mediaDB.checkMediaCountIfExists(getCurrent().getId(), getCurrent().getTitle()) + "");
+
+        if (!mediaDB.checkMediaCountIfExists(getCurrent().getId(), getCurrent().getTitle())) {
+            Log.d("mediaDBCheck", "This song does not exist in the DB");
+            mediaDB.addSongToMediaCount(getCurrent());
+        } else {
+            // Since it exists, give it's row an increment in the playcount column
+            Log.d("mediaDBCheck", "This song exists in the DB");
+            mediaDB.incrementMediaCount(getCurrent());
+        }
+        updateTopPlayed(); // finally, update the top played list
+
+    }
 }

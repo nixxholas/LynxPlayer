@@ -597,6 +597,13 @@ public class MainActivity extends AppCompatActivity {
         preferenceHelper.setShuffle(result);
     }
 
+    /**
+     * Method used to refresh the UI contents.
+     */
+    public void refreshMediaInterface() {
+
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
