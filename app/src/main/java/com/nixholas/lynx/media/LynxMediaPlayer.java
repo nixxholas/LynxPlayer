@@ -4,6 +4,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.SeekBar;
 
@@ -18,7 +20,9 @@ import java.util.Locale;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
+import static android.content.Context.TELEPHONY_SERVICE;
 import static com.nixholas.lynx.ui.MediaControlUpdater.mediaControlsOnClickNext;
+import static com.nixholas.lynx.ui.activities.MainActivity.getInstance;
 import static com.nixholas.lynx.ui.activities.MainActivity.mediaControls_PlayPause;
 import static com.nixholas.lynx.ui.activities.MainActivity.mediaSeekText_Maximum;
 import static com.nixholas.lynx.ui.activities.MainActivity.mediaSeekText_Progress;
@@ -70,6 +74,12 @@ public class LynxMediaPlayer extends MediaPlayer implements MediaPlayer.OnPrepar
      */
     private Runnable progressRunnable;
 
+    /**
+     * This Listener allows LynxMediaPlayer to handle calls in conjunction with media playback
+     * to prevent overlapping audio during phone calls.
+     */
+    PhoneStateListener mPhoneStateListener;
+
     public LynxMediaPlayer(MediaManager _mService) {
         // Bind the MediaPlayer with the service
         mService = new WeakReference<>(_mService);
@@ -85,6 +95,34 @@ public class LynxMediaPlayer extends MediaPlayer implements MediaPlayer.OnPrepar
         mCurrentPlayerIndex = -1;
         mNextPlayerIndex = -1;
         mPaused = true;
+
+        // Setup the listeners
+        mPhoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                if (state == TelephonyManager.CALL_STATE_RINGING) {
+                    //Incoming call: Pause music
+                    if (mPaused) { // Make sure the player is not paused deliberately first
+                        pause();
+                    }
+                } else if(state == TelephonyManager.CALL_STATE_IDLE) {
+                    //Not in call: Play music
+                    if (!mPaused) { // Make sure the player is not paused deliberately first
+                        start();
+                    }
+                } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    //A call is dialing, active or on hold
+                    // Phone is on idle, so we shall start playing.
+                }
+                super.onCallStateChanged(state, incomingNumber);
+            }
+        };
+
+        TelephonyManager mgr = (TelephonyManager) getInstance().getSystemService(TELEPHONY_SERVICE);
+        if (mgr != null) {
+            mgr.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
+
     }
 
     @Override

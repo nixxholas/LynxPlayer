@@ -96,7 +96,6 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
     /**
      * Handles music playback
      */
-    public MediaPlayer mMediaPlayer;
     public LynxMediaPlayer mLynxMediaPlayer;
 
     /**
@@ -211,37 +210,7 @@ public class MediaManager extends Service implements MediaPlayer.OnPreparedListe
         initializeMediaDB(getInstance().getApplicationContext()); // Instantiate the SQLite Object
 
         // Instantiate the MediaPlayer Object
-        mMediaPlayer = new MediaPlayer();
-        mMediaPlayer.setOnPreparedListener(this);
-        mMediaPlayer.setOnCompletionListener(this);
-
         mLynxMediaPlayer = new LynxMediaPlayer(this);
-
-        PhoneStateListener phoneStateListener = new PhoneStateListener() {
-            @Override
-            public void onCallStateChanged(int state, String incomingNumber) {
-                if (state == TelephonyManager.CALL_STATE_RINGING) {
-                    //Incoming call: Pause music
-                    if (mediaPlayerIsPaused) { // Make sure the player is not paused deliberately first
-                        mMediaPlayer.pause();
-                    }
-                } else if(state == TelephonyManager.CALL_STATE_IDLE) {
-                    //Not in call: Play music
-                    if (!mediaPlayerIsPaused) { // Make sure the player is not paused deliberately first
-                        mMediaPlayer.start();
-                    }
-                } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
-                    //A call is dialing, active or on hold
-                    // Phone is on idle, so we shall start playing.
-                }
-                super.onCallStateChanged(state, incomingNumber);
-            }
-        };
-
-        TelephonyManager mgr = (TelephonyManager) getInstance().getSystemService(TELEPHONY_SERVICE);
-        if (mgr != null) {
-            mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-        }
 
         // Setup the shuffle randomizer
         shufflerRandomizer = new Random();
