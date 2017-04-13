@@ -37,16 +37,16 @@ public class MediaControlUpdater {
     public static void mediaControlsOnClickPlayPause() {
         Log.d("mCOnClickPlayPause", "Running method");
 
-        if (mediaManager.mMediaPlayer != null) {
+        if (mediaManager.mLynxMediaPlayer != null) {
                 // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
                 if (mediaManager.mediaPlayerIsPaused) { // If the current song is paused,
-                    mediaManager.mMediaPlayer.start();
+                    mediaManager.mLynxMediaPlayer.start();
                     mediaManager.mediaPlayerIsPaused = false;
                     //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
                     slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                     mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
                 } else { // Else we pause it
-                    mediaManager.mMediaPlayer.pause();
+                    mediaManager.mLynxMediaPlayer.pause();
                     mediaManager.mediaPlayerIsPaused = true;
                     slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                     mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
@@ -60,11 +60,11 @@ public class MediaControlUpdater {
         Log.d("mCOnClickPrevious", "Running method");
 
         try {
-            if (mediaManager.mMediaPlayer.getCurrentPosition() > 3000) {
+            if (mediaManager.mLynxMediaPlayer.getCurrentPosition() > 3000) {
                 Log.d("onClickPrevious", "Current Position is > 3000");
 
                 // Since it is playing inwards already, we'll restart it again.
-                mediaManager.mMediaPlayer.seekTo(0);
+                mediaManager.mLynxMediaPlayer.seekTo(0);
                 return; // Exit the method
             }
 
@@ -77,11 +77,11 @@ public class MediaControlUpdater {
                     .parse("content://media/external/audio/albumart");
             Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, prevSong.getAlbumId());
 
-            if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
-                mediaManager.mMediaPlayer.stop();
-                mediaManager.mMediaPlayer.reset();
-                mediaManager.mMediaPlayer.setDataSource(v.getContext(), audioUri);
-                mediaManager.mMediaPlayer.prepareAsync();
+            if (mediaManager.mLynxMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
+                mediaManager.mLynxMediaPlayer.stop();
+                mediaManager.mLynxMediaPlayer.reset();
+                mediaManager.mLynxMediaPlayer.setDataSource(v.getContext(), audioUri);
+                mediaManager.mLynxMediaPlayer.prepareAsync();
 
                 /**
                  * User Interface Changes
@@ -198,10 +198,10 @@ public class MediaControlUpdater {
                     .parse("content://media/external/audio/albumart");
             Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, nextSong.getAlbumId());
 
-                mediaManager.mMediaPlayer.stop();
-                mediaManager.mMediaPlayer.reset();
-                mediaManager.mMediaPlayer.setDataSource(getInstance().getApplicationContext(), audioUri);
-                mediaManager.mMediaPlayer.prepareAsync();
+                mediaManager.mLynxMediaPlayer.stop();
+                mediaManager.mLynxMediaPlayer.reset();
+                mediaManager.mLynxMediaPlayer.setDataSource(getInstance().getApplicationContext(), audioUri);
+                mediaManager.mLynxMediaPlayer.prepareAsync();
 
                 /**
                  * User Interface Changes

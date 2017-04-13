@@ -265,7 +265,7 @@ public class LynxNotification extends BroadcastReceiver implements Runnable {
                         //Log.d("Color[0]", color[0] + "");
 
                         // http://stackoverflow.com/questions/27209596/media-style-notification-not-working-after-update-to-android-5-0
-                        if (mediaManager.mMediaPlayer.isPlaying()) {
+                        if (mediaManager.mLynxMediaPlayer.isPlaying()) {
                             // Creating a Notifcation
                             // https://developer.android.com/guide/topics/ui/notifiers/notifications.html
                             mBuilder
@@ -320,7 +320,7 @@ public class LynxNotification extends BroadcastReceiver implements Runnable {
                             bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_white_24dp);
                             bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_white_24dp);
 
-                            if (mediaManager.mMediaPlayer.isPlaying()) {
+                            if (mediaManager.mLynxMediaPlayer.isPlaying()) {
                                 normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_white_24dp);
                                 bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_white_24dp);
                             } else {
@@ -346,7 +346,7 @@ public class LynxNotification extends BroadcastReceiver implements Runnable {
                             bigView.setImageViewResource(R.id.notibig_next, R.drawable.ic_skip_next_black_24dp);
                             bigView.setImageViewResource(R.id.notibig_dismiss, R.drawable.ic_close_black_24dp);
 
-                            if (mediaManager.mMediaPlayer.isPlaying()) {
+                            if (mediaManager.mLynxMediaPlayer.isPlaying()) {
                                 normalView.setImageViewResource(R.id.noti_playpause, R.drawable.ic_pause_black_24dp);
                                 bigView.setImageViewResource(R.id.notibig_playpause, R.drawable.ic_pause_black_24dp);
                             } else {

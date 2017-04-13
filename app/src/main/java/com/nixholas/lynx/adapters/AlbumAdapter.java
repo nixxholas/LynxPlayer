@@ -107,16 +107,16 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
             try {
                 Uri albumArtUri = getAlbumArtUri(currentSong.getAlbumId());
 
-                if (mediaManager.mMediaPlayer.isPlaying() && !mediaManager.mediaPlayerIsPaused) {
+                if (mediaManager.mLynxMediaPlayer.isPlaying() && !mediaManager.mediaPlayerIsPaused) {
                     /**
                      * Under the hood changes
                      */
                     //stop or pause your media player mediaPlayer.stop(); or mediaPlayer.pause();
                     // http://stackoverflow.com/questions/12266502/android-mediaplayer-stop-and-play
                     //mediaManager.mediaPlayer.stop();
-                    mediaManager.mMediaPlayer.reset();
-                    mediaManager.mMediaPlayer.setDataSource(context, audioUri);
-                    mediaManager.mMediaPlayer.prepareAsync();
+                    mediaManager.mLynxMediaPlayer.reset();
+                    mediaManager.mLynxMediaPlayer.setDataSource(context, audioUri);
+                    mediaManager.mLynxMediaPlayer.prepareAsync();
 
                     /**
                      * User Interface Changes
@@ -173,9 +173,9 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                     //Log.d("SongAdapter", "Working");
 
                     // http://stackoverflow.com/questions/9008770/media-player-called-in-state-0-error-38-0
-                    mediaManager.mMediaPlayer.reset();
-                    mediaManager.mMediaPlayer.setDataSource(context, audioUri);
-                    mediaManager.mMediaPlayer.prepareAsync();
+                    mediaManager.mLynxMediaPlayer.reset();
+                    mediaManager.mLynxMediaPlayer.setDataSource(context, audioUri);
+                    mediaManager.mLynxMediaPlayer.prepareAsync();
 
                     /**
                      * User Interface Changes

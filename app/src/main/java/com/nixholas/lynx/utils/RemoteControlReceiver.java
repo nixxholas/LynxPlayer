@@ -24,12 +24,12 @@ public class RemoteControlReceiver extends BroadcastReceiver {
         if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
             KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
             if (KeyEvent.KEYCODE_MEDIA_PLAY == event.getKeyCode()) {
-                if (mediaManager.mMediaPlayer.isPlaying()) {
-                    mediaManager.mMediaPlayer.start();
+                if (mediaManager.mLynxMediaPlayer.isPlaying()) {
+                    mediaManager.mLynxMediaPlayer.start();
                 }
             } else if (KeyEvent.KEYCODE_MEDIA_PAUSE == event.getKeyCode()) {
-                if (mediaManager.mMediaPlayer.isPlaying()) {
-                    mediaManager.mMediaPlayer.pause();
+                if (mediaManager.mLynxMediaPlayer.isPlaying()) {
+                    mediaManager.mLynxMediaPlayer.pause();
                 }
             }
         }

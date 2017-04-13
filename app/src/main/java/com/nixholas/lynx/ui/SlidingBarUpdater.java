@@ -98,7 +98,7 @@ public class SlidingBarUpdater {
                 slideSongArtist.setText(currentSong.getArtistName());
                 slided_SongArtist.setText(currentSong.getArtistName());
 
-                if (mediaManager.mMediaPlayer.isPlaying()) {
+                if (mediaManager.mLynxMediaPlayer.isPlaying()) {
                     slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                     mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
                 } else {

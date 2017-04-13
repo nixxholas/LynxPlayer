@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
         // Finally initialize the data responsible for media playback along with the database and
         // the MediaPlayer
         mediaManager = new MediaManager(getContentResolver());
-        mediaManager.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaManager.mLynxMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         switch (preferenceHelper.getRepeat()) {
             case 0: // Repeat None
@@ -514,16 +514,16 @@ public class MainActivity extends AppCompatActivity {
     public void slideButtonOnClick(View v) {
         Log.d("Slide Button", "Clicked");
 
-        if (mediaManager.mMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
+        if (mediaManager.mLynxMediaPlayer.isPlaying() || mediaManager.mediaPlayerIsPaused) {
             // http://stackoverflow.com/questions/25381624/possible-to-detect-paused-state-of-mediaplayer
             if (mediaManager.mediaPlayerIsPaused) { // If the current song is paused,
-                mediaManager.mMediaPlayer.start();
+                mediaManager.mLynxMediaPlayer.start();
                 mediaManager.mediaPlayerIsPaused = false;
                 //http://stackoverflow.com/questions/7024881/replace-one-image-with-another-after-clicking-a-button
                 slideButton.setImageResource(R.drawable.ic_pause_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_pause_white_36dp);
             } else { // Else we pause it
-                mediaManager.mMediaPlayer.pause();
+                mediaManager.mLynxMediaPlayer.pause();
                 mediaManager.mediaPlayerIsPaused = true;
                 slideButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                 mediaControls_PlayPause.setImageResource(R.drawable.ic_play_arrow_white_36dp);
@@ -553,7 +553,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "mediaControlsOnClickRepeat -> getRepeat(): " + preferenceHelper.getRepeat());
         switch (preferenceHelper.getRepeat()) {
             case 0:
-                mediaManager.mMediaPlayer.setLooping(false);
+                mediaManager.mLynxMediaPlayer.setLooping(false);
                 mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
                 mediaControls_Repeat.setEnabledUI(true);
 
@@ -563,7 +563,7 @@ public class MainActivity extends AppCompatActivity {
                 preferenceHelper.setRepeat(1);
                 break;
             case 1:
-                mediaManager.mMediaPlayer.setLooping(true);
+                mediaManager.mLynxMediaPlayer.setLooping(true);
                 mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_one_white_24dp);
                 mediaControls_Repeat.setEnabledUI(true);
 
@@ -573,7 +573,7 @@ public class MainActivity extends AppCompatActivity {
                 preferenceHelper.setRepeat(2);
                 break;
             case 2:
-                mediaManager.mMediaPlayer.setLooping(false);
+                mediaManager.mLynxMediaPlayer.setLooping(false);
                 mediaControls_Repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
                 mediaControls_Repeat.setEnabledUI(false);
 
